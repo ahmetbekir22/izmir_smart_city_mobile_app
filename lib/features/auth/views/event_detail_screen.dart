@@ -109,19 +109,34 @@ class DetailEventScreen extends StatelessWidget {
   // Tek bir bilgi satırı için oluşturulan widget
   Widget _buildDetailRow(IconData icon, String label, String value,
       {bool isLink = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3), // gölgeleme etkisi
+          ),
+        ],
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.purple, size: 24),
+          Icon(icon, color: const Color.fromARGB(255, 124, 116, 126), size: 24),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               '$label: $value',
               style: TextStyle(
                 fontSize: 16,
-                color: isLink ? Colors.blue : Colors.black87,
+                color: isLink
+                    ? const Color.fromARGB(255, 103, 122, 139)
+                    : Colors.black87,
                 decoration:
                     isLink ? TextDecoration.underline : TextDecoration.none,
                 fontWeight: isLink ? FontWeight.w600 : FontWeight.normal,

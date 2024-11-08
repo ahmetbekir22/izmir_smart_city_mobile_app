@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'features/auth/views/latest_events_screen.dart';
+import 'package:smart_city_app/features/auth/views/home_page.dart';
 
 Future<void> main() async {
   await dotenv.load(
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: LatestEventsScreen(),
+      home: HomePage(),
     );
   }
 }
