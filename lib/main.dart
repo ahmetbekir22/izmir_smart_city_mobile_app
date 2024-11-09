@@ -3,6 +3,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:smart_city_app/features/auth/views/home_page.dart';
 
+import 'themes/dark_theme.dart';
+import 'themes/light_theme.dart';
+
 Future<void> main() async {
   await dotenv.load(
       fileName:
@@ -14,12 +17,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Etkinlik Uygulaması',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system, // Set initial theme mode
+      home: const HomePage(),
     );
   }
 }

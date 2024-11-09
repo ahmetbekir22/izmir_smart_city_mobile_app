@@ -1,4 +1,3 @@
-// LatestEventsScreen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async';
@@ -49,6 +48,12 @@ class _LatestEventsScreenState extends State<LatestEventsScreen> {
         return const Center(child: CircularProgressIndicator());
       }
 
+      // Tema durumuna göre renkleri belirleyelim
+      bool isDarkMode = Get.isDarkMode;
+      Color backgroundColor = isDarkMode ? Colors.black87 : Colors.white;
+      Color textColor = isDarkMode ? Colors.white : Colors.black;
+      Color overlayColor = isDarkMode ? Colors.black45 : Colors.black26;
+
       return Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -78,12 +83,12 @@ class _LatestEventsScreenState extends State<LatestEventsScreen> {
                         ),
                       ),
                       Container(
-                        color: const Color.fromARGB(137, 107, 106, 106),
+                        color: overlayColor,
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Text(
                           etkinlik.adi,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: textColor,
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -100,11 +105,11 @@ class _LatestEventsScreenState extends State<LatestEventsScreen> {
             top: 16,
             child: Obx(() => Text(
                   '${currentIndex.value + 1}/${etkinlikController.etkinlikListesi.length}',
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: textColor,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    backgroundColor: Colors.black54,
+                    backgroundColor: overlayColor,
                   ),
                 )),
           ),
