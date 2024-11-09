@@ -40,4 +40,8 @@ class HomeController extends GetxController {
     selectedCategoryIndex.value = index;
     pageController.jumpToPage(index);
   }
+
+  void handleApiTap(String first) {
+    print("object");
+  }
 }

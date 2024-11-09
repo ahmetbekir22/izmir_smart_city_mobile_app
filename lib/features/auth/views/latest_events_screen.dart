@@ -8,6 +8,10 @@ class LatestEventsScreen extends StatelessWidget {
 
   LatestEventsScreen({super.key});
 
+  String getCleanedTitle(String title) {
+    return title.replaceAll('``', '');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -53,7 +57,7 @@ class LatestEventsScreen extends StatelessWidget {
                             horizontal: Get.width * 0.05,
                             vertical: Get.height * 0.01),
                         child: Text(
-                          etkinlik.adi,
+                          getCleanedTitle(etkinlik.adi), // Temizlenmiş başlık
                           style: TextStyle(
                             color: textColor,
                             fontSize: 24,
