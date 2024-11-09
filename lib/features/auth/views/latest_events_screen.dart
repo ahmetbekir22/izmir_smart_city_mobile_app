@@ -1,45 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:async';
 import '../../../controllers/event_controller.dart';
 import 'event_detail_screen.dart';
 
-class LatestEventsScreen extends StatefulWidget {
-  @override
-  _LatestEventsScreenState createState() => _LatestEventsScreenState();
-}
-
-class _LatestEventsScreenState extends State<LatestEventsScreen> {
+class LatestEventsScreen extends StatelessWidget {
   final EtkinlikController etkinlikController = Get.put(EtkinlikController());
-  late PageController _pageController;
-  RxInt currentIndex = 0.obs;
-  late Timer _timer;
 
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-    _startEventRotation();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void _startEventRotation() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (currentIndex.value < etkinlikController.etkinlikListesi.length - 1) {
-        currentIndex.value++;
-      } else {
-        currentIndex.value = 0;
-      }
-      _pageController.animateToPage(currentIndex.value,
-          duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-    });
-  }
+  LatestEventsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,21 +15,19 @@ class _LatestEventsScreenState extends State<LatestEventsScreen> {
         return const Center(child: CircularProgressIndicator());
       }
 
-      // Tema durumuna göre renkleri belirleyelim
       bool isDarkMode = Get.isDarkMode;
-      Color backgroundColor = isDarkMode ? Colors.black87 : Colors.white;
       Color textColor = isDarkMode ? Colors.white : Colors.black;
-      Color overlayColor = isDarkMode ? Colors.black45 : Colors.black26;
+      Color overlayColor = isDarkMode ? Colors.black45 : Colors.white10;
 
       return Stack(
         alignment: Alignment.bottomCenter,
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: Get.height * 0.4,
             child: PageView.builder(
-              controller: _pageController,
+              controller: etkinlikController.pageController,
               onPageChanged: (index) {
-                currentIndex.value = index;
+                etkinlikController.currentIndex.value = index;
               },
               itemCount: etkinlikController.etkinlikListesi.length,
               itemBuilder: (context, index) {
@@ -84,7 +49,9 @@ class _LatestEventsScreenState extends State<LatestEventsScreen> {
                       ),
                       Container(
                         color: overlayColor,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Get.width * 0.05,
+                            vertical: Get.height * 0.01),
                         child: Text(
                           etkinlik.adi,
                           style: TextStyle(
@@ -104,7 +71,7 @@ class _LatestEventsScreenState extends State<LatestEventsScreen> {
             right: 16,
             top: 16,
             child: Obx(() => Text(
-                  '${currentIndex.value + 1}/${etkinlikController.etkinlikListesi.length}',
+                  '${etkinlikController.currentIndex.value + 1}/${etkinlikController.etkinlikListesi.length}',
                   style: TextStyle(
                     color: textColor,
                     fontSize: 16,

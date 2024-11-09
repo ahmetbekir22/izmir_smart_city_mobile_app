@@ -83,7 +83,7 @@ class HomePage extends StatelessWidget {
                       GestureDetector(
                         onTap: homeController.expandDraggableSheet,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+                          padding: EdgeInsets.only(top: screenHeight * 0.01),
                           child: Obx(() => Icon(
                                 homeController.isExpanded.value
                                     ? Icons.keyboard_arrow_down
@@ -96,7 +96,8 @@ class HomePage extends StatelessWidget {
                       ),
                       if (!homeController.isExpanded.value)
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          padding: EdgeInsets.symmetric(
+                              vertical: screenHeight * 0.01),
                           child: Text(
                             "Hayatı Kolaylaştıran Hizmetler...",
                             style: TextStyle(
@@ -114,8 +115,8 @@ class HomePage extends StatelessWidget {
                           itemCount: categories.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: screenWidth * 0.01),
                               child: Obx(() {
                                 bool isSelected = homeController
                                         .selectedCategoryIndex.value ==
@@ -231,9 +232,10 @@ class HomePage extends StatelessWidget {
 }
 
 final List<String> categories = [
-  'Kategori 1',
-  'Kategori 2',
-  'Kategori 3',
-  'Kategori 4',
-  'Kategori 5',
+  'ACİL',
+  'Seyehat',
+  'İhtiyaç',
+  'Kültür&Sanat',
+  'Tarihi Alanalar',
+  'Sağlık',
 ];
