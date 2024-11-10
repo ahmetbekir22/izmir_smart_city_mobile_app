@@ -22,13 +22,15 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('İzmir Smart City'),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        backgroundColor: Get.theme.appBarTheme.backgroundColor,
         centerTitle: true,
         actions: [
           IconButton(
             icon: Obx(() => Icon(
                   themeController.isDarkTheme.value ? Icons.dark_mode : Icons.light_mode,
-                  color: themeController.isDarkTheme.value ? Colors.white : Colors.black,
+                  color: themeController.isDarkTheme.value
+                      ? Get.theme.colorScheme.onPrimary
+                      : Get.theme.colorScheme.onSecondary,
                 )),
             onPressed: themeController.toggleTheme,
           ),
@@ -56,8 +58,8 @@ class HomePage extends StatelessWidget {
               return Container(
                 decoration: BoxDecoration(
                   color: themeController.isDarkTheme.value
-                      ? const Color.fromARGB(255, 30, 30, 30)
-                      : const Color.fromARGB(255, 242, 245, 250),
+                      ? Get.theme.colorScheme.surface
+                      : Get.theme.colorScheme.surface,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
@@ -117,10 +119,10 @@ class HomePage extends StatelessWidget {
                                   label: categoryKeys[index],
                                   icon: Icons.place,
                                   backgroundColor: isSelected
-                                      ? const Color.fromARGB(255, 118, 165, 247)
-                                      : themeController.isDarkTheme.value
-                                          ? Colors.grey[700]!
-                                          : Colors.grey[300]!,
+                                      ? themeController.isDarkTheme.value
+                                          ? Get.theme.colorScheme.primary
+                                          : Get.theme.colorScheme.secondary
+                                      : Colors.transparent,
                                   textColor: isSelected
                                       ? Colors.white
                                       : themeController.isDarkTheme.value
@@ -135,79 +137,6 @@ class HomePage extends StatelessWidget {
                           },
                         ),
                       ),
-                      // GridView for displaying category items
-                      // SizedBox(
-                      //   height: screenHeight * 0.60,
-                      //   child: Obx(() {
-                      //     var selectedCategory = categoryKeys[
-                      //         homeController.selectedCategoryIndex.value];
-                      //     var items = categorizedApis[selectedCategory] ?? [];
-                      //     return GridView.builder(
-                      //       padding: EdgeInsets.symmetric(
-                      //         horizontal: screenWidth * 0.03,
-                      //         vertical: screenHeight * 0.03,
-                      //       ),
-                      //       gridDelegate:
-                      //           const SliverGridDelegateWithFixedCrossAxisCount(
-                      //         crossAxisCount: 2,
-                      //         crossAxisSpacing: 40,
-                      //         mainAxisSpacing: 40,
-                      //         childAspectRatio: 12 / 14,
-                      //       ),
-                      //       itemCount: items.length,
-                      //       itemBuilder: (context, index) {
-                      //         // Her API için başlık gösterimi
-                      //         var itemTitle = items[index].values.first;
-                      //         return Card(
-                      //           shape: RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.circular(12),
-                      //           ),
-                      //           elevation: 10,
-                      //           color: themeController.isDarkTheme.value
-                      //               ? Colors.grey[800]
-                      //               : Colors.white,
-                      //           child: Center(
-                      //             child: Padding(
-                      //               padding: EdgeInsets.symmetric(
-                      //                 horizontal: screenWidth * 0.03,
-                      //                 vertical: screenHeight * 0.02,
-                      //               ),
-                      //               child: Column(
-                      //                 mainAxisAlignment:
-                      //                     MainAxisAlignment.center,
-                      //                 children: [
-                      //                   Icon(
-                      //                     Icons.place,
-                      //                     size: 48,
-                      //                     color:
-                      //                         themeController.isDarkTheme.value
-                      //                             ? Colors.white
-                      //                             : Colors.black,
-                      //                   ),
-                      //                   SizedBox(
-                      //                     height: screenHeight * 0.01,
-                      //                   ),
-                      //                   Text(
-                      //                     itemTitle,
-                      //                     style: TextStyle(
-                      //                       fontSize: 16,
-                      //                       fontWeight: FontWeight.w600,
-                      //                       color: themeController
-                      //                               .isDarkTheme.value
-                      //                           ? Colors.white
-                      //                           : Colors.black,
-                      //                     ),
-                      //                     textAlign: TextAlign.center,
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         );
-                      //       },
-                      //     );
-                      //   }),
-                      // ),
                       SizedBox(
                         height: screenHeight * 0.60,
                         child: Obx(() {
@@ -229,11 +158,8 @@ class HomePage extends StatelessWidget {
                             itemCount: items.length,
                             itemBuilder: (context, index) {
                               return CustomCategoryCard(
-                                title: items[index]
-                                    .values
-                                    .first, // API adını göstermemek için uygun bir isim
-                                imagePath:
-                                    'assets/images/eczane.png', // Her API'ye uygun bir resim yolu ayarlayabilirsiniz
+                                title: items[index].values.first,
+                                imagePath: 'assets/images/eczane.png',
                                 onTap: () {
                                   homeController.handleApiTap(items[index].keys.first);
                                 },

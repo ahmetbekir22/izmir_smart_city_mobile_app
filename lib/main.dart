@@ -8,19 +8,22 @@ import 'themes/light_theme.dart';
 
 Future<void> main() async {
   await dotenv.load(
-      fileName:
-          "/Users/ahmetbekir/smart_city_app/smart_city_app/.env"); // .env dosyasını yükle
-  runApp(MyApp());
+      fileName: "/Users/ahmetbekir/smart_city_app/smart_city_app/.env"); // .env dosyasını yükle
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      title: 'Smart City',
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: ThemeMode.system, // Set initial theme mode
+      themeMode: ThemeMode.system,
+      // Set initial theme mode
       home: const HomePage(),
     );
   }

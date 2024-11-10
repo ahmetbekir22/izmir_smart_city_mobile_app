@@ -41,8 +41,7 @@ final ThemeData lightTheme = ThemeData(
     filled: true,
     fillColor: Color(0xFFF4F6F9), // Light grey input field background
     border: OutlineInputBorder(
-      borderSide:
-          BorderSide(color: Color(0xFF4A90E2)), // Blue border for inputs
+      borderSide: BorderSide(color: Color(0xFF4A90E2)), // Blue border for inputs
     ),
     hintStyle: TextStyle(color: Colors.black38), // Light grey hint text color
   ),
