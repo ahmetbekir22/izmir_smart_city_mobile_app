@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:smart_city_app/core/api/events_model.dart';
+
+import '../../../core/api/events_model.dart';
+import '../../../utils/data_cleaning_utility.dart';
+import '../../../utils/generic_functions.dart'; // EventUtils dosyasını import ettik
 
 class DetailEventScreen extends StatelessWidget {
   final Etkinlik etkinlik;
 
-  DetailEventScreen({required this.etkinlik});
+  const DetailEventScreen({super.key, required this.etkinlik});
 
   @override
   Widget build(BuildContext context) {
+    // Etkinlik açıklamasını temizleyelim
+    String cleanedDescription = DataCleaningUtility.cleanHtmlText(etkinlik.kisaAciklama);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(etkinlik.adi),
         backgroundColor: const Color.fromARGB(255, 144, 117, 190),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -21,23 +27,49 @@ class DetailEventScreen extends StatelessWidget {
           children: [
             // Etkinlik Resmi
             ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
+              borderRadius: BorderRadius.circular(20.0),
               child: Image.network(
                 etkinlik.resim,
                 fit: BoxFit.cover,
                 width: double.infinity,
-                height: 250,
+                height: 300,
+                loadingBuilder:
+                    (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                (loadingProgress.expectedTotalBytes ?? 1)
+                            : null,
+                      ),
+                    );
+                  }
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(child: Icon(Icons.error, color: Colors.red, size: 50));
+                },
               ),
             ),
             const SizedBox(height: 20),
 
-            // Kısa Açıklama
+            // Etkinlik Başlığı ve Kısa Açıklama
             Text(
-              etkinlik.kisaAciklama,
+              etkinlik.adi,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              cleanedDescription, // Temizlenmiş açıklama burada gösterilecek
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.black54,
               ),
             ),
             const SizedBox(height: 20),
@@ -45,10 +77,10 @@ class DetailEventScreen extends StatelessWidget {
             // Etkinlik Detayları Kartı
             Card(
               margin: EdgeInsets.zero,
-              elevation: 3,
-              shadowColor: Colors.grey.withOpacity(0.5),
+              elevation: 8,
+              shadowColor: Colors.grey.withOpacity(0.3),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
+                borderRadius: BorderRadius.circular(20.0),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -56,14 +88,13 @@ class DetailEventScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Tür
-                    _buildDetailRow(
-                        Icons.category, 'Etkinlik Türü', etkinlik.tur),
+                    _buildDetailRow(Icons.category, 'Etkinlik Türü', etkinlik.tur),
 
                     // Başlangıç ve Bitiş Tarihi (Tek Row)
                     _buildDetailRow(
                       Icons.date_range,
                       'Tarih Aralığı',
-                      '${_formatDate(etkinlik.etkinlikBaslamaTarihi)} - ${_formatDate(etkinlik.etkinlikBitisTarihi)}',
+                      '${EventUtils.formatDate(etkinlik.etkinlikBaslamaTarihi)} - ${EventUtils.formatDate(etkinlik.etkinlikBitisTarihi)}',
                     ),
 
                     // Ücret Durumu
@@ -76,7 +107,8 @@ class DetailEventScreen extends StatelessWidget {
                     // Konum Bilgisi (Tıklanabilir Row)
                     GestureDetector(
                       onTap: () {
-                        // onTap fonksiyonu burada tanımlanabilir
+                        EventUtils.launchMap(
+                            etkinlik.etkinlikMerkezi); // Harita fonksiyonunu çağırdık
                       },
                       child: _buildDetailRow(
                         Icons.location_on,
@@ -95,32 +127,20 @@ class DetailEventScreen extends StatelessWidget {
     );
   }
 
-  // Tarih formatlama fonksiyonu
-  String _formatDate(String date) {
-    try {
-      final DateTime parsedDate = DateTime.parse(date);
-      final DateFormat formatter = DateFormat('dd MMMM yyyy - HH:mm');
-      return formatter.format(parsedDate);
-    } catch (e) {
-      return date; // Hata durumunda orijinal tarihi döndür
-    }
-  }
-
   // Tek bir bilgi satırı için oluşturulan widget
-  Widget _buildDetailRow(IconData icon, String label, String value,
-      {bool isLink = false}) {
+  Widget _buildDetailRow(IconData icon, String label, String value, {bool isLink = false}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.3),
             spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3), // gölgeleme etkisi
+            blurRadius: 3,
+            offset: const Offset(0, 1), // gölgeleme etkisi
           ),
         ],
       ),
@@ -134,11 +154,8 @@ class DetailEventScreen extends StatelessWidget {
               '$label: $value',
               style: TextStyle(
                 fontSize: 16,
-                color: isLink
-                    ? const Color.fromARGB(255, 103, 122, 139)
-                    : Colors.black87,
-                decoration:
-                    isLink ? TextDecoration.underline : TextDecoration.none,
+                color: isLink ? const Color.fromARGB(255, 103, 122, 139) : Colors.black87,
+                decoration: isLink ? TextDecoration.underline : TextDecoration.none,
                 fontWeight: isLink ? FontWeight.w600 : FontWeight.normal,
               ),
             ),
