@@ -1,6 +1,6 @@
 final Map<String, List<Map<String, String>>> categorizedApis = {
   'ACİL': [
-    {'NOBETCI_ECZANE_API': 'Nöbetçi Eczaneler'},
+    {'NOBETCI_ECZANE_API': 'Nöbetçi Eczaneler', 'imagePath': 'assets/images/eczane.png'},
     {'AFET_TOPLANMA_YERLERI_API': 'Afet Toplanma Alanları'},
   ],
   'Seyahat': [

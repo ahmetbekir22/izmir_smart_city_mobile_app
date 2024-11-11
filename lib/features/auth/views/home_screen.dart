@@ -22,8 +22,8 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('İzmir Smart City'),
-        backgroundColor: Get.theme.appBarTheme.backgroundColor,
         centerTitle: true,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         actions: [
           IconButton(
             icon: Obx(() => Icon(
@@ -126,7 +126,7 @@ class HomePage extends StatelessWidget {
                                   textColor: isSelected
                                       ? Colors.white
                                       : themeController.isDarkTheme.value
-                                          ? Colors.white
+                                          ? const Color(0xFF6200EE)
                                           : Colors.black,
                                   onPressed: () {
                                     homeController.onCategorySelected(index);
@@ -157,9 +157,10 @@ class HomePage extends StatelessWidget {
                             ),
                             itemCount: items.length,
                             itemBuilder: (context, index) {
-                              return CustomCategoryCard(
+                              return CustomCard(
                                 title: items[index].values.first,
-                                imagePath: 'assets/images/eczane.png',
+                                imagePath: items[index]['imagePath'] ??
+                                    'assets/images/Izmir-Rehberi-Gezilecek-Yerler.jpg', // Varsayılan resim
                                 onTap: () {
                                   homeController.handleApiTap(items[index].keys.first);
                                 },

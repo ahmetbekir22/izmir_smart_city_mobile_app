@@ -39,6 +39,21 @@ class EtkinlikController extends GetxController {
     }
   }
 
+// void _startEventRotation() {
+//     _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+//       if (currentIndex.value < etkinlikListesi.length - 1) {
+//         currentIndex.value++;
+//       } else {
+//         currentIndex.value = 0;
+//       }
+//       pageController.animateToPage(
+//         currentIndex.value,
+//         duration: const Duration(milliseconds: 300),
+//         curve: Curves.easeIn,
+//       );
+//     });
+//   }
+
   void _startEventRotation() {
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       if (currentIndex.value < etkinlikListesi.length - 1) {
@@ -46,11 +61,17 @@ class EtkinlikController extends GetxController {
       } else {
         currentIndex.value = 0;
       }
-      pageController.animateToPage(
-        currentIndex.value,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeIn,
-      );
+
+      // `pageController`'ın bir PageView'e bağlı olup olmadığını kontrol et
+      if (pageController.hasClients) {
+        pageController.animateToPage(
+          currentIndex.value,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeIn,
+        );
+      } else {
+        print("pageController henüz bir PageView'e bağlı değil.");
+      }
     });
   }
 

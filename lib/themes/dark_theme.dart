@@ -5,15 +5,15 @@ final ThemeData darkTheme = ThemeData(
   primaryColor: const Color(0xFF1D1D1D), // A modern deep grey/black for primary
   scaffoldBackgroundColor: const Color(0xFF121212), // Dark background
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xFF1F1F1F), // Slightly lighter dark grey for app bar
+    backgroundColor: Color.fromARGB(255, 32, 5, 69), // Slightly lighter dark grey for app bar
     foregroundColor: Colors.white, // White text/icons in app bar
     elevation: 0,
   ),
   colorScheme: const ColorScheme.dark(
-    primary: Color(0xFF6200EE), // Purple as the primary accent color
+    primary: Color.fromARGB(255, 39, 4, 88), // Purple as the primary accent color
     secondary: Color(0xFF03DAC6), // Teal for secondary accents
     onPrimary: Colors.white, // White text/icons on primary elements
-    surface: Color(0xFF121212), // Same dark background for surfaces
+    surface: Color(0xFF121212), // Same dark background for surfaces (scroll)
   ),
   textTheme: TextTheme(
     bodyLarge: const TextStyle(color: Colors.white), // White text for body

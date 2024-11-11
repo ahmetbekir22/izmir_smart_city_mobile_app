@@ -11,7 +11,7 @@ final ThemeData lightTheme = ThemeData(
   ),
   colorScheme: const ColorScheme.light(
     primary: Color(0xFF4A90E2), // Blue as primary color
-    secondary: Color(0xFF50E3C2), // Light teal accent
+    secondary: Color(0xFF26B0A2), // Light teal accent
     onPrimary: Colors.white, // White text/icons on primary
     surface: Color(0xFFF4F6F9), // Light grey surface color
   ),
