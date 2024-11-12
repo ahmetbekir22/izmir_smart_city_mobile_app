@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
 import '../../../controllers/event_controller.dart';
 import '../../../controllers/theme_contoller.dart';
 import '../../../core/api/events_model.dart';
 import '../widgets/custom_category_card.dart';
 import 'event_detail_screen.dart';
-import 'filter_dialog.dart';
 
 class EtkinlikListesiSayfasi extends StatelessWidget {
   final EtkinlikController etkinlikController = Get.put(EtkinlikController());
@@ -25,12 +26,13 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.filter_list),
             onPressed: () {
-              _showFilterDialog(context);
+              // Get.to(() => FiltreDrawer());
             },
           ),
         ],
       ),
       body: Obx(() {
+        // Eğer etkinlikler boşsa, yükleniyor göstergesini göster
         if (etkinlikController.filteredEventList.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -45,41 +47,55 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
             itemCount: etkinlikController.filteredEventList.length,
             itemBuilder: (context, index) {
               Etkinlik etkinlik = etkinlikController.filteredEventList[index];
+
+              // Eğer etkinlik saat bilgisi içeriyorsa, tarihi güncelle
+              String formattedDate;
+              try {
+                // Eğer tarih ve saat bilgisini içeriyorsa
+                formattedDate =
+                    DateFormat('yyyy-MM-dd').format(DateTime.parse(etkinlik.etkinlikBaslamaTarihi));
+              } catch (e) {
+                // Sadece saati içeriyorsa, tarihi bugünün tarihi olarak kabul et
+                formattedDate = DateFormat('dd-mm-yyyy').format(DateTime.now());
+              }
+
               return Padding(
                 padding: EdgeInsets.symmetric(vertical: Get.height * 0.005),
-                child: SizedBox(
-                  height: Get.height * 0.4,
-                  width: Get.width,
-                  child: CustomCard(
-                    isNetworkImage: true,
-                    title: etkinlik.adi,
-                    imagePath: etkinlik.kucukAfis,
-                    location: etkinlik.etkinlikMerkezi,
-                    date: etkinlik.etkinlikBaslamaTarihi.split('T')[0],
-                    time: etkinlik.etkinlikBaslamaTarihi.split('T')[1],
-                    onTap: () {
-                      Get.to(() => DetailEventScreen(etkinlik: etkinlik));
-                    },
-                  ),
+                child: CustomCard(
+                  isNetworkImage: true,
+                  title: etkinlik.adi,
+                  category: etkinlik.tur,
+                  imagePath: etkinlik.kucukAfis,
+                  location: etkinlik.etkinlikMerkezi,
+                  date: formattedDate, // Date burada formatlanmış şekilde geçiyor
+                  time: etkinlik.etkinlikBaslamaTarihi, // Saat burada
+                  onTap: () {
+                    Get.to(() => DetailEventScreen(etkinlik: etkinlik));
+                  },
                 ),
               );
             },
           ),
         );
       }),
-      
     );
   }
 
-  void _showFilterDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return FilterDialog(
-          onLocationSelected: etkinlikController.updateSelectedLocation,
-          onDateRangeSelected: etkinlikController.updateSelectedDateRange,
-        );
-      },
-    );
-  }
+  // Filtreleme dialogunu Get.dialog ile açma
+  // void _showFilterDialog() {
+  //   Get.dialog(
+  //     LocationAndDateFilterDialog(
+  //       locations:
+  //           etkinlikController.eventList.map((event) => event.etkinlikMerkezi).toSet().toList(),
+  //       onFilterApplied: (filters) {
+  //         String? selectedLocation = filters['location'];
+  //         DateTime? selectedDate = filters['date'];
+
+  //         // Etkinlikleri filtrelemek için EtkinlikController'a çağrı yapıyoruz
+  //         etkinlikController.filterEvents(selectedLocation, selectedDate);
+  //       },
+  //     ),
+  //     barrierDismissible: true, // Kullanıcı dışarı tıklarsa dialog kapanabilir
+  //   );
+  // }
 }

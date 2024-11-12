@@ -4,14 +4,12 @@ import 'package:get/get.dart';
 import 'package:smart_city_app/features/auth/views/home_screen.dart';
 
 import 'controllers/theme_contoller.dart';
-import 'features/auth/views/event_list.dart';
 import 'themes/dark_theme.dart';
 import 'themes/light_theme.dart';
 
 Future<void> main() async {
   Get.put(ThemeController());
-  await dotenv.load(
-      fileName: ".env"); // .env dosyasını yükle
+  await dotenv.load(fileName: ".env"); // .env dosyasını yükle
   runApp(const MyApp());
 }
 

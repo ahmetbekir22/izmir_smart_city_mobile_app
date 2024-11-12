@@ -46,16 +46,14 @@ class Etkinlik {
     data['Tur'] = tur; // Key is case-sensitive and should match the JSON
     data['Id'] = id;
     data['Adi'] = adi;
-    data['EtkinlikBitisTarihi'] =
-        etkinlikBitisTarihi; // String, no null check needed
+    data['EtkinlikBitisTarihi'] = etkinlikBitisTarihi; // String, no null check needed
     data['KucukAfis'] = kucukAfis;
     data['EtkinlikMerkezi'] = etkinlikMerkezi;
     data['KisaAciklama'] = kisaAciklama;
     data['UcretsizMi'] = ucretsizMi;
     data['Resim'] = resim;
     data['EtkinlikUrl'] = etkinlikUrl;
-    data['EtkinlikBaslamaTarihi'] =
-        etkinlikBaslamaTarihi; // String, no null check needed
+    data['EtkinlikBaslamaTarihi'] = etkinlikBaslamaTarihi; // String, no null check needed
     return data;
   }
 }

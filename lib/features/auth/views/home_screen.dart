@@ -1,6 +1,7 @@
 // home_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../controllers/home_controller.dart';
 import '../../../controllers/theme_contoller.dart';
 import '../widgets/draggable_sheet_page.dart';
@@ -22,9 +23,7 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             icon: Obx(() => Icon(
-                  themeController.isDarkTheme.value
-                      ? Icons.dark_mode
-                      : Icons.light_mode,
+                  themeController.isDarkTheme.value ? Icons.dark_mode : Icons.light_mode,
                   color: themeController.isDarkTheme.value
                       ? Get.theme.colorScheme.onPrimary
                       : Get.theme.colorScheme.onSecondary,
@@ -45,9 +44,12 @@ class HomePage extends StatelessWidget {
               ),
             ],
           ),
-          DraggableSheetPage(
-            homeController: homeController,
-            themeController: themeController,
+          // Wrap DraggableSheetPage with Positioned to provide size constraints
+          Positioned.fill(
+            child: DraggableSheetPage(
+              homeController: homeController,
+              themeController: themeController,
+            ),
           ),
         ],
       ),
