@@ -20,69 +20,93 @@ class LatestEventsScreen extends StatelessWidget {
       }
 
       bool isDarkMode = Get.isDarkMode;
-      Color textColor = isDarkMode ? Colors.white : Colors.black;
-      Color overlayColor = isDarkMode ? Colors.black45 : Colors.white10;
+      Color textColor = Colors.white;
 
       return Stack(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.center,
         children: [
-          SizedBox(
-            height: Get.height * 0.4,
-            child: PageView.builder(
-              controller: etkinlikController.pageController,
-              onPageChanged: (index) {
+          PageView.builder(
+            controller: etkinlikController.pageController,
+            onPageChanged: (index) {
+              if (etkinlikController.currentIndex.value != index) {
                 etkinlikController.currentIndex.value = index;
-              },
-              itemCount: etkinlikController.etkinlikListesi.length,
-              itemBuilder: (context, index) {
-                var etkinlik = etkinlikController.etkinlikListesi[index];
-                return GestureDetector(
-                  onTap: () {
-                    Get.to(() => DetailEventScreen(etkinlik: etkinlik));
-                  },
-                  child: Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(etkinlik.kucukAfis),
-                            fit: BoxFit.cover,
-                          ),
+              }
+            },
+            itemCount: etkinlikController.etkinlikListesi.length,
+            itemBuilder: (context, index) {
+              var etkinlik = etkinlikController.etkinlikListesi[index];
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => DetailEventScreen(etkinlik: etkinlik));
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Boşluk ekleyerek başlık ve görseli aşağı kaydırma
+                    const SizedBox(height: 50),
+
+                    // Dinamik etkinlik adı
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        getCleanedTitle(etkinlik.adi),
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                      Container(
-                        color: overlayColor,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: Get.width * 0.05,
-                            vertical: Get.height * 0.01),
-                        child: Text(
-                          getCleanedTitle(etkinlik.adi), // Temizlenmiş başlık
-                          style: TextStyle(
-                            color: textColor,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                    ),
+                    // Görsel tam çerçeveye sığdırılmış ve köşeleri yuvarlatılmış
+                    ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(20), // Köşeleri yuvarlat
+                      child: Image.network(
+                        etkinlik.kucukAfis,
+                        width: Get.width * 0.9,
+                        height: Get.height * 0.5,
+                        fit: BoxFit.fill, // Görseli tam çerçeveye sığdır
                       ),
-                    ],
-                  ),
-                );
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          // Sol ok butonu
+          Positioned(
+            left: 16,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white, size: 32),
+              onPressed: () {
+                int currentIndex = etkinlikController.currentIndex.value;
+                if (currentIndex > 0) {
+                  etkinlikController.pageController.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
               },
             ),
           ),
+          // Sağ ok butonu
           Positioned(
             right: 16,
-            top: 16,
-            child: Obx(() => Text(
-                  '${etkinlikController.currentIndex.value + 1}/${etkinlikController.etkinlikListesi.length}',
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    backgroundColor: overlayColor,
-                  ),
-                )),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_forward,
+                  color: Colors.white, size: 32),
+              onPressed: () {
+                int currentIndex = etkinlikController.currentIndex.value;
+                if (currentIndex <
+                    etkinlikController.etkinlikListesi.length - 1) {
+                  etkinlikController.pageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
+              },
+            ),
           ),
         ],
       );

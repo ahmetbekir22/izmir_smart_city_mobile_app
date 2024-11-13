@@ -2,45 +2,31 @@ import 'package:flutter/material.dart';
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: const Color(0xFF1D1D1D), // A modern deep grey/black for primary
-  scaffoldBackgroundColor: const Color(0xFF121212), // Dark background
+  primaryColor: const Color.fromARGB(255, 39, 4, 88), // Purple as primary color
+  scaffoldBackgroundColor: const Color(0xFF121212),
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color.fromARGB(255, 32, 5, 69), // Slightly lighter dark grey for app bar
-    foregroundColor: Colors.white, // White text/icons in app bar
+    backgroundColor: Color.fromARGB(255, 32, 5, 69),
+    foregroundColor: Colors.white,
     elevation: 0,
   ),
   colorScheme: const ColorScheme.dark(
-    primary: Color.fromARGB(255, 39, 4, 88), // Purple as the primary accent color
-    secondary: Color(0xFF03DAC6), // Teal for secondary accents
-    onPrimary: Colors.white, // White text/icons on primary elements
-    surface: Color(0xFF121212), // Same dark background for surfaces (scroll)
-  ),
-  textTheme: TextTheme(
-    bodyLarge: const TextStyle(color: Colors.white), // White text for body
-    bodyMedium: TextStyle(color: Colors.grey[400]), // Light grey for secondary text
-    titleLarge: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold), // Bold headlines
-    bodySmall: const TextStyle(color: Colors.white60), // Lighter text for subtitles
-    labelMedium: const TextStyle(color: Colors.white70), // Light text for captions
-  ),
-
-  buttonTheme: const ButtonThemeData(
-    buttonColor: Color(0xFF6200EE), // Purple buttons
-    textTheme: ButtonTextTheme.primary, // White text on buttons
+    primary: Color.fromARGB(255, 39, 4, 88),
+    secondary: Color(0xFF03DAC6),
+    onPrimary: Colors.white,
+    surface: Color(0xFF1F1F1F),
+    background: Color(0xFF121212),
+    onBackground: Colors.white,
+    onSurface: Colors.white70,
   ),
   cardTheme: const CardTheme(
-    color: Color(0xFF1F1F1F), // Dark card background
-    elevation: 5, // Slight elevation to create depth
-    shadowColor: Color.fromARGB(255, 155, 131, 188), // Purple shadow for card
+    color: Color(0xFF1F1F1F),
+    elevation: 5,
+    shadowColor: Color.fromARGB(255, 155, 131, 188),
   ),
-  iconTheme: const IconThemeData(
-    color: Color(0xFF6200EE), // Purple icons
+  textTheme: const TextTheme(
+    bodyLarge: TextStyle(color: Colors.white),
+    bodyMedium: TextStyle(color: Colors.grey),
+    titleLarge: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
   ),
-  inputDecorationTheme: InputDecorationTheme(
-    filled: true,
-    fillColor: const Color(0xFF333333), // Dark background for input fields
-    border: const OutlineInputBorder(
-      borderSide: BorderSide(color: Color(0xFF6200EE)), // Purple border for inputs
-    ),
-    hintStyle: TextStyle(color: Colors.grey[500]), // Lighter grey hint text color
-  ),
+  iconTheme: const IconThemeData(color: Color(0xFF6200EE)),
 );

@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 1000),
     );
 
     _fadeAnimation1 = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen>
   void _startAnimation() {
     _animationController.forward();
 
-    Future.delayed(const Duration(milliseconds: 4000), () {
+    Future.delayed(const Duration(milliseconds: 1000), () {
       Get.off(() => const HomePage());
     });
   }

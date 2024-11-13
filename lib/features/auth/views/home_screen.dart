@@ -1,7 +1,5 @@
-// home_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../controllers/home_controller.dart';
 import '../../../controllers/theme_contoller.dart';
 import '../widgets/draggable_sheet_page.dart';
@@ -17,16 +15,20 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('İzmir Smart City'),
+        title: const Text(
+          'Kent Rehberim',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        elevation: 0,
         actions: [
           IconButton(
             icon: Obx(() => Icon(
-                  themeController.isDarkTheme.value ? Icons.dark_mode : Icons.light_mode,
-                  color: themeController.isDarkTheme.value
-                      ? Get.theme.colorScheme.onPrimary
-                      : Get.theme.colorScheme.onSecondary,
+                  themeController.isDarkTheme.value
+                      ? Icons.dark_mode
+                      : Icons.light_mode,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 )),
             onPressed: themeController.toggleTheme,
           ),
@@ -34,17 +36,21 @@ class HomePage extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: LatestEventsScreen(),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.secondary,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
-            ],
+            ),
           ),
-          // Wrap DraggableSheetPage with Positioned to provide size constraints
+          Center(
+            child: LatestEventsScreen(),
+          ),
           Positioned.fill(
             child: DraggableSheetPage(
               homeController: homeController,

@@ -1,4 +1,3 @@
-// draggable_sheet_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -31,18 +30,14 @@ class DraggableSheetPage extends StatelessWidget {
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-            color: themeController.isDarkTheme.value
-                ? Get.theme.colorScheme.surface
-                : Get.theme.colorScheme.surface,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
             boxShadow: [
               BoxShadow(
-                color: themeController.isDarkTheme.value
-                    ? Colors.black.withOpacity(0.5)
-                    : Colors.grey.withOpacity(0.5),
+                color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
                 blurRadius: 10,
               ),
             ],
@@ -51,7 +46,7 @@ class DraggableSheetPage extends StatelessWidget {
             controller: scrollController,
             physics: const ClampingScrollPhysics(),
             child: Column(
-              mainAxisSize: MainAxisSize.min, // Fix for unbounded height issue
+              mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
                   onTap: homeController.expandDraggableSheet,
@@ -61,18 +56,20 @@ class DraggableSheetPage extends StatelessWidget {
                           homeController.isExpanded.value
                               ? Icons.keyboard_arrow_down
                               : Icons.keyboard_arrow_up,
-                          color: themeController.isDarkTheme.value ? Colors.white : Colors.black,
+                          color: Theme.of(context).colorScheme.onSurface,
                         )),
                   ),
                 ),
                 if (!homeController.isExpanded.value)
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
+                    padding:
+                        EdgeInsets.symmetric(vertical: screenHeight * 0.01),
                     child: Text(
                       "Hayatı Kolaylaştıran Hizmetler...",
                       style: TextStyle(
-                          fontSize: 25,
-                          color: themeController.isDarkTheme.value ? Colors.white : Colors.black),
+                        fontSize: 25,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -83,22 +80,21 @@ class DraggableSheetPage extends StatelessWidget {
                     itemCount: categorizedApis.length,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.01),
                         child: Obx(() {
-                          bool isSelected = homeController.selectedCategoryIndex.value == index;
+                          bool isSelected =
+                              homeController.selectedCategoryIndex.value ==
+                                  index;
                           return CategoryButton(
                             label: categoryKeys[index],
-                            icon: Icons.place,
+                           
                             backgroundColor: isSelected
-                                ? themeController.isDarkTheme.value
-                                    ? Get.theme.colorScheme.primary
-                                    : Get.theme.colorScheme.secondary
-                                : Colors.transparent,
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.surface,
                             textColor: isSelected
-                                ? Colors.white
-                                : themeController.isDarkTheme.value
-                                    ? const Color(0xFF6200EE)
-                                    : Colors.black,
+                                ? Theme.of(context).colorScheme.onPrimary
+                                : Theme.of(context).colorScheme.onSurface,
                             onPressed: () {
                               homeController.onCategorySelected(index);
                             },
@@ -111,7 +107,8 @@ class DraggableSheetPage extends StatelessWidget {
                 SizedBox(
                   height: screenHeight * 0.60,
                   child: Obx(() {
-                    var selectedCategory = categoryKeys[homeController.selectedCategoryIndex.value];
+                    var selectedCategory = categoryKeys[
+                        homeController.selectedCategoryIndex.value];
                     var items = categorizedApis[selectedCategory] ?? [];
 
                     return GridView.builder(
@@ -119,29 +116,30 @@ class DraggableSheetPage extends StatelessWidget {
                         horizontal: screenWidth * 0.03,
                         vertical: screenHeight * 0.03,
                       ),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        crossAxisSpacing: 40,
-                        mainAxisSpacing: 40,
+                        crossAxisSpacing: 20,
+                        mainAxisSpacing: 20,
                         childAspectRatio: 12 / 14,
                       ),
                       itemCount: items.length,
                       itemBuilder: (context, index) {
                         return Flexible(
-                          // Wrap CustomCard with Flexible to prevent overflow
                           child: CustomCard(
                             title: items[index].values.first,
                             imagePath: items[index]['imagePath'] ??
                                 'assets/images/Izmir-Rehberi-Gezilecek-Yerler.jpg',
                             onTap: () {
-                              homeController.handleApiTap(items[index].keys.first);
+                              homeController
+                                  .handleApiTap(items[index].keys.first);
                             },
                           ),
                         );
                       },
                     );
                   }),
-                )
+                ),
               ],
             ),
           ),
