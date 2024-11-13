@@ -7,6 +7,7 @@ import '../../../controllers/theme_contoller.dart';
 import '../../../core/api/events_model.dart';
 import '../widgets/custom_category_card.dart';
 import 'event_detail_screen.dart';
+import 'filter_dialog.dart';
 
 class EtkinlikListesiSayfasi extends StatelessWidget {
   final EtkinlikController etkinlikController = Get.put(EtkinlikController());
@@ -14,9 +15,14 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
 
   EtkinlikListesiSayfasi({super.key});
+  
+  // Add a method to reset filters
+  void onInit() {
+  }
 
   @override
   Widget build(BuildContext context) {
+    etkinlikController.clearFilters(); // Reset filters when the page is built
     return Scaffold(
       appBar: AppBar(
         title: const Text("Güncel Etkinlikler"),
@@ -26,17 +32,16 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.filter_list),
             onPressed: () {
-              // Get.to(() => FiltreDrawer());
+              _showFilterDialog(context);
             },
           ),
         ],
       ),
       body: Obx(() {
-        // Eğer etkinlikler boşsa, yükleniyor göstergesini göster
+        // Display loading indicator if filtered events are empty
         if (etkinlikController.filteredEventList.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
-
         return Scrollbar(
           controller: _scrollController,
           thumbVisibility: false,
@@ -47,18 +52,12 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
             itemCount: etkinlikController.filteredEventList.length,
             itemBuilder: (context, index) {
               Etkinlik etkinlik = etkinlikController.filteredEventList[index];
-
-              // Eğer etkinlik saat bilgisi içeriyorsa, tarihi güncelle
               String formattedDate;
               try {
-                // Eğer tarih ve saat bilgisini içeriyorsa
-                formattedDate =
-                    DateFormat('yyyy-MM-dd').format(DateTime.parse(etkinlik.etkinlikBaslamaTarihi));
+                formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(etkinlik.etkinlikBaslamaTarihi));
               } catch (e) {
-                // Sadece saati içeriyorsa, tarihi bugünün tarihi olarak kabul et
-                formattedDate = DateFormat('dd-mm-yyyy').format(DateTime.now());
+                formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
               }
-
               return Padding(
                 padding: EdgeInsets.symmetric(vertical: Get.height * 0.005),
                 child: CustomCard(
@@ -67,8 +66,8 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
                   category: etkinlik.tur,
                   imagePath: etkinlik.kucukAfis,
                   location: etkinlik.etkinlikMerkezi,
-                  date: formattedDate, // Date burada formatlanmış şekilde geçiyor
-                  time: etkinlik.etkinlikBaslamaTarihi, // Saat burada
+                  date: formattedDate,
+                  time: etkinlik.etkinlikBaslamaTarihi,
                   onTap: () {
                     Get.to(() => DetailEventScreen(etkinlik: etkinlik));
                   },
@@ -80,22 +79,16 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
       }),
     );
   }
-
-  // Filtreleme dialogunu Get.dialog ile açma
-  // void _showFilterDialog() {
-  //   Get.dialog(
-  //     LocationAndDateFilterDialog(
-  //       locations:
-  //           etkinlikController.eventList.map((event) => event.etkinlikMerkezi).toSet().toList(),
-  //       onFilterApplied: (filters) {
-  //         String? selectedLocation = filters['location'];
-  //         DateTime? selectedDate = filters['date'];
-
-  //         // Etkinlikleri filtrelemek için EtkinlikController'a çağrı yapıyoruz
-  //         etkinlikController.filterEvents(selectedLocation, selectedDate);
-  //       },
-  //     ),
-  //     barrierDismissible: true, // Kullanıcı dışarı tıklarsa dialog kapanabilir
-  //   );
-  // }
+  void _showFilterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FilterDialog(
+          onLocationSelected: etkinlikController.updateSelectedLocation,
+          onDateRangeSelected: etkinlikController.updateSelectedDateRange,
+        );
+      },
+    );
+  }
+  
 }

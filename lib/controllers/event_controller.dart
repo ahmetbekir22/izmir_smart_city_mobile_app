@@ -1,27 +1,27 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:smart_city_app/core/api/event_api_service.dart';
-
 import '../core/api/events_model.dart';
+import '../utils/data_cleaning_utility.dart';
+import '../utils/making_data_unique.dart';
 
 class EtkinlikController extends GetxController {
-  var etkinlikListesi = <Etkinlik>[].obs; // Tüm etkinlikler
-  var filteredEventList = <Etkinlik>[].obs; // Filtrelenmiş etkinlikler
-  var selectedLocation = Rxn<String>(); // Seçilen konum
-  var selectedDateRange = Rxn<DateTimeRange>(); // Seçilen tarih aralığı
-
+  var etkinlikListesi = <Etkinlik>[].obs;
+  var filteredEventList = <Etkinlik>[].obs;
+  var currentIndex = 0.obs;
   late PageController pageController;
   Timer? _timer;
-  var currentIndex = 0.obs;
+
+  var selectedLocation = Rxn<String>();
+  var selectedDateRange = Rxn<DateTimeRange>();
 
   @override
   void onInit() {
     super.onInit();
     pageController = PageController();
     loadEtkinlikler();
+    clearFilters(); // Clear filters when entering the page
     _startEventRotation();
   }
 
@@ -32,52 +32,16 @@ class EtkinlikController extends GetxController {
     super.onClose();
   }
 
-  // Etkinlikleri yüklerken tarihleri formatlıyoruz
   void loadEtkinlikler() async {
     try {
       final etkinlikler = await EtkinlikApiService().fetchEtkinlikler();
-      // Verileri alırken saatleri formatla
-      for (var etkinlik in etkinlikler) {
-        etkinlik.etkinlikBaslamaTarihi = _formatTime(etkinlik.etkinlikBaslamaTarihi);
-        etkinlik.etkinlikBitisTarihi = _formatTime(etkinlik.etkinlikBitisTarihi);
-      }
-
-      // Verileri listeye ekle
-      etkinlikListesi.value = etkinlikler;
-      applyFilters(); // Filtreleme işlemi uygula
+      etkinlikListesi.value = filterUniqueById(etkinlikler, (etkinlik) => etkinlik.id);
+      applyFilters();
     } catch (e) {
       throw Exception('Failed to load etkinlikler: $e');
     }
   }
 
-  // Zamanı formatlama işlemi
-  String _formatTime(String dateTimeStr) {
-    DateTime dateTime = DateTime.parse(dateTimeStr);
-    return DateFormat('HH:mm').format(dateTime); // Saat: Dakika formatı
-  }
-
-  // Filtreleme işlemi
-  void applyFilters() {
-    List<Etkinlik> filteredList = etkinlikListesi.toList();
-
-    if (selectedLocation.value != null) {
-      filteredList = filteredList.where((etkinlik) {
-        return etkinlik.etkinlikMerkezi == selectedLocation.value;
-      }).toList();
-    }
-
-    if (selectedDateRange.value != null) {
-      DateTimeRange range = selectedDateRange.value!;
-      filteredList = filteredList.where((etkinlik) {
-        DateTime etkinlikDate = DateTime.parse(etkinlik.etkinlikBaslamaTarihi);
-        return etkinlikDate.isAfter(range.start) && etkinlikDate.isBefore(range.end);
-      }).toList();
-    }
-
-    filteredEventList.value = filteredList;
-  }
-
-  // Etkinlikleri döngüye al
   void _startEventRotation() {
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       if (currentIndex.value < etkinlikListesi.length - 1) {
@@ -95,8 +59,49 @@ class EtkinlikController extends GetxController {
     });
   }
 
-  // Döngüyü durdur
   void _stopEventRotation() {
     _timer?.cancel();
+  }
+
+  List<String> getUniqueLocations() {
+    return etkinlikListesi.map((e) => e.etkinlikMerkezi).toSet().toList();
+  }
+
+  void applyFilters() {
+    List<Etkinlik> filteredList = etkinlikListesi.toList();
+
+    if (selectedLocation.value != null) {
+      filteredList = filteredList
+          .where((etkinlik) => etkinlik.etkinlikMerkezi == selectedLocation.value)
+          .toList();
+    }
+
+    if (selectedDateRange.value != null) {
+      DateTimeRange range = selectedDateRange.value!;
+      filteredList = filteredList.where((etkinlik) {
+        DateTime etkinlikDate = DateTime.parse(etkinlik.etkinlikBaslamaTarihi);
+        return etkinlikDate.isAfter(range.start.subtract(const Duration(days: 1))) &&
+               etkinlikDate.isBefore(range.end.add(const Duration(days: 1)));
+      }).toList();
+    }
+
+    filteredEventList.value = filteredList;
+  }
+
+  void updateSelectedLocation(String? location) {
+    selectedLocation.value = location;
+    applyFilters();
+  }
+
+  void updateSelectedDateRange(DateTimeRange? range) {
+    selectedDateRange.value = range;
+    applyFilters();
+  }
+
+  // Clear filters
+  void clearFilters() {
+    selectedLocation.value = null;
+    selectedDateRange.value = null;
+    applyFilters(); // Reset the filtered list to show all events
   }
 }
