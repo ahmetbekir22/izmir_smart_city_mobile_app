@@ -28,7 +28,9 @@ class HomePage extends StatelessWidget {
                   themeController.isDarkTheme.value
                       ? Icons.dark_mode
                       : Icons.light_mode,
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: Get.theme.colorScheme.onPrimary,
+
+                  //color: Theme.of(context).colorScheme.onPrimary,
                 )),
             onPressed: themeController.toggleTheme,
           ),
@@ -40,8 +42,8 @@ class HomePage extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Theme.of(context).colorScheme.primary,
-                  Theme.of(context).colorScheme.secondary,
+                  Get.theme.colorScheme.primary,
+                  Get.theme.colorScheme.secondary,
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,

@@ -36,7 +36,11 @@ class _CategoryButtonState extends State<CategoryButton> {
       child: ElevatedButton(
         onPressed: widget.onPressed,
         style: ElevatedButton.styleFrom(
-          shape: const StadiumBorder(),
+          shape: const StadiumBorder(
+            side: BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
           backgroundColor:
               widget.backgroundColor ?? Get.theme.colorScheme.primary,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

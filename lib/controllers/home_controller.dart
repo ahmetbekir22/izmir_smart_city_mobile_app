@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../features/auth/views/event_list.dart';
 
 class HomeController extends GetxController {
+  // Observables for UI state management
   var isExpanded = false.obs;
   var selectedCategoryIndex = 0.obs;
-  double initialChildSize = 0.3;
+  double initialChildSize = 0.3; // Initial size for the draggable sheet
 
-  final DraggableScrollableController draggableController = DraggableScrollableController();
+  // Controllers
+  final DraggableScrollableController draggableController =
+      DraggableScrollableController();
   final PageController pageController = PageController();
 
   @override
@@ -18,10 +20,12 @@ class HomeController extends GetxController {
     pageController.addListener(_handlePageChange);
   }
 
+  // Handles changes in the draggable sheet size
   void _handleScrollChange() {
     isExpanded.value = draggableController.size >= 0.5;
   }
 
+  // Handles page change to update the selected category index
   void _handlePageChange() {
     int newIndex = pageController.page?.round() ?? 0;
     if (newIndex != selectedCategoryIndex.value) {
@@ -29,6 +33,7 @@ class HomeController extends GetxController {
     }
   }
 
+  // Expands or collapses the draggable sheet
   void expandDraggableSheet() {
     draggableController.animateTo(
       isExpanded.value ? initialChildSize : 0.8,
@@ -37,30 +42,45 @@ class HomeController extends GetxController {
     );
   }
 
-  // void onCategorySelected(int index) {
-  //   selectedCategoryIndex.value = index;
-  //   pageController.jumpToPage(index);
-  // }
-
+  // Updates the selected category and scrolls to the corresponding page
   void onCategorySelected(int index) {
     selectedCategoryIndex.value = index;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (pageController.hasClients) {
-        pageController.jumpToPage(index);
+        pageController.jumpToPage(index); // Ensures smooth navigation
       }
     });
   }
 
+  // Handles API item tap based on the API key
   void handleApiTap(String apiKey) {
     switch (apiKey) {
       case 'KULTUR_SANAT_ETKINLILERI_API':
+        // Navigate to the event list page
         Get.to(() => EtkinlikListesiSayfasi());
         break;
-
-      // Diğer API’ler için yönlendirmeler...
       default:
-        print("Sayfa bulunamadı.");
+        // Handle undefined API key (display placeholder page)
+        Get.to(() => PlaceholderPage());
         break;
     }
+  }
+}
+
+// Placeholder page for unimplemented API keys
+class PlaceholderPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Placeholder Sayfası"),
+      ),
+      body: const Center(
+        child: Text(
+          "Bu sayfa henüz geliştirilmedi.",
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+    );
   }
 }

@@ -88,12 +88,11 @@ class DraggableSheetPage extends StatelessWidget {
                                   index;
                           return CategoryButton(
                             label: categoryKeys[index],
-                           
                             backgroundColor: isSelected
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.surface,
+                                ? Get.theme.colorScheme.primary
+                                : Get.theme.colorScheme.surface,
                             textColor: isSelected
-                                ? Theme.of(context).colorScheme.onPrimary
+                                ? Get.theme.colorScheme.onPrimary
                                 : Theme.of(context).colorScheme.onSurface,
                             onPressed: () {
                               homeController.onCategorySelected(index);
@@ -128,8 +127,7 @@ class DraggableSheetPage extends StatelessWidget {
                         return Flexible(
                           child: CustomCard(
                             title: items[index].values.first,
-                            imagePath: items[index]['imagePath'] ??
-                                'assets/images/Izmir-Rehberi-Gezilecek-Yerler.jpg',
+                            imagePath: items[index]['imagePath'],
                             onTap: () {
                               homeController
                                   .handleApiTap(items[index].keys.first);

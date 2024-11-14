@@ -19,8 +19,8 @@ class LatestEventsScreen extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       }
 
-      bool isDarkMode = Get.isDarkMode;
-      Color textColor = Colors.white;
+      // bool isDarkMode = Get.isDarkMode;
+      // Color textColor = Colors.white;
 
       return Stack(
         alignment: Alignment.center,
@@ -43,7 +43,7 @@ class LatestEventsScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Boşluk ekleyerek başlık ve görseli aşağı kaydırma
-                    const SizedBox(height: 50),
+                    SizedBox(height: Get.height * 0.08),
 
                     // Dinamik etkinlik adı
                     Padding(
@@ -58,7 +58,6 @@ class LatestEventsScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    // Görsel tam çerçeveye sığdırılmış ve köşeleri yuvarlatılmış
                     ClipRRect(
                       borderRadius:
                           BorderRadius.circular(20), // Köşeleri yuvarlat

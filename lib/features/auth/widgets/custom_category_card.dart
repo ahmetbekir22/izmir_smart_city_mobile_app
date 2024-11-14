@@ -52,7 +52,8 @@ class CustomCard extends StatelessWidget {
                       width: double.infinity,
                     )
                   : Image.asset(
-                      imagePath ?? 'assets/images/Izmir-Rehberi-Gezilecek-Yerler.jpg',
+                      imagePath ??
+                          'assets/images/Izmir-Rehberi-Gezilecek-Yerler.jpg',
                       fit: BoxFit.cover,
                       width: double.infinity,
                     ),
@@ -66,7 +67,9 @@ class CustomCard extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      color: themeController.isDarkTheme.value ? Colors.white : Colors.black,
+                      color: themeController.isDarkTheme.value
+                          ? Colors.white
+                          : Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                     ),
@@ -82,8 +85,9 @@ class CustomCard extends StatelessWidget {
                         Icon(
                           Icons.category,
                           size: 20,
-                          color:
-                              themeController.isDarkTheme.value ? Colors.white70 : Colors.black87,
+                          color: themeController.isDarkTheme.value
+                              ? Colors.white70
+                              : Colors.black87,
                         ),
                         SizedBox(
                           width: Get.width * 0.01,
@@ -107,15 +111,17 @@ class CustomCard extends StatelessWidget {
                         Icon(
                           Icons.access_time,
                           size: 20,
-                          color:
-                              themeController.isDarkTheme.value ? Colors.white70 : Colors.black87,
+                          color: themeController.isDarkTheme.value
+                              ? Colors.white70
+                              : Colors.black87,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           "$time",
                           style: TextStyle(
-                            color:
-                                themeController.isDarkTheme.value ? Colors.white70 : Colors.black87,
+                            color: themeController.isDarkTheme.value
+                                ? Colors.white70
+                                : Colors.black87,
                           ),
                         ),
                       ],
@@ -126,8 +132,9 @@ class CustomCard extends StatelessWidget {
                         Icon(
                           Icons.calendar_today,
                           size: 20,
-                          color:
-                              themeController.isDarkTheme.value ? Colors.white70 : Colors.black87,
+                          color: themeController.isDarkTheme.value
+                              ? Colors.white70
+                              : Colors.black87,
                         ),
                         SizedBox(
                           width: Get.width * 0.01,
@@ -135,8 +142,9 @@ class CustomCard extends StatelessWidget {
                         Text(
                           "$date",
                           style: TextStyle(
-                            color:
-                                themeController.isDarkTheme.value ? Colors.white70 : Colors.black87,
+                            color: themeController.isDarkTheme.value
+                                ? Colors.white70
+                                : Colors.black87,
                           ),
                         ),
                       ],
@@ -147,8 +155,9 @@ class CustomCard extends StatelessWidget {
                         Icon(
                           Icons.location_on,
                           size: 20,
-                          color:
-                              themeController.isDarkTheme.value ? Colors.white70 : Colors.black87,
+                          color: themeController.isDarkTheme.value
+                              ? Colors.white70
+                              : Colors.black87,
                         ),
                         SizedBox(
                           width: Get.width * 0.01,

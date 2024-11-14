@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:smart_city_app/features/auth/views/home_screen.dart';
 
 import 'controllers/theme_contoller.dart';
 import 'features/splash_screen.dart';
-import 'themes/dark_theme.dart';
-import 'themes/light_theme.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get.dart';
-import 'controllers/theme_contoller.dart';
 import 'themes/dark_theme.dart';
 import 'themes/light_theme.dart';
 
@@ -32,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-      home: const SplashScreen(), // Splash screen'i başlangıç sayfası yap
+      home: const SplashScreen(),
     );
   }
 }

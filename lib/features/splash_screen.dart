@@ -12,8 +12,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  bool _showFirstText = false;
-  bool _showSecondText = false;
+  // bool _showFirstText = false;
+  // bool _showSecondText = false;
   bool _imageLoaded = false;
   bool _loadingImage = false;
   late AnimationController _animationController;
