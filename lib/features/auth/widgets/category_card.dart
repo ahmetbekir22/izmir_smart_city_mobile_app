@@ -40,7 +40,10 @@ class CategoryCard extends StatelessWidget {
         elevation: 10,
         clipBehavior: Clip.antiAlias,
         child: Padding(
-          padding: const EdgeInsets.all(12.0), // Daha fazla boşluk için padding ekledik
+          padding: EdgeInsets.symmetric(
+              horizontal: Get.width * 0.02,
+              vertical:
+                  Get.height * 0.01), // Daha fazla boşluk için padding ekledik
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -54,7 +57,8 @@ class CategoryCard extends StatelessWidget {
                       height: 110, // Resmin yüksekliğini belirttik
                     )
                   : Image.asset(
-                      imagePath ?? 'assets/images/Izmir-Rehberi-Gezilecek-Yerler.jpg',
+                      imagePath ??
+                          'assets/images/Izmir-Rehberi-Gezilecek-Yerler.jpg',
                       fit: BoxFit.cover,
                       width: 110,
                       height: 110,
@@ -65,7 +69,9 @@ class CategoryCard extends StatelessWidget {
                 title,
                 textAlign: TextAlign.center, // Ortalanmış metin
                 style: TextStyle(
-                  color: themeController.isDarkTheme.value ? Colors.white : Colors.black,
+                  color: themeController.isDarkTheme.value
+                      ? Colors.white
+                      : Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -77,7 +83,9 @@ class CategoryCard extends StatelessWidget {
                     date!,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black87,
+                      color: themeController.isDarkTheme.value
+                          ? Colors.white70
+                          : Colors.black87,
                       fontSize: 14,
                     ),
                   ),
@@ -89,7 +97,9 @@ class CategoryCard extends StatelessWidget {
                     location!,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: themeController.isDarkTheme.value ? Colors.white70 : Colors.black87,
+                      color: themeController.isDarkTheme.value
+                          ? Colors.white70
+                          : Colors.black87,
                       fontSize: 14,
                     ),
                   ),
