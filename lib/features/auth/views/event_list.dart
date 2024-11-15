@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../controllers/event_controller.dart';
 import '../../../controllers/theme_contoller.dart';
 import '../../../core/api/events_model.dart';
-import '../widgets/custom_category_card.dart';
+import '../widgets/event_list_card.dart';
 import 'event_detail_screen.dart';
 import 'filter_dialog.dart';
 
@@ -54,13 +54,13 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
               Etkinlik etkinlik = etkinlikController.filteredEventList[index];
               String formattedDate;
               try {
-                formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(etkinlik.etkinlikBaslamaTarihi));
+                formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(etkinlik.etkinlikBaslamaTarihi));
               } catch (e) {
                 formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
               }
               return Padding(
                 padding: EdgeInsets.symmetric(vertical: Get.height * 0.005),
-                child: CustomCard(
+                child: EventListCard(
                   isNetworkImage: true,
                   title: etkinlik.adi,
                   category: etkinlik.tur,

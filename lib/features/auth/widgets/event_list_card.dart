@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../controllers/theme_contoller.dart';
 
-class CustomCard extends StatelessWidget {
+class EventListCard extends StatelessWidget {
   final String title;
   final String? imagePath;
   final String? location;
@@ -14,7 +14,7 @@ class CustomCard extends StatelessWidget {
   final String? category;
   final double? height;
 
-  const CustomCard({
+  const EventListCard({
     super.key,
     required this.title,
     required this.imagePath,

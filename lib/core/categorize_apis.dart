@@ -35,6 +35,8 @@ final Map<String, List<Map<String, String>>> categorizedApis = {
     },
     {
       'AFET_TOPLANMA_YERLERI_API': 'Afet Toplanma Alanları',
+      'imagePath': 'assets/images/acil.png'
+
     },
   ],
   'Seyahat': [
@@ -44,8 +46,11 @@ final Map<String, List<Map<String, String>>> categorizedApis = {
     },
     {
       'OTOPARK_API': 'Otoparklar',
+      'imagePath': 'assets/images/otopark.png'  
     },
-    {'PLAJLAR_API': 'Plajlar'},
+    {'PLAJLAR_API': 'Plajlar',
+     'imagePath': 'assets/images/plaj.png'
+},
   ],
   'İhtiyaç': [
     {

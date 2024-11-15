@@ -3,63 +3,63 @@ final Map<String, List<Map<String, String>>> apiIcons = {
     {
       'api': 'WIFI_API',
       'title': 'WiFi Noktaları',
-      'imagePath': 'assets/images/KentRehberimGörsel/wifi.jpg'
+      'imagePath': 'assets/images/wifi.jpg'
     },
   ],
   'Afet Toplanma Yerleri': [
     {
       'api': 'AFET_TOPLANMA_YERLERI_API',
       'title': 'Afet Toplanma Yerleri',
-      'imagePath': 'assets/images/afet.jpg'
+      'imagePath': 'assets/images/acil.png'
     },
   ],
   'Kültür ve Sanat Etkinlikleri': [
     {
       'api': 'KULTUR_SANAT_ETKINLILERI_API',
       'title': 'Kültür Sanat Etkinlikleri',
-      'imagePath': 'assets/images/KentRehberimGörsel/kültürsanat.png'
+      'imagePath': 'assets/images/kültürsanat.png'
     },
   ],
   'Bisiklet İstasyonları': [
     {
       'api': 'BISIKLET_ISTASYONLARI',
       'title': 'Bisiklet İstasyonları',
-      'imagePath': 'assets/images/KentRehberimGörsel/bisiklet.png'
+      'imagePath': 'assets/images/bisiklet.png'
     },
   ],
   'Otoparklar': [
     {
       'api': 'OTOPARK_API',
       'title': 'Otoparklar',
-      'imagePath': 'assets/images/otopark.jpg'
+      'imagePath': 'assets/images/otopark.png'
     },
   ],
   'Galeri ve Salonlar': [
     {
       'api': 'GALERI_SALONLAR',
       'title': 'Galeri ve Salonlar',
-      'imagePath': 'assets/images/KentRehberimGörsel/sanatgalerisi.png'
+      'imagePath': 'assets/images/sanatgalerisi.png'
     },
   ],
   'Tarihi Yapılar': [
     {
       'api': 'TARIHI_YAPILAR',
       'title': 'Tarihi Yapılar',
-      'imagePath': 'assets/images/KentRehberimGörsel/tarihiyapılar.png'
+      'imagePath': 'assets/images/tarihiyapılar.png'
     },
   ],
   'Antik Kentler': [
     {
       'api': 'ANTIK_KENTLER',
       'title': 'Antik Kentler',
-      'imagePath': 'assets/images/KentRehberimGörsel/antikkent.png'
+      'imagePath': 'assets/images/antikkent.png'
     },
   ],
   'Plajlar': [
     {
       'api': 'PLAJLAR_API',
       'title': 'Plajlar',
-      'imagePath': 'assets/images/plaj.jpg'
+      'imagePath': 'assets/images/plaj.png'
     },
   ],
   'Kütüphaneler': [
@@ -73,14 +73,14 @@ final Map<String, List<Map<String, String>>> apiIcons = {
     {
       'api': 'SEMT_PAZAR_API',
       'title': 'Semt Pazarları',
-      'imagePath': 'assets/images/KentRehberimGörsel/semtpazarı.jpg'
+      'imagePath': 'assets/images/semtpazarı.jpg'
     },
   ],
   'Nöbetçi Eczaneler': [
     {
       'api': 'NOBETCI_ECZANE_API',
       'title': 'Nöbetçi Eczaneler',
-      'imagePath': 'assets/images/KentRehberimGörsel/eczane.png'
+      'imagePath': 'assets/images/eczane.png'
     },
   ],
   ""
@@ -88,7 +88,7 @@ final Map<String, List<Map<String, String>>> apiIcons = {
     {
       'api': 'VETERINER_API',
       'title': 'Veterinerlikler',
-      'imagePath': 'assets/images/KentRehberimGörsel/veteriner.png'
+      'imagePath': 'assets/images/veteriner.png'
     },
   ],
 };
