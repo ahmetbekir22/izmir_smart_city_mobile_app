@@ -59,7 +59,7 @@ final Map<String, List<Map<String, String>>> categorizedApis = {
   'Kültür&Sanat': [
     {
       'KULTUR_SANAT_ETKINLILERI_API': 'Kültür ve Sanat Etkinlikleri',
-      'imagePath': 'assets/images/kültürsanat.png'
+      'imagePath': 'assets/images/4136007.jpg'
     },
     {
       'GALERI_SALONLAR': 'Galeri Salonları',

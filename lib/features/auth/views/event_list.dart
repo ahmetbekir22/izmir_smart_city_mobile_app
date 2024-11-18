@@ -15,10 +15,9 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
 
   EtkinlikListesiSayfasi({super.key});
-  
+
   // Add a method to reset filters
-  void onInit() {
-  }
+  void onInit() {}
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +53,8 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
               Etkinlik etkinlik = etkinlikController.filteredEventList[index];
               String formattedDate;
               try {
-                formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(etkinlik.etkinlikBaslamaTarihi));
+                formattedDate = DateFormat('dd-MM-yyyy')
+                    .format(DateTime.parse(etkinlik.etkinlikBaslamaTarihi));
               } catch (e) {
                 formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
               }
@@ -79,6 +79,7 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
       }),
     );
   }
+
   void _showFilterDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -90,5 +91,4 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
       },
     );
   }
-  
 }

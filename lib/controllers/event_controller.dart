@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_city_app/core/api/event_api_service.dart';
 import '../core/api/events_model.dart';
 import '../utils/making_data_unique.dart';
@@ -105,5 +106,15 @@ class EtkinlikController extends GetxController {
     selectedLocation.value = null;
     selectedDateRange.value = null;
     applyFilters(); // Reset the filtered list to show all events
+  }
+
+  String formatDate(String etkinlikBaslamaTarihi) {
+    final DateTime dateTime = DateTime.parse(etkinlikBaslamaTarihi);
+    return DateFormat('yyyy-MM-dd').format(dateTime);
+  }
+
+  String formatTime(String etkinlikBaslamaTarihi) {
+    final DateTime dateTime = DateTime.parse(etkinlikBaslamaTarihi);
+    return DateFormat('HH:mm').format(dateTime);
   }
 }

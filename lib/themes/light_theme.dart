@@ -21,7 +21,7 @@ final ThemeData lightTheme = ThemeData(
     bodyLarge: TextStyle(color: Colors.black87),
     bodyMedium: TextStyle(color: Colors.black54),
     titleLarge: TextStyle(
-      color: Color(0xFF4A90E2),
+      color: Colors.white,
       fontWeight: FontWeight.bold,
     ),
     bodySmall: TextStyle(color: Colors.black45),
@@ -47,5 +47,4 @@ final ThemeData lightTheme = ThemeData(
     ),
     hintStyle: TextStyle(color: Colors.black38),
   ),
-  
 );

@@ -1,23 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../../controllers/location_controller.dart';
+import '../../../controllers/theme_contoller.dart';
 import '../../../core/api/events_model.dart';
 import '../../../utils/data_cleaning_utility.dart';
-import '../../../utils/generic_functions.dart';
 
 class DetailEventScreen extends StatelessWidget {
   final Etkinlik etkinlik;
-  const DetailEventScreen({super.key, required this.etkinlik});
+  final LocationController _locationController = Get.put(LocationController());
+  final ThemeController themeController = Get.find<ThemeController>();
+
+  DetailEventScreen({super.key, required this.etkinlik});
 
   @override
   Widget build(BuildContext context) {
-    String cleanedDescription = DataCleaningUtility.cleanHtmlText(etkinlik.kisaAciklama);
+    String cleanedDescription =
+        DataCleaningUtility.cleanHtmlText(etkinlik.kisaAciklama);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           etkinlik.adi,
-          style: Theme.of(context).textTheme.titleLarge, // Temadan başlık stili
+          style: Get.theme.textTheme.titleLarge,
         ),
+        actions: [
+          IconButton(
+            icon: Obx(() => Icon(
+                  themeController.isDarkTheme.value
+                      ? Icons.dark_mode
+                      : Icons.light_mode,
+                  color: Get.theme.colorScheme.onPrimary,
+
+                  //color: Theme.of(context).colorScheme.onPrimary,
+                )),
+            onPressed: themeController.toggleTheme,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -44,7 +63,8 @@ class DetailEventScreen extends StatelessWidget {
                   );
                 },
                 errorBuilder: (context, error, stackTrace) {
-                  return const Center(child: Icon(Icons.error, color: Colors.red, size: 50));
+                  return const Center(
+                      child: Icon(Icons.error, color: Colors.red, size: 50));
                 },
               ),
             ),
@@ -53,14 +73,14 @@ class DetailEventScreen extends StatelessWidget {
             // Etkinlik Başlığı ve Kısa Açıklama
             Text(
               etkinlik.adi,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+              style: Get.theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
             const SizedBox(height: 10),
             Text(
               cleanedDescription,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Get.theme.textTheme.bodyMedium,
             ),
             const SizedBox(height: 20),
 
@@ -73,13 +93,14 @@ class DetailEventScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Tür
-                    _buildDetailRow(Icons.category, 'Etkinlik Türü', etkinlik.tur, context),
+                    _buildDetailRow(
+                        Icons.category, 'Etkinlik Türü', etkinlik.tur, context),
 
                     // Başlangıç ve Bitiş Tarihi (Tek Row)
                     _buildDetailRow(
                       Icons.date_range,
                       'Tarih Aralığı',
-                      '${EventUtils.formatDate(etkinlik.etkinlikBaslamaTarihi)} - ${EventUtils.formatDate(etkinlik.etkinlikBitisTarihi)}',
+                      '${etkinlik.etkinlikBaslamaTarihi} - ${etkinlik.etkinlikBitisTarihi}',
                       context,
                     ),
 
@@ -94,7 +115,8 @@ class DetailEventScreen extends StatelessWidget {
                     // Konum Bilgisi (Tıklanabilir Row)
                     GestureDetector(
                       onTap: () {
-                        EventUtils.launchMap(etkinlik.etkinlikMerkezi);
+                        _locationController
+                            .openLocation(etkinlik.etkinlikMerkezi);
                       },
                       child: _buildDetailRow(
                         Icons.location_on,
@@ -114,7 +136,8 @@ class DetailEventScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(IconData icon, String label, String value, BuildContext context,
+  Widget _buildDetailRow(
+      IconData icon, String label, String value, BuildContext context,
       {bool isLink = false}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -140,7 +163,8 @@ class DetailEventScreen extends StatelessWidget {
             child: Text(
               '$label: $value',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: isLink ? Theme.of(context).colorScheme.secondary : null,
+                    color:
+                        isLink ? Theme.of(context).colorScheme.secondary : null,
                     decoration: isLink ? TextDecoration.underline : null,
                     fontWeight: isLink ? FontWeight.w600 : FontWeight.normal,
                   ),

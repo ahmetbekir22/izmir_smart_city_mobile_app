@@ -42,3 +42,25 @@
 //     selectedDate.value = null;
 //   }
 // }
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class FilterDialogController extends GetxController {
+  final RxnString selectedLocation = RxnString(null);
+  final Rxn<DateTime> startDate = Rxn<DateTime>(null);
+  final Rxn<DateTime> endDate = Rxn<DateTime>(null);
+
+  void resetFilters() {
+    selectedLocation.value = null;
+    startDate.value = null;
+    endDate.value = null;
+  }
+
+  DateTimeRange? get dateRange {
+    if (startDate.value != null && endDate.value != null) {
+      return DateTimeRange(start: startDate.value!, end: endDate.value!);
+    }
+    return null;
+  }
+}
