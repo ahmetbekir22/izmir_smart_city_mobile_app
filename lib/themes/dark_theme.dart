@@ -28,5 +28,5 @@ final ThemeData darkTheme = ThemeData(
     bodyMedium: TextStyle(color: Colors.grey),
     titleLarge: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
   ),
-  iconTheme: const IconThemeData(color: Color(0xFF6200EE)),
+  iconTheme: const IconThemeData(color: Color.fromARGB(255, 98, 13, 217)),
 );

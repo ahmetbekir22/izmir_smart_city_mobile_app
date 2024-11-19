@@ -39,7 +39,7 @@ class DetailEventScreen extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.02),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -70,107 +70,80 @@ class DetailEventScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
+// Get.theme.textTheme.bodyLarge?.copyWith(
+//                 fontWeight: FontWeight.w600
             // Etkinlik Başlığı ve Kısa Açıklama
             Text(
               etkinlik.adi,
-              style: Get.theme.textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(
+                  color: Color.fromARGB(255, 113, 96, 96),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
             ),
             const SizedBox(height: 10),
             Text(
               cleanedDescription,
-              style: Get.theme.textTheme.bodyMedium,
+              style: const TextStyle(
+                color: Color.fromARGB(255, 109, 96, 96),
+              ),
             ),
             const SizedBox(height: 20),
 
-            // Etkinlik Detayları Kartı
-            Card(
-              margin: EdgeInsets.zero,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Tür
-                    _buildDetailRow(
-                        Icons.category, 'Etkinlik Türü', etkinlik.tur, context),
-
-                    // Başlangıç ve Bitiş Tarihi (Tek Row)
-                    _buildDetailRow(
-                      Icons.date_range,
-                      'Tarih Aralığı',
-                      '${etkinlik.etkinlikBaslamaTarihi} - ${etkinlik.etkinlikBitisTarihi}',
-                      context,
-                    ),
-
-                    // Ücret Durumu
-                    _buildDetailRow(
-                      Icons.money_off,
-                      'Ücret Durumu',
-                      etkinlik.ucretsizMi ? 'Ücretsiz' : 'Ücretli',
-                      context,
-                    ),
-
-                    // Konum Bilgisi (Tıklanabilir Row)
-                    GestureDetector(
-                      onTap: () {
-                        _locationController
-                            .openLocation(etkinlik.etkinlikMerkezi);
-                      },
-                      child: _buildDetailRow(
-                        Icons.location_on,
-                        'Etkinlik Merkezi',
-                        etkinlik.etkinlikMerkezi,
-                        context,
-                        isLink: true,
-                      ),
-                    ),
-                  ],
-                ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Etkinlik Bilgileri Listesi
+                  ListTile(
+                    leading:
+                        Icon(Icons.category, color: Get.theme.iconTheme.color),
+                    title: const Text('Etkinlik Türü',
+                        style: TextStyle(fontWeight: FontWeight.w600)),
+                    subtitle: Text(etkinlik.tur),
+                  ),
+                  const Divider(
+                    color: Color.fromARGB(255, 206, 205, 205),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.date_range,
+                        color: Get.theme.iconTheme.color),
+                    title: const Text('Tarih',
+                        style: TextStyle(fontWeight: FontWeight.w600)),
+                    subtitle: Text(etkinlik.etkinlikBaslamaTarihi),
+                  ),
+                  const Divider(
+                    color: Color.fromARGB(255, 206, 205, 205),
+                  ),
+                  ListTile(
+                    leading:
+                        Icon(Icons.money_off, color: Get.theme.iconTheme.color),
+                    title: const Text('Ücret Durumu',
+                        style: TextStyle(fontWeight: FontWeight.w600)),
+                    subtitle:
+                        Text(etkinlik.ucretsizMi ? 'Ücretsiz' : 'Ücretli'),
+                  ),
+                  const Divider(
+                    color: Color.fromARGB(255, 206, 205, 205),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.location_on,
+                        color: Get.theme.iconTheme.color),
+                    title: const Text('Etkinlik Merkezi',
+                        style: TextStyle(fontWeight: FontWeight.w600)),
+                    subtitle: Text(etkinlik.etkinlikMerkezi),
+                    onTap: () {
+                      _locationController
+                          .openLocation(etkinlik.etkinlikMerkezi);
+                    },
+                    trailing: const Icon(Icons.arrow_forward_ios,
+                        size: 16.0, color: Colors.grey),
+                  ),
+                ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildDetailRow(
-      IconData icon, String label, String value, BuildContext context,
-      {bool isLink = false}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      padding: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 3,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              '$label: $value',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color:
-                        isLink ? Theme.of(context).colorScheme.secondary : null,
-                    decoration: isLink ? TextDecoration.underline : null,
-                    fontWeight: isLink ? FontWeight.w600 : FontWeight.normal,
-                  ),
-            ),
-          ),
-        ],
       ),
     );
   }
