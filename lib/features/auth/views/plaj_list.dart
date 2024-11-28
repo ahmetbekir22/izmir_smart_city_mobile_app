@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/plaj_controller.dart';
 import '../../../controllers/theme_contoller.dart';
+import '../../../controllers/general_filter_controller.dart';
 import '../widgets/general_card.dart';
+import 'general_filter_UI.dart';
 
 class PlajList extends StatelessWidget {
   final ThemeController themeController = Get.find();
-  final PlajController plajController = Get.put(PlajController());
+  final PlajController plajController = Get.put(PlajController()); // Change this line
+  final GeneralFilterController filterController = Get.put(GeneralFilterController());
 
   final ScrollController scrollController = ScrollController();
 
@@ -22,6 +25,10 @@ class PlajList extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.filter_list),
             onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => GeneralFilterDialog(),
+              );
             },
           ),
         ],
@@ -31,7 +38,14 @@ class PlajList extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (plajController.errorMessage.isNotEmpty) {
           return Center(child: Text(plajController.errorMessage.value));
-        } else if (plajController.plajList.isEmpty) {
+        }
+
+        // Use filtered list or original list if no filter applied
+        final displayList = filterController.filteredPlajList.isNotEmpty 
+            ? filterController.filteredPlajList 
+            : plajController.plajList;
+
+        if (displayList.isEmpty) {
           return const Center(child: Text('Plaj bulunamadı.'));
         }
 
@@ -39,13 +53,13 @@ class PlajList extends StatelessWidget {
           controller: scrollController,
           thickness: 10,
           radius: const Radius.circular(8),
-          thumbVisibility: false, // Kaydırma çubuğu her zaman görünür olsun
-          interactive: true, // Sürüklemeyi aktif eder
+          thumbVisibility: false,
+          interactive: true,
           child: ListView.builder(
             controller: scrollController,
-            itemCount: plajController.plajList.length,
+            itemCount: displayList.length,
             itemBuilder: (context, index) {
-              final plaj = plajController.plajList[index];
+              final plaj = displayList[index];
               return GeneralCard(
                 adi: plaj.aDI ?? 'Bilinmiyor',
                 ilce: plaj.iLCE ?? 'Bilinmiyor',
