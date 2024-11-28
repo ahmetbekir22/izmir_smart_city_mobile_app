@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../features/auth/views/event_list.dart';
+import '../features/auth/views/plaj_list.dart';
 
 class HomeController extends GetxController {
   // Observables for UI state management
@@ -58,6 +59,10 @@ class HomeController extends GetxController {
       case 'KULTUR_SANAT_ETKINLILERI_API':
         // Navigate to the event list page
         Get.to(() => EtkinlikListesiSayfasi());
+        break;
+      case 'PLAJLAR_API':
+        // Navigate to the plaj list page
+        Get.to(() => PlajList());
         break;
       default:
         // Handle undefined API key (display placeholder page)
