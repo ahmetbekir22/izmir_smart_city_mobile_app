@@ -5,7 +5,7 @@ class GeneralCard extends StatelessWidget {
   final String ilce;
   final String mahalle;
   final String? aciklama; // Opsiyonel aciklama alanı
-  final VoidCallback onIconPressed;
+  final VoidCallback? onLocationTap;
 
   const GeneralCard({
     Key? key,
@@ -13,7 +13,7 @@ class GeneralCard extends StatelessWidget {
     required this.ilce,
     required this.mahalle,
     this.aciklama,
-    required this.onIconPressed,
+    this.onLocationTap,
   }) : super(key: key);
 
   @override
@@ -62,7 +62,7 @@ class GeneralCard extends StatelessWidget {
             // Sağ tarafta yer alan konum butonu
             Center( // Sağdaki içeriği dikey ortalamak için
               child: GestureDetector(
-                onTap: onIconPressed,
+                onTap: onLocationTap,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center, // İçeriği kendi ekseninde ortala
                   children: [

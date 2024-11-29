@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../controllers/location_controller.dart';
 import '../../../controllers/plaj_controller.dart';
 import '../../../controllers/theme_contoller.dart';
 import '../../../controllers/general_filter_controller.dart';
@@ -10,6 +11,7 @@ class PlajList extends StatelessWidget {
   final ThemeController themeController = Get.find();
   final PlajController plajController = Get.put(PlajController()); // Change this line
   final GeneralFilterController filterController = Get.put(GeneralFilterController());
+  final LocationController locationController = Get.put(LocationController());
 
   final ScrollController scrollController = ScrollController();
 
@@ -64,9 +66,15 @@ class PlajList extends StatelessWidget {
                 adi: plaj.aDI ?? 'Bilinmiyor',
                 ilce: plaj.iLCE ?? 'Bilinmiyor',
                 mahalle: plaj.mAHALLE ?? 'Bilinmiyor',
-                onIconPressed: () {
-                  print('${plaj.aDI} seçildi.');
-                },
+                onLocationTap: plaj.eNLEM != null && plaj.bOYLAM != null
+                  ? () {
+                      final LocationController locationController = Get.find();
+                      locationController.openLocationByCoordinates(
+                        plaj.eNLEM!, 
+                        plaj.bOYLAM!
+                      );
+                    }
+                  : null, // Disable location tap if coordinates are missing
               );
             },
           ),
