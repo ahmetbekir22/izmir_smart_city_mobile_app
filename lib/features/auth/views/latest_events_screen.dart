@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../controllers/event_controller.dart';
+import '../../../controllers/etkinlik_api_controllers/event_controller.dart';
 import 'event_detail_screen.dart';
 
 class LatestEventsScreen extends StatelessWidget {

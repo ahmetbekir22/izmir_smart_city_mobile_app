@@ -7,11 +7,11 @@ class EtkinlikApiService {
   final Dio _dio = Dio();
 
   Future<List<Etkinlik>> fetchEtkinlikler() async {
-    final String apiUrl = dotenv.env[
+    final String etkinlikApiUrl = dotenv.env[
         'KULTUR_SANAT_ETKINLILERI_API']!; // .env dosyasından API URL'sini al
 
     try {
-      final response = await _dio.get(apiUrl);
+      final response = await _dio.get(etkinlikApiUrl);
       // API'den gelen verinin 'data' kısmı yerine doğrudan dizi döndürdüğünü varsayıyoruz.
       List<dynamic> body = response.data; // Eğer yanıt direkt liste ise
       return body.map((dynamic item) => Etkinlik.fromJson(item)).toList();

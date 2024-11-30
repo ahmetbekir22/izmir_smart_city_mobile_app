@@ -2,9 +2,9 @@ import 'package:get/get.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_city_app/core/api/event_api_service.dart';
-import '../core/api/events_model.dart';
-import '../utils/making_data_unique.dart';
+import 'package:smart_city_app/core/api/etkinlik/event_api_service.dart';
+import '../../core/api/etkinlik/events_model.dart';
+import '../../utils/making_data_unique.dart';
 
 class EtkinlikController extends GetxController {
   var etkinlikListesi = <Etkinlik>[].obs;

@@ -266,7 +266,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/event_controller.dart';
+import '../../../controllers/etkinlik_api_controllers/event_controller.dart';
 import '../../../controllers/filter_controller.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 

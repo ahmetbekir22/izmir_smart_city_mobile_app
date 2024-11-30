@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../controllers/event_controller.dart';
+import '../../../controllers/etkinlik_api_controllers/event_controller.dart';
 import '../../../controllers/theme_contoller.dart';
-import '../../../core/api/events_model.dart';
+import '../../../core/api/etkinlik/events_model.dart';
 import '../widgets/event_list_card.dart';
 import 'event_detail_screen.dart';
 import 'filter_dialog.dart';

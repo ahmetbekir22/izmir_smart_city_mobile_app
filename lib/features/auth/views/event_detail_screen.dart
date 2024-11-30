@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../controllers/location_controller.dart';
 import '../../../controllers/theme_contoller.dart';
-import '../../../core/api/events_model.dart';
+import '../../../core/api/etkinlik/events_model.dart';
 import '../../../utils/data_cleaning_utility.dart';
 
 class DetailEventScreen extends StatelessWidget {
