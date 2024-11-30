@@ -61,11 +61,11 @@ class HomeController extends GetxController {
         Get.to(() => EtkinlikListesiSayfasi());
         break;
       case 'NOBETCI_ECZANE_API':
-        Get.to(() => EczaneHomeScreen());
+        Get.to(() => const EczaneHomeScreen());
 
       default:
         // Handle undefined API key (display placeholder page)
-        Get.to(() => ());
+        Get.to(() => PlaceholderPage());
         break;
     }
   }

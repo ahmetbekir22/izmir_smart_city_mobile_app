@@ -6,7 +6,7 @@ class EczaneService {
   final Dio _dio = Dio();
   final String eczaneApiUrl = dotenv.env['NOBETCI_ECZANE_API'] ?? '';
 
-  Future<List<Eczane>> fetchEczaneler() async {
+  Future<List<Eczane>> getEczaneler() async {
     try {
       final response = await _dio.get(eczaneApiUrl);
 
