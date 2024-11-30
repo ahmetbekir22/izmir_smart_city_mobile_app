@@ -1,1 +1,0 @@
-//burada api service işlemleri ve modeller olucak.

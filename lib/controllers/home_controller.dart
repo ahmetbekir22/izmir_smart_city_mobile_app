@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_city_app/features/auth/views/eczane_pages/eczane_home_screen.dart';
 import '../features/auth/views/event_list.dart';
 
 class HomeController extends GetxController {
@@ -59,9 +60,12 @@ class HomeController extends GetxController {
         // Navigate to the event list page
         Get.to(() => EtkinlikListesiSayfasi());
         break;
+      case 'NOBETCI_ECZANE_API':
+        Get.to(() => EczaneHomeScreen());
+
       default:
         // Handle undefined API key (display placeholder page)
-        Get.to(() => PlaceholderPage());
+        Get.to(() => ());
         break;
     }
   }

@@ -124,15 +124,13 @@ class DraggableSheetPage extends StatelessWidget {
                       ),
                       itemCount: items.length,
                       itemBuilder: (context, index) {
-                        return Flexible(
-                          child: CategoryCard(
-                            title: items[index].values.first,
-                            imagePath: items[index]['imagePath'],
-                            onTap: () {
-                              homeController
-                                  .handleApiTap(items[index].keys.first);
-                            },
-                          ),
+                        return CategoryCard(
+                          title: items[index].values.first,
+                          imagePath: items[index]['imagePath'],
+                          onTap: () {
+                            homeController
+                                .handleApiTap(items[index].keys.first);
+                          },
                         );
                       },
                     );
