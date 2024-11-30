@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smart_city_app/controllers/pazar_yer_controllers/pazar_yeri_controller.dart';
 import 'package:smart_city_app/core/coordiantes_calculations.dart';
@@ -27,23 +28,19 @@ class PazarYeriHomeScreen extends StatelessWidget {
         ],
       ),
       body: Obx(() {
-        // Veriler yükleniyor mu kontrolü
         if (pazarYeriController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        // Eğer filtrelenmiş liste varsa, onu göster
         final pazarYerleriList =
             pazarYeriController.filteredPazarYerleri.isEmpty
                 ? pazarYeriController.pazarYerleri
                 : pazarYeriController.filteredPazarYerleri;
 
-        // Veri boşsa kullanıcıya bilgi göster
         if (pazarYerleriList.isEmpty) {
           return const Center(child: Text("Hiçbir semt pazarı bulunamadı."));
         }
 
-        // Veriler yüklendiğinde liste göster
         return ListView.builder(
           itemCount: pazarYerleriList.length,
           itemBuilder: (context, index) {
@@ -76,7 +73,7 @@ class PazarYeriHomeScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.location_city,
+                        const Icon(FontAwesomeIcons.locationArrow,
                             size: 21, color: Colors.red),
                         const SizedBox(width: 8),
                         Text(
@@ -93,7 +90,8 @@ class PazarYeriHomeScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.map, size: 21, color: Colors.blue),
+                        const Icon(FontAwesomeIcons.locationDot,
+                            size: 21, color: Colors.blue),
                         const SizedBox(width: 8),
                         Text(
                           "İlçe: ${pazar.iLCE ?? "Bilinmiyor"}",
@@ -110,7 +108,7 @@ class PazarYeriHomeScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.calendar_today,
+                        const Icon(FontAwesomeIcons.calendarDay,
                             size: 21, color: Colors.green),
                         const SizedBox(width: 8),
                         Text(

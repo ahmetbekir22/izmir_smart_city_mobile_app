@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../../../../controllers/eczane_api_controllers/eczane_controller.dart';
 import '../../../../core/coordiantes_calculations.dart';
@@ -59,7 +60,7 @@ class EczaneHomeScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: Get.height * 0.004,
                             horizontal: Get.width * 0.005),
-                        child: const Icon(Icons.location_on,
+                        child: const Icon(FontAwesomeIcons.locationDot,
                             size: 20, color: Colors.red),
                       ),
                       Expanded(
@@ -77,7 +78,7 @@ class EczaneHomeScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: Get.height * 0.005,
                             horizontal: Get.width * 0.01),
-                        child: const Icon(Icons.phone_in_talk_rounded,
+                        child: const Icon(FontAwesomeIcons.phoneVolume,
                             size: 20, color: Colors.green),
                       ),
                       Padding(
@@ -96,8 +97,8 @@ class EczaneHomeScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: Get.height * 0.005,
                             horizontal: Get.width * 0.01),
-                        child:
-                            const Icon(Icons.map, size: 20, color: Colors.blue),
+                        child: const Icon(FontAwesomeIcons.mapLocationDot,
+                            size: 20, color: Colors.blue),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
