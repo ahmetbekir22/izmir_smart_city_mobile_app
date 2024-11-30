@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_city_app/features/auth/views/eczane_pages/eczane_home_screen.dart';
+import 'package:smart_city_app/features/auth/views/pazar_yeri_pages/pazar_yeri_home_screen.dart';
 import '../features/auth/views/event_list.dart';
 
 class HomeController extends GetxController {
@@ -62,6 +63,8 @@ class HomeController extends GetxController {
         break;
       case 'NOBETCI_ECZANE_API':
         Get.to(() => const EczaneHomeScreen());
+      case 'SEMT_PAZAR_API':
+        Get.to(() => const PazarYeriHomeScreen());
 
       default:
         // Handle undefined API key (display placeholder page)
