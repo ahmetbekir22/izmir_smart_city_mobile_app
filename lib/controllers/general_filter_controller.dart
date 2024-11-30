@@ -1,56 +1,82 @@
 import 'package:get/get.dart';
-import '../core/api/plaj_model.dart';
-import '../core/api/plaj_service.dart';
 
-class GeneralFilterController extends GetxController {
-  final PlajApiService apiService = PlajApiService();
-
+class GenericFilterController<T> extends GetxController {
+  // List to store the original unfiltered items
+  final RxList<T> originalList = <T>[].obs;
+  
+  // List to store filtered items
+  final RxList<T> filteredList = <T>[].obs;
+  
+  // Lists to store unique filter options
   final RxList<String> ilceler = <String>[].obs;
   final RxList<String> mahalleler = <String>[].obs;
   
+  // Selected filter values
   final RxString selectedIlce = ''.obs;
   final RxString selectedMahalle = ''.obs;
   
-  final RxList<Onemliyer> filteredPlajList = <Onemliyer>[].obs;
-  final RxList<Onemliyer> originalPlajList = <Onemliyer>[].obs;
+  // Function to extract ilce from an item
+  String Function(T item) extractIlce;
+  
+  // Function to extract mahalle from an item
+  String Function(T item) extractMahalle;
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchFilterData();
+  // Constructor with required extraction functions
+  GenericFilterController({
+    required this.extractIlce,
+    required this.extractMahalle,
+  });
+
+  // Initialize filter data
+  void initializeFilterData(List<T> data) {
+    originalList.assignAll(data);
+    
+    // Extract unique ilçeler and mahalleler
+    ilceler.assignAll(
+      data.map((item) => extractIlce(item)).toSet().toList()
+    );
+    
+    mahalleler.assignAll(
+      data.map((item) => extractMahalle(item)).toSet().toList()
+    );
   }
 
-  void fetchFilterData() async {
-    try {
-      final fetchedData = await apiService.fetchPlajlar();
-      originalPlajList.assignAll(fetchedData);
-      
-      // Extract unique ilçeler and mahalleler
-      ilceler.assignAll(fetchedData.map((plaj) => plaj.iLCE ?? '').toSet().toList());
-      mahalleler.assignAll(fetchedData.map((plaj) => plaj.mAHALLE ?? '').toSet().toList());
-    } catch (e) {
-      print('Filter data fetch error: $e');
-    }
-  }
-
-  void filterPlajList() {
+  // Filter list based on selected ilce and mahalle
+  void filterList() {
     if (selectedIlce.value.isEmpty && selectedMahalle.value.isEmpty) {
-      filteredPlajList.assignAll(originalPlajList);
+      filteredList.assignAll(originalList);
       return;
     }
-
-    filteredPlajList.assignAll(
-      originalPlajList.where((plaj) {
-        final matchesIlce = selectedIlce.value.isEmpty || plaj.iLCE == selectedIlce.value;
-        final matchesMahalle = selectedMahalle.value.isEmpty || plaj.mAHALLE == selectedMahalle.value;
+    
+    filteredList.assignAll(
+      originalList.where((item) {
+        final matchesIlce = selectedIlce.value.isEmpty || 
+            extractIlce(item) == selectedIlce.value;
+        
+        final matchesMahalle = selectedMahalle.value.isEmpty || 
+            extractMahalle(item) == selectedMahalle.value;
+        
         return matchesIlce && matchesMahalle;
       }).toList()
     );
   }
 
+  // Reset filter to initial state
   void resetFilter() {
     selectedIlce.value = '';
     selectedMahalle.value = '';
-    filteredPlajList.assignAll(originalPlajList);
+    filteredList.assignAll(originalList);
+  }
+
+  // Update mahalle list based on selected ilce
+  void updateMahalleList(List<T> allItems) {
+    mahalleler.assignAll(
+      allItems
+        .where((item) => extractIlce(item) == selectedIlce.value)
+        .map((item) => extractMahalle(item))
+        .toSet()
+        .toList()
+    );
+    selectedMahalle.value = '';
   }
 }

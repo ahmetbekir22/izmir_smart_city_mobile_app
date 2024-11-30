@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/general_filter_controller.dart';
-import '../../../controllers/plaj_controller.dart';
 
-class GeneralFilterDialog extends StatelessWidget {
-  final GeneralFilterController filterController = Get.find();
-  final PlajController plajController = Get.find();
+class GenericFilterDialog<T> extends StatelessWidget {
+  final GenericFilterController<T> filterController;
+  final List<T> allItems;
+  final String title;
+
+  const GenericFilterDialog({
+    Key? key,
+    required this.filterController,
+    required this.allItems,
+    this.title = 'Filtrele',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Plaj Filtrele'),
+      title: Text(title),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -29,15 +36,8 @@ class GeneralFilterDialog extends StatelessWidget {
                   }).toList(),
                   onChanged: (value) {
                     filterController.selectedIlce.value = value ?? '';
-                    // Güncellenen ilçeye göre mahalle listesini filtrele
-                    filterController.mahalleler.assignAll(
-                      plajController.plajList
-                        .where((plaj) => plaj.iLCE == value)
-                        .map((plaj) => plaj.mAHALLE ?? '')
-                        .toSet()
-                        .toList()
-                    );
-                    filterController.selectedMahalle.value = '';
+                    // Update mahalle list based on selected ilce
+                    filterController.updateMahalleList(allItems);
                   },
                 )),
 
@@ -72,7 +72,7 @@ class GeneralFilterDialog extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            filterController.filterPlajList();
+            filterController.filterList();
             Navigator.of(context).pop();
           },
           child: const Text('Filtrele'),

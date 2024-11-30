@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../features/auth/views/event_list.dart';
 import '../features/auth/views/plaj_list.dart';
+import '../features/auth/views/wifi_list.dart';
 
 class HomeController extends GetxController {
   // Observables for UI state management
@@ -63,6 +64,10 @@ class HomeController extends GetxController {
       case 'PLAJLAR_API':
         // Navigate to the plaj list page
         Get.to(() => PlajList());
+        break;
+      case 'WIFI_API':
+        // Navigate to the plaj list page
+        Get.to(() => WifiList());
         break;
       default:
         // Handle undefined API key (display placeholder page)
