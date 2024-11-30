@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_city_app/core/api/veteriner_model.dart';
 import '../features/auth/views/event_list.dart';
 import '../features/auth/views/plaj_list.dart';
+import '../features/auth/views/veteriner_list.dart';
 import '../features/auth/views/wifi_list.dart';
 
 class HomeController extends GetxController {
@@ -68,6 +70,10 @@ class HomeController extends GetxController {
       case 'WIFI_API':
         // Navigate to the plaj list page
         Get.to(() => WifiList());
+        break;
+      case 'VETERINER_API':
+        // Navigate to the plaj list page
+        Get.to(() => VeterinerList());
         break;
       default:
         // Handle undefined API key (display placeholder page)
