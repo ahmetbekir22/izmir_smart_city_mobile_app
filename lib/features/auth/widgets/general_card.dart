@@ -4,8 +4,9 @@ class GeneralCard extends StatelessWidget {
   final String adi;
   final String ilce;
   final String mahalle;
-  final String? aciklama; // Opsiyonel aciklama alanı
+  final String? aciklama;
   final VoidCallback? onLocationTap;
+  final int maxCharacterLength = 100; 
 
   const GeneralCard({
     Key? key,
@@ -16,9 +17,29 @@ class GeneralCard extends StatelessWidget {
     this.onLocationTap,
   }) : super(key: key);
 
+  void _showDescriptionDialog(BuildContext context, String description) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Detaylı Açıklama'),
+          content: SingleChildScrollView(
+            child: Text(description),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Kapat'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // Mevcut temayı almak için
+    final theme = Theme.of(context);
 
     return Card(
       color: theme.cardTheme.color,
@@ -27,9 +48,8 @@ class GeneralCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center, // Satır içeriğini dikey ortala
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Sol tarafta yer alan metin alanları
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,21 +70,55 @@ class GeneralCard extends StatelessWidget {
                   ),
                   if (aciklama != null && aciklama!.isNotEmpty) ...[
                     const SizedBox(height: 4),
-                    Text(
-                      aciklama!,
-                      style: theme.textTheme.bodySmall,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Açıklama: ',
+                          style: theme.textTheme.bodySmall,
+                        ),
+                        Expanded(
+                          child: aciklama!.length > maxCharacterLength
+                              ? GestureDetector(
+                                  onTap: () => _showDescriptionDialog(
+                                      context, aciklama!),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              '${aciklama!.substring(0, maxCharacterLength)}... ',
+                                          style: theme.textTheme.bodySmall,
+                                        ),
+                                        TextSpan(
+                                          text: 'Detayına Git',
+                                          style: theme.textTheme.bodySmall
+                                              ?.copyWith(
+                                            color: theme.primaryColor,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Text(
+                                  aciklama!,
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                        ),
+                      ],
                     ),
                   ],
                 ],
               ),
             ),
-
-            // Sağ tarafta yer alan konum butonu
-            Center( // Sağdaki içeriği dikey ortalamak için
+            Center(
               child: GestureDetector(
                 onTap: onLocationTap,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center, // İçeriği kendi ekseninde ortala
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
                       Icons.location_on,
