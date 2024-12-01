@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'custom_description.dart';
 
 class GeneralCard extends StatelessWidget {
   final String adi;
@@ -6,7 +7,6 @@ class GeneralCard extends StatelessWidget {
   final String mahalle;
   final String? aciklama;
   final VoidCallback? onLocationTap;
-  final int maxCharacterLength = 100; 
 
   const GeneralCard({
     Key? key,
@@ -16,26 +16,6 @@ class GeneralCard extends StatelessWidget {
     this.aciklama,
     this.onLocationTap,
   }) : super(key: key);
-
-  void _showDescriptionDialog(BuildContext context, String description) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Detaylı Açıklama'),
-          content: SingleChildScrollView(
-            child: Text(description),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Kapat'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,45 +50,9 @@ class GeneralCard extends StatelessWidget {
                   ),
                   if (aciklama != null && aciklama!.isNotEmpty) ...[
                     const SizedBox(height: 4),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Açıklama: ',
-                          style: theme.textTheme.bodySmall,
-                        ),
-                        Expanded(
-                          child: aciklama!.length > maxCharacterLength
-                              ? GestureDetector(
-                                  onTap: () => _showDescriptionDialog(
-                                      context, aciklama!),
-                                  child: RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              '${aciklama!.substring(0, maxCharacterLength)}... ',
-                                          style: theme.textTheme.bodySmall,
-                                        ),
-                                        TextSpan(
-                                          text: 'Detayına Git',
-                                          style: theme.textTheme.bodySmall
-                                              ?.copyWith(
-                                            color: theme.primaryColor,
-                                            decoration:
-                                                TextDecoration.underline,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              : Text(
-                                  aciklama!,
-                                  style: theme.textTheme.bodySmall,
-                                ),
-                        ),
-                      ],
+                    CustomDescription(
+                      description: aciklama,
+                      textStyle: theme.textTheme.bodySmall,
                     ),
                   ],
                 ],
