@@ -65,6 +65,10 @@ final Map<String, List<Map<String, String>>> categorizedApis = {
       'GALERI_SALONLAR': 'Galeri Salonları',
       'imagePath': 'assets/images/sanatgalerisi.png',
     },
+     {
+      'KUTUPHANE_API': 'Kütüphaneler',
+      'imagePath': 'assets/images/kutuphane.png',
+    },
   ],
   'Tarihi Alanlar': [
     {

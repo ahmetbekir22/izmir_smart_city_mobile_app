@@ -5,6 +5,12 @@ import '../features/auth/views/event_list.dart';
 import '../features/auth/views/plaj_list.dart';
 import '../features/auth/views/veteriner_list.dart';
 import '../features/auth/views/wifi_list.dart';
+import '../features/auth/views/galeri_list.dart';
+import '../features/auth/views/tarihi_list.dart';
+import '../features/auth/views/antik_list.dart';
+import '../features/auth/views/kutuphane_list.dart';
+
+
 
 class HomeController extends GetxController {
   // Observables for UI state management
@@ -74,6 +80,18 @@ class HomeController extends GetxController {
       case 'VETERINER_API':
         // Navigate to the plaj list page
         Get.to(() => VeterinerList());
+        break;
+      case 'GALERI_SALONLAR': 
+        Get.to(() => GaleriList());
+        break;
+      case 'TARIHI_YAPILAR': 
+        Get.to(() => TarihiList());
+        break;
+      case 'ANTIK_KENTLER':
+        Get.to(() => AntikList());
+        break;
+      case 'KUTUPHANE_API':
+        Get.to(() => KutuphaneList());
         break;
       default:
         // Handle undefined API key (display placeholder page)
