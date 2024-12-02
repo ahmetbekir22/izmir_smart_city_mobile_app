@@ -85,6 +85,7 @@ class BisikletHomeScreen extends StatelessWidget {
                               color: station['Durumu'] == "1"
                                   ? Colors.green
                                   : Colors.red,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],

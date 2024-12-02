@@ -4,6 +4,7 @@ import 'package:smart_city_app/features/auth/views/eczane_pages/eczane_home_scre
 import 'package:smart_city_app/features/auth/views/pazar_yeri_pages/pazar_yeri_home_screen.dart';
 import '../features/auth/views/bisiklet_home_pages/bisiklet_home_screen.dart';
 import '../features/auth/views/event_list.dart';
+import '../features/auth/views/otopark_pages/otopark_home_screen.dart';
 
 class HomeController extends GetxController {
   // Observables for UI state management
@@ -68,6 +69,8 @@ class HomeController extends GetxController {
         Get.to(() => const PazarYeriHomeScreen());
       case 'BISIKLET_ISTASYONLARI':
         Get.to(() => BisikletHomeScreen());
+      case 'OTOPARK_API':
+        Get.to(() => OtoparkHomeScreen());
 
       default:
         // Handle undefined API key (display placeholder page)

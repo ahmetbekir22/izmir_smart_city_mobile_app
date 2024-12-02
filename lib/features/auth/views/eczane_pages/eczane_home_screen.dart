@@ -138,9 +138,10 @@ class EczaneHomeScreen extends StatelessWidget {
                 final region = regions[index];
                 return ListTile(
                   title: Text(region),
+                  trailing: const Icon(Icons.chevron_right),
                   onTap: () {
                     controller.filterByRegion(region);
-                    Navigator.pop(context); // BottomSheet'i kapat
+                    Navigator.pop(context);
                   },
                 );
               },

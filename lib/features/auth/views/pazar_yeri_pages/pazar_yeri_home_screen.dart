@@ -152,6 +152,7 @@ void _filterPagePazarYeri(
               final region = regions[index];
               return ListTile(
                 title: Text(region),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   controller.filterByIlce(region);
                   Navigator.pop(context); // BottomSheet'i kapat
@@ -164,3 +165,38 @@ void _filterPagePazarYeri(
     },
   );
 }
+
+// void _filterPagePazarYeri(
+//     BuildContext context, PazarYeriController controller) {
+//   showModalBottomSheet(
+//     context: context,
+//     builder: (context) {
+//       return Obx(() {
+//         // İlçeler listesi
+//         final regions = controller.pazarYerleri
+//             .map((pazar) => pazar.iLCE ?? '')
+//             .toSet()
+//             .where((ilce) => ilce.isNotEmpty)
+//             .toList();
+
+//         return Container(
+//           padding: const EdgeInsets.all(16),
+//           child: ListView.builder(
+//             itemCount: regions.length,
+//             itemBuilder: (context, index) {
+//               final region = regions[index];
+//               return ListTile(
+//                 title: Text(region),
+//                 trailing: const Icon(Icons.chevron_right), // Sağ ok ikonu
+//                 onTap: () {
+//                   controller.filterByIlce(region);
+//                   Navigator.pop(context); // BottomSheet'i kapat
+//                 },
+//               );
+//             },
+//           ),
+//         );
+//       });
+//     },
+//   );
+// }
