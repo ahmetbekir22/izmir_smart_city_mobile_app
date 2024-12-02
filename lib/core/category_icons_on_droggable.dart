@@ -66,7 +66,7 @@ final Map<String, List<Map<String, String>>> apiIcons = {
     {
       'api': 'KUTUPHANE_API',
       'title': 'Kütüphaneler',
-      'imagePath': 'assets/images/kutuphane.jpg'
+      'imagePath': 'assets/images/kutuphane.png'
     },
   ],
   'Semt Pazarları': [

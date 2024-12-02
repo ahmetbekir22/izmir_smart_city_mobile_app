@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'custom_description.dart';
 
 class GeneralCard extends StatelessWidget {
   final String adi;
   final String ilce;
   final String mahalle;
-  final String? aciklama; // Opsiyonel aciklama alanı
+  final String? aciklama;
   final VoidCallback? onLocationTap;
 
   const GeneralCard({
@@ -18,7 +19,7 @@ class GeneralCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // Mevcut temayı almak için
+    final theme = Theme.of(context);
 
     return Card(
       color: theme.cardTheme.color,
@@ -27,9 +28,8 @@ class GeneralCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center, // Satır içeriğini dikey ortala
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Sol tarafta yer alan metin alanları
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,21 +50,19 @@ class GeneralCard extends StatelessWidget {
                   ),
                   if (aciklama != null && aciklama!.isNotEmpty) ...[
                     const SizedBox(height: 4),
-                    Text(
-                      aciklama!,
-                      style: theme.textTheme.bodySmall,
+                    CustomDescription(
+                      description: aciklama,
+                      textStyle: theme.textTheme.bodySmall,
                     ),
                   ],
                 ],
               ),
             ),
-
-            // Sağ tarafta yer alan konum butonu
-            Center( // Sağdaki içeriği dikey ortalamak için
+            Center(
               child: GestureDetector(
                 onTap: onLocationTap,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center, // İçeriği kendi ekseninde ortala
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
                       Icons.location_on,
