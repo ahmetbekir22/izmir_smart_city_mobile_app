@@ -18,7 +18,9 @@ final ThemeData lightTheme = ThemeData(
     background: Color(0xFFF2F5FA), // Arka plan rengi
   ),
   textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Colors.black87),
+    bodyLarge: TextStyle(
+      color: Colors.black87,
+      fontWeight: FontWeight.bold,),
     bodyMedium: TextStyle(color: Colors.black54),
     titleLarge: TextStyle(
       color: Colors.white,

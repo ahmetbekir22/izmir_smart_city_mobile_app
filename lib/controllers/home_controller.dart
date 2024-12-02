@@ -3,8 +3,13 @@ import 'package:get/get.dart';
 import 'package:smart_city_app/features/auth/views/eczane_pages/eczane_home_screen.dart';
 import 'package:smart_city_app/features/auth/views/pazar_yeri_pages/pazar_yeri_home_screen.dart';
 import '../features/auth/views/bisiklet_home_pages/bisiklet_home_screen.dart';
+import 'package:smart_city_app/core/api/veteriner_model.dart';
+import '../features/auth/views/afet_list.dart';
 import '../features/auth/views/event_list.dart';
 import '../features/auth/views/otopark_pages/otopark_home_screen.dart';
+import '../features/auth/views/plaj_list.dart';
+import '../features/auth/views/veteriner_list.dart';
+import '../features/auth/views/wifi_list.dart';
 
 class HomeController extends GetxController {
   // Observables for UI state management
@@ -72,6 +77,18 @@ class HomeController extends GetxController {
       case 'OTOPARK_API':
         Get.to(() => OtoparkHomeScreen());
 
+      case 'PLAJLAR_API':
+        Get.to(() => PlajList());
+        break;
+      case 'WIFI_API':
+        Get.to(() => WifiList());
+        break;
+      case 'VETERINER_API':
+        Get.to(() => VeterinerList());
+        break;
+      case 'AFET_TOPLANMA_YERLERI_API':
+        Get.to(() => AfetList());
+        break;
       default:
         // Handle undefined API key (display placeholder page)
         Get.to(() => PlaceholderPage());
