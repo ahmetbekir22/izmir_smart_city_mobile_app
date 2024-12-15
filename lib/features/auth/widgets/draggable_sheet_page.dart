@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_city_app/features/auth/widgets/category_card.dart';
+import 'package:smart_city_app/features/auth/widgets/card_widgets/category_card.dart';
 
-import '../../../controllers/home_controller.dart';
+import '../../../controllers/home_controllers/home_controller.dart';
+
 import '../../../controllers/theme_contoller.dart';
 import '../../../core/categorize_apis.dart';
-import '../widgets/custom_category_buttom.dart';
+import 'button_wigdets/custom_category_buttom.dart';
 
 class DraggableSheetPage extends StatelessWidget {
   final HomeController homeController;

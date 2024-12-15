@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../../../../controllers/eczane_api_controllers/eczane_controller.dart';
 import '../../../../core/coordiantes_calculations.dart';
-import '../../widgets/category_card.dart';
+import '../../widgets/card_widgets/category_card.dart';
 
 class EczaneHomeScreen extends StatelessWidget {
   const EczaneHomeScreen({super.key});

@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smart_city_app/controllers/pazar_yer_controllers/pazar_yeri_controller.dart';
 import 'package:smart_city_app/core/coordiantes_calculations.dart';
-import 'package:smart_city_app/features/auth/widgets/category_card.dart';
+import 'package:smart_city_app/features/auth/widgets/card_widgets/category_card.dart';
 
 class PazarYeriHomeScreen extends StatelessWidget {
   const PazarYeriHomeScreen({super.key});

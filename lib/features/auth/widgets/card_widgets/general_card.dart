@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'custom_description.dart';
+import '../custom_description.dart';
 
 class GeneralCard extends StatelessWidget {
   final String adi;
@@ -45,7 +45,7 @@ class GeneralCard extends StatelessWidget {
                     Row(
                       children: [
                         Icon(Icons.location_city, size: 16, color: theme.iconTheme.color),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 10),
                         Text(
                           'İlçe: $ilce',
                           style: theme.textTheme.bodyMedium,
@@ -56,7 +56,7 @@ class GeneralCard extends StatelessWidget {
                     Row(
                       children: [
                         Icon(FontAwesomeIcons.mapLocationDot, size: 16, color: theme.iconTheme.color),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 10),
                         Text(
                           'Mahalle: $mahalle',
                           style: theme.textTheme.bodyMedium,

@@ -8,7 +8,7 @@ class CustomDescription extends StatelessWidget {
   const CustomDescription({
     Key? key,
     this.description,
-    this.maxLength = 100,
+    this.maxLength = 20,
     this.textStyle,
   }) : super(key: key);
 
