@@ -83,6 +83,13 @@ final Map<String, List<Map<String, String>>> apiIcons = {
       'imagePath': 'assets/images/eczane.png'
     },
   ],
+   'Tuvaletler': [
+    {
+      'api': 'TUVALET_API',
+      'title': 'Tuvaletler',
+      'imagePath': 'assets/images/eczane.png'
+    },
+  ],
   ""
       'Veterinerlikler': [
     {

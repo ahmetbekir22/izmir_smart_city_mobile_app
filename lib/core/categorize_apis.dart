@@ -55,6 +55,11 @@ final Map<String, List<Map<String, String>>> categorizedApis = {
       'SEMT_PAZAR_API': 'Semt Pazarları',
       'imagePath': 'assets/images/semtpazarı.jpg'
     },
+    {
+      'TUVALET_API': 'Tuvaletler',
+      'imagePath': 'assets/images/semtpazarı.jpg'
+    },
+
   ],
   'Kültür&Sanat': [
     {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_city_app/controllers/toilet_binding.dart';
 import 'package:smart_city_app/features/auth/views/eczane_pages/eczane_home_screen.dart';
 import 'package:smart_city_app/features/auth/views/pazar_yeri_pages/pazar_yeri_home_screen.dart';
+import 'package:smart_city_app/features/auth/views/toilet_view.dart';
 import '../features/auth/views/bisiklet_home_pages/bisiklet_home_screen.dart';
 import 'package:smart_city_app/core/api/veteriner_model.dart';
 import '../features/auth/views/afet_list.dart';
@@ -106,6 +108,12 @@ class HomeController extends GetxController {
         break;
       case 'AFET_TOPLANMA_YERLERI_API':
         Get.to(() => AfetList());
+        break;
+         case 'TUVALET_API':
+        Get.to(
+          () => const ToiletView(),
+          binding: ToiletBinding(), // Binding'i burada ekliyoruz
+        );
         break;
       default:
         // Handle undefined API key (display placeholder page)

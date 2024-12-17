@@ -45,7 +45,7 @@ dependencies:
   flutter_datetime_picker_plus: ^2.2.0
   flutter_launcher_icons: ^0.14.1
   font_awesome_flutter: ^10.8.0
-
+  http: ^1.2.2
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
