@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_city_app/controllers/toilet_binding.dart';
 import 'package:smart_city_app/features/auth/views/eczane_pages/eczane_home_screen.dart';
 import 'package:smart_city_app/features/auth/views/pazar_yeri_pages/pazar_yeri_home_screen.dart';
+import 'package:smart_city_app/features/auth/views/toilet_view.dart';
+import '../features/auth/views/bisiklet_home_pages/bisiklet_home_screen.dart';
+import 'package:smart_city_app/core/api/veteriner_model.dart';
+import '../features/auth/views/afet_list.dart';
+import '../features/auth/views/event_list.dart';
+import '../features/auth/views/otopark_pages/otopark_home_screen.dart';
+import '../features/auth/views/plaj_list.dart';
+import '../features/auth/views/veteriner_list.dart';
+import '../features/auth/views/wifi_list.dart';
+import '../features/auth/views/galeri_list.dart';
+import '../features/auth/views/tarihi_list.dart';
+import '../features/auth/views/antik_list.dart';
+import '../features/auth/views/kutuphane_list.dart';
 import '../../features/auth/views/bisiklet_home_pages/bisiklet_home_screen.dart';
 import '../../features/auth/views/afet_pages/afet_list.dart';
 import '../../features/auth/views/event_pages/event_list.dart';
@@ -105,6 +119,12 @@ class HomeController extends GetxController {
         break;
       case 'AFET_TOPLANMA_YERLERI_API':
         Get.to(() => AfetList());
+        break;
+         case 'TUVALET_API':
+        Get.to(
+          () => const ToiletView(),
+          binding: ToiletBinding(), // Binding'i burada ekliyoruz
+        );
         break;
       default:
         // Handle undefined API key (display placeholder page)
