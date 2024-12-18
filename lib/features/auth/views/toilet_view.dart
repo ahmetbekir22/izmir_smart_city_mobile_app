@@ -1,18 +1,17 @@
-// lib/app/views/toilet_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_city_app/controllers/location_controller.dart';
+import 'package:smart_city_app/controllers/location_controllers/location_controller.dart';
 import 'package:smart_city_app/controllers/toilet_controller.dart';
 import 'package:smart_city_app/core/api/toilet_model.dart';
-
+import 'package:smart_city_app/features/auth/views/filter_pages/general_filter_UI.dart';
 import '../widgets/general_card.dart';
+import '../../../../controllers/filter_controllers/general_filter_controller.dart';
 
 class ToiletView extends GetView<ToiletController> {
   const ToiletView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // LocationController'ı find veya put ile alıyoruz
     final locationController = Get.find<LocationController>();
 
     return Scaffold(
@@ -20,8 +19,17 @@ class ToiletView extends GetView<ToiletController> {
         title: const Text('Akıllı Tuvaletler'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () => controller.fetchToilets(),
+            icon: const Icon(Icons.filter_list),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => GenericFilterDialog<Records>(
+                  filterController: controller.filterController,
+                  allItems: controller.toilets,
+                  title: 'Tuvalet Filtrele',
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -55,11 +63,16 @@ class ToiletView extends GetView<ToiletController> {
             return const Center(child: Text('Veri bulunamadı'));
           }
 
+          final displayedToilets =
+              controller.filterController.filteredList.isEmpty
+                  ? controller.toilets
+                  : controller.filterController.filteredList;
+
           return ListView.builder(
             padding: const EdgeInsets.all(8),
-            itemCount: controller.toilets.length,
+            itemCount: displayedToilets.length,
             itemBuilder: (context, index) {
-              final toilet = controller.toilets[index];
+              final toilet = displayedToilets[index];
 
               return GeneralCard(
                 adi: toilet.tESISADI ?? 'İsimsiz Tesis',
@@ -73,7 +86,6 @@ class ToiletView extends GetView<ToiletController> {
                         toilet.bOYLAM!,
                       );
                     } else if (toilet.tESISADI != null) {
-                      // Koordinat yoksa tesis adı ile arama yap
                       locationController.openLocation(toilet.tESISADI!);
                     } else {
                       Get.snackbar(
@@ -94,62 +106,6 @@ class ToiletView extends GetView<ToiletController> {
             },
           );
         },
-      ),
-    );
-  }
-}
-
-
-class ToiletDetailView extends StatelessWidget {
-  const ToiletDetailView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final Records toilet = Get.arguments;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(toilet.tESISADI ?? 'Tesis Detayı'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Card(
-              child: ListTile(
-                title: const Text('Tesis Bilgileri'),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-                    Text('ID: ${toilet.iId}'),
-                    const SizedBox(height: 4),
-                    Text('İlçe: ${toilet.iLCE ?? 'Belirtilmemiş'}'),
-                    const SizedBox(height: 4),
-                    Text('Mahalle: ${toilet.mAHALLE ?? 'Belirtilmemiş'}'),
-                    const SizedBox(height: 4),
-                    Text('Adres: ${toilet.aDRES ?? 'Belirtilmemiş'}'),
-                    const SizedBox(height: 4),
-                    Text('Koordinatlar: ${toilet.eNLEM}, ${toilet.bOYLAM}'),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Harita uygulamasına yönlendirme yapılabilir
-                // TODO: Implement map navigation
-              },
-              icon: const Icon(Icons.map),
-              label: const Text('Haritada Göster'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 48),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

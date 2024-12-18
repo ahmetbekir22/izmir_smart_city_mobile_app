@@ -1,6 +1,6 @@
 // final Map<String, List<Map<String, String>>> categorizedApis = {
 //   'ACİL': [
-//     {'NOBETCI_ECZANE_API': 'Nöbetçi Eczaneler', 'imagePath': 'assets/images/eczane.png'},
+//     {'NOBETCI_ECZANE_API': 'Nöbetçi Eczaneler', 'imagePath': 'assets/images/eczane'},
 //     {'AFET_TOPLANMA_YERLERI_API': 'Afet Toplanma Alanları'},
 //   ],
 //   'Seyahat': [
@@ -57,7 +57,7 @@ final Map<String, List<Map<String, String>>> categorizedApis = {
     },
     {
       'TUVALET_API': 'Tuvaletler',
-      'imagePath': 'assets/images/semtpazarı.jpg'
+      'imagePath': 'assets/images/toilet.png'
     },
 
   ],

@@ -87,7 +87,7 @@ final Map<String, List<Map<String, String>>> apiIcons = {
     {
       'api': 'TUVALET_API',
       'title': 'Tuvaletler',
-      'imagePath': 'assets/images/eczane.png'
+      'imagePath': 'assets/images/toilet.png'
     },
   ],
   ""
