@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_city_app/features/auth/views/afet_pages/DisasterAreasBeachesPage.dart';
+import 'package:smart_city_app/features/auth/views/afet_pages/harita_view.dart';
 import 'package:smart_city_app/features/auth/views/eczane_pages/eczane_home_screen.dart';
 import 'package:smart_city_app/features/auth/views/pazar_yeri_pages/pazar_yeri_home_screen.dart';
 import '../../features/auth/views/bisiklet_home_pages/bisiklet_home_screen.dart';
@@ -104,7 +106,7 @@ class HomeController extends GetxController {
         Get.to(() => KutuphaneList());
         break;
       case 'AFET_TOPLANMA_YERLERI_API':
-        Get.to(() => AfetList());
+        Get.to(() => DisasterAreasBeachesPage());
         break;
       default:
         // Handle undefined API key (display placeholder page)
