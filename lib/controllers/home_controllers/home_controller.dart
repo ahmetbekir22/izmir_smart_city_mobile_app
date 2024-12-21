@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_city_app/features/auth/views/afet_pages/DisasterAreasBeachesPage.dart';
-import 'package:smart_city_app/features/auth/views/afet_pages/harita_view.dart';
+import 'package:smart_city_app/features/auth/views/map_pages/map_view.dart';
 import 'package:smart_city_app/features/auth/views/eczane_pages/eczane_home_screen.dart';
 import 'package:smart_city_app/features/auth/views/pazar_yeri_pages/pazar_yeri_home_screen.dart';
 import '../../features/auth/views/bisiklet_home_pages/bisiklet_home_screen.dart';
@@ -72,7 +71,6 @@ class HomeController extends GetxController {
   void handleApiTap(String apiKey) {
     switch (apiKey) {
       case 'KULTUR_SANAT_ETKINLILERI_API':
-        // Navigate to the event list page
         Get.to(() => EtkinlikListesiSayfasi());
         break;
       case 'NOBETCI_ECZANE_API':
@@ -83,7 +81,6 @@ class HomeController extends GetxController {
         Get.to(() => BisikletHomeScreen());
       case 'OTOPARK_API':
         Get.to(() => OtoparkHomeScreen());
-
       case 'PLAJLAR_API':
         Get.to(() => PlajList());
         break;
@@ -106,7 +103,7 @@ class HomeController extends GetxController {
         Get.to(() => KutuphaneList());
         break;
       case 'AFET_TOPLANMA_YERLERI_API':
-        Get.to(() => DisasterAreasBeachesPage());
+        Get.to(() => AfetList());
         break;
       default:
         // Handle undefined API key (display placeholder page)
