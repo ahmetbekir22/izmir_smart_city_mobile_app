@@ -59,98 +59,94 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          centerTitle: true,
-          actions: [
-            Obx(() {
-              if (currentTabIndex.value == 0) {
-                return IconButton(
-                  icon: const Icon(Icons.filter_list),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => GenericFilterDialog<T>(
-                        filterController: filterController,
-                        allItems: widget.items,
-                        title: '${widget.title} Filtrele',
-                      ),
-                    );
-                  },
-                );
-              }
-              return const SizedBox.shrink();
-            }),
-          ],
-          bottom: TabBar(
-            onTap: (index) {
-              currentTabIndex.value = index;
-            },
-            tabs: const [
-              Tab(text: 'Liste Görünümü'),
-              Tab(text: 'Harita Görünümü'),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            // Tab 1: List view
-            Obx(() {
-              final displayList = filterController.filteredList.isNotEmpty
-                  ? filterController.filteredList
-                  : widget.items;
-
-              if (displayList.isEmpty) {
-                return const Center(child: Text('Kayıt bulunamadı.'));
-              }
-
-              return Scrollbar(
-                controller: scrollController,
-                thickness: 10,
-                radius: const Radius.circular(8),
-                thumbVisibility: false,
-                interactive: true,
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: displayList.length,
-                  itemBuilder: (context, index) {
-                    final item = displayList[index];
-                    return GeneralCard(
-                      adi: widget.extractAdi(item) ?? 'Bilinmiyor',
-                      ilce: widget.extractIlce(item),
-                      mahalle: widget.extractMahalle(item),
-                      aciklama: widget.extractAciklama != null ? widget.extractAciklama!(item) : null,
-                      gun: widget.extractGun != null ? widget.extractGun!(item) : null,
-                      onLocationTap: widget.extractEnlem != null && widget.extractBoylam != null
-                          ? () {
-                              final enlem = widget.extractEnlem!(item);
-                              final boylam = widget.extractBoylam!(item);
-                              if (enlem != null && boylam != null) {
-                                Get.put(LocationController()).openLocationByCoordinates(
-                                  enlem,
-                                  boylam,
-                                );
-                              }
-                            }
-                          : null,
-                    );
-                  },
-                ),
+@override
+Widget build(BuildContext context) {
+  return DefaultTabController(
+    length: 2,
+    child: Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        centerTitle: true,
+        actions: [
+          Obx(() {
+            if (currentTabIndex.value == 0) {
+              return IconButton(
+                icon: const Icon(Icons.filter_list),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => GenericFilterDialog<T>(
+                      filterController: filterController,
+                      allItems: widget.items,
+                      title: '${widget.title} Filtrele',
+                    ),
+                  );
+                },
               );
-            }),
-
-            // Tab 2: Map view
-            Center(
-              child: MapView()            
-              ),
+            }
+            return const SizedBox.shrink();
+          }),
+        ],
+        bottom: TabBar(
+          onTap: (index) {
+            currentTabIndex.value = index;
+          },
+          tabs: const [
+            Tab(text: 'Liste Görünümü'),
+            Tab(text: 'Harita Görünümü'),
           ],
         ),
       ),
-    );
-  }
+      body: Obx(() {
+        // TabBar'a göre doğru içeriği seç
+        if (currentTabIndex.value == 0) {
+          final displayList = filterController.filteredList.isNotEmpty
+              ? filterController.filteredList
+              : widget.items;
+
+          if (displayList.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return Scrollbar(
+            controller: scrollController,
+            thickness: 10,
+            radius: const Radius.circular(8),
+            thumbVisibility: false,
+            interactive: true,
+            child: ListView.builder(
+              controller: scrollController,
+              itemCount: displayList.length,
+              itemBuilder: (context, index) {
+                final item = displayList[index];
+                return GeneralCard(
+                  adi: widget.extractAdi(item) ?? 'Bilinmiyor',
+                  ilce: widget.extractIlce(item),
+                  mahalle: widget.extractMahalle(item),
+                  aciklama: widget.extractAciklama != null ? widget.extractAciklama!(item) : null,
+                  gun: widget.extractGun != null ? widget.extractGun!(item) : null,
+                  onLocationTap: widget.extractEnlem != null && widget.extractBoylam != null
+                      ? () {
+                          final enlem = widget.extractEnlem!(item);
+                          final boylam = widget.extractBoylam!(item);
+                          if (enlem != null && boylam != null) {
+                            Get.put(LocationController()).openLocationByCoordinates(
+                              enlem,
+                              boylam,
+                            );
+                          }
+                        }
+                      : null,
+                );
+              },
+            ),
+          );
+        } else {
+          return const MapView(); // Map görünümü
+        }
+      }),
+    ),
+  );
+}
+
 }
