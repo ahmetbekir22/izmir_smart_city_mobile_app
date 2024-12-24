@@ -2,7 +2,7 @@ class AntikKent {
   int? sayfadakiKayitsayisi;
   int? kayitSayisi;
   int? sayfaNumarasi;
-  List<Antik>? onemliyer;
+  List<Onemliyer>? onemliyer;
   int? toplamSayfaSayisi;
 
   AntikKent(
@@ -17,9 +17,9 @@ class AntikKent {
     kayitSayisi = json['kayit_sayisi'];
     sayfaNumarasi = json['sayfa_numarasi'];
     if (json['onemliyer'] != null) {
-      onemliyer = <Antik>[];
+      onemliyer = <Onemliyer>[];
       json['onemliyer'].forEach((v) {
-        onemliyer!.add(Antik.fromJson(v));
+        onemliyer!.add(Onemliyer.fromJson(v));
       });
     }
     toplamSayfaSayisi = json['toplam_sayfa_sayisi'];
@@ -38,7 +38,7 @@ class AntikKent {
   }
 }
 
-class Antik {
+class Onemliyer {
   String? iLCE;
   String? kAPINO;
   double? eNLEM;
@@ -50,7 +50,7 @@ class Antik {
   double? bOYLAM;
   String? yOL;
 
-  Antik(
+  Onemliyer(
       {this.iLCE,
       this.kAPINO,
       this.eNLEM,
@@ -62,7 +62,7 @@ class Antik {
       this.bOYLAM,
       this.yOL});
 
-  Antik.fromJson(Map<String, dynamic> json) {
+  Onemliyer.fromJson(Map<String, dynamic> json) {
     iLCE = json['ILCE'];
     kAPINO = json['KAPINO']?.toString();
     eNLEM = json['ENLEM'] is String

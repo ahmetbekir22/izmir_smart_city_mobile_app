@@ -2,7 +2,7 @@ class Kutuphane {
   int? sayfadakiKayitsayisi;
   int? kayitSayisi;
   int? sayfaNumarasi;
-  List<KutuphaneBilgi>? onemliyer;
+  List<Onemliyer>? onemliyer;
   int? toplamSayfaSayisi;
 
   Kutuphane(
@@ -17,9 +17,9 @@ class Kutuphane {
     kayitSayisi = json['kayit_sayisi'];
     sayfaNumarasi = json['sayfa_numarasi'];
     if (json['onemliyer'] != null) {
-      onemliyer = <KutuphaneBilgi>[];
+      onemliyer = <Onemliyer>[];
       json['onemliyer'].forEach((v) {
-        onemliyer!.add(KutuphaneBilgi.fromJson(v));
+        onemliyer!.add(Onemliyer.fromJson(v));
       });
     }
     toplamSayfaSayisi = json['toplam_sayfa_sayisi'];
@@ -38,7 +38,7 @@ class Kutuphane {
   }
 }
 
-class KutuphaneBilgi {
+class Onemliyer {
   String? iLCE;
   String? kAPINO;
   double? eNLEM;
@@ -50,7 +50,7 @@ class KutuphaneBilgi {
   double? bOYLAM;
   String? yOL;
 
-  KutuphaneBilgi(
+  Onemliyer(
       {this.iLCE,
       this.kAPINO,
       this.eNLEM,
@@ -62,7 +62,7 @@ class KutuphaneBilgi {
       this.bOYLAM,
       this.yOL});
 
-  KutuphaneBilgi.fromJson(Map<String, dynamic> json) {
+  Onemliyer.fromJson(Map<String, dynamic> json) {
     iLCE = json['ILCE'];
     kAPINO = json['KAPINO']?.toString();
     eNLEM = json['ENLEM'] is String

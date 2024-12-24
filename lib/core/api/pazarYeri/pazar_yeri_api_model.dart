@@ -1,4 +1,4 @@
-class PazarYeri {
+class Onemliyer {
   String? iLCE;
   String? kAPINO;
   double? eNLEM;
@@ -10,7 +10,7 @@ class PazarYeri {
   double? bOYLAM;
   String? yOL;
 
-  PazarYeri(
+  Onemliyer(
       {this.iLCE,
       this.kAPINO,
       this.eNLEM,
@@ -22,7 +22,7 @@ class PazarYeri {
       this.bOYLAM,
       this.yOL});
 
-  PazarYeri.fromJson(Map<String, dynamic> json) {
+  Onemliyer.fromJson(Map<String, dynamic> json) {
     iLCE = json['ILCE'];
     kAPINO = json['KAPINO'];
     eNLEM = json['ENLEM'];

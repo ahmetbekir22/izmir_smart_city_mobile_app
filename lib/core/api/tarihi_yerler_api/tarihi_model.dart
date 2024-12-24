@@ -2,7 +2,7 @@ class TarihiYapi {
   int? sayfadakiKayitsayisi;
   int? kayitSayisi;
   int? sayfaNumarasi;
-  List<Yapilar>? onemliyer;
+  List<Onemliyer>? onemliyer;
   int? toplamSayfaSayisi;
 
   TarihiYapi(
@@ -17,9 +17,9 @@ class TarihiYapi {
     kayitSayisi = json['kayit_sayisi'];
     sayfaNumarasi = json['sayfa_numarasi'];
     if (json['onemliyer'] != null) {
-      onemliyer = <Yapilar>[];
+      onemliyer = <Onemliyer>[];
       json['onemliyer'].forEach((v) {
-        onemliyer!.add(Yapilar.fromJson(v));
+        onemliyer!.add(Onemliyer.fromJson(v));
       });
     }
     toplamSayfaSayisi = json['toplam_sayfa_sayisi'];
@@ -38,7 +38,7 @@ class TarihiYapi {
   }
 }
 
-class Yapilar {
+class Onemliyer {
   String? iLCE;
   String? kAPINO;
   double? eNLEM;
@@ -50,7 +50,7 @@ class Yapilar {
   double? bOYLAM;
   String? yOL;
 
-  Yapilar(
+  Onemliyer(
       {this.iLCE,
       this.kAPINO,
       this.eNLEM,
@@ -62,7 +62,7 @@ class Yapilar {
       this.bOYLAM,
       this.yOL});
 
-  Yapilar.fromJson(Map<String, dynamic> json) {
+  Onemliyer.fromJson(Map<String, dynamic> json) {
     iLCE = json['ILCE'];
     kAPINO = json['KAPINO']?.toString();
     eNLEM = json['ENLEM'] is String

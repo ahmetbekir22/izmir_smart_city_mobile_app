@@ -35,7 +35,7 @@ class PazarYeriApiService {
   final Dio _dio = Dio();
   final String pazarYeriApiUrl = dotenv.env['SEMT_PAZAR_API'] ?? '';
 
-  Future<List<PazarYeri>> getPazarYerleri() async {
+  Future<List<Onemliyer>> getPazarYerleri() async {
     try {
       final response = await _dio.get(pazarYeriApiUrl);
 
@@ -44,7 +44,7 @@ class PazarYeriApiService {
         if (response.data is Map<String, dynamic> &&
             response.data['onemliyer'] is List) {
           List<dynamic> data = response.data['onemliyer'];
-          return data.map((json) => PazarYeri.fromJson(json)).toList();
+          return data.map((json) => Onemliyer.fromJson(json)).toList();
         } else {
           throw Exception('Beklenmeyen veri formatı');
         }

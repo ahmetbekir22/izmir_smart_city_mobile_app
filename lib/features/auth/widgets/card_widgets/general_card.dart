@@ -6,6 +6,7 @@ class GeneralCard extends StatelessWidget {
   final String adi;
   final String ilce;
   final String mahalle;
+  final String? gun;
   final String? aciklama;
   final VoidCallback? onLocationTap;
 
@@ -14,6 +15,7 @@ class GeneralCard extends StatelessWidget {
     required this.adi,
     required this.ilce,
     required this.mahalle,
+    this.gun,
     this.aciklama,
     this.onLocationTap,
   }) : super(key: key);
@@ -63,11 +65,24 @@ class GeneralCard extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 4),
                     if (aciklama != null && aciklama!.isNotEmpty) ...[
-                      const SizedBox(height: 4),
                       CustomDescription(
                         description: aciklama,
-                        textStyle: theme.textTheme.bodySmall,
+                        textStyle: theme.textTheme.bodyMedium,
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                    if (gun != null && gun!.isNotEmpty) ...[
+                      Row(
+                      children: [
+                        Icon(FontAwesomeIcons.calendarDay, size: 16, color: theme.iconTheme.color),
+                        const SizedBox(width: 10),
+                        Text(
+                        'Gün: $gun',
+                        style: theme.textTheme.bodyMedium,
+                        ),
+                      ],
                       ),
                     ],
                   ],
