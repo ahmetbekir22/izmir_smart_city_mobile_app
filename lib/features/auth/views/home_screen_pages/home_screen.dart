@@ -4,7 +4,7 @@ import '../../../../controllers/home_controllers/home_controller.dart';
 import '../../../../controllers/theme_contoller.dart';
 import '../../widgets/draggable_sheet_page.dart';
 import 'latest_events_screen.dart';
-
+import '../menu_pages/menu_page.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -15,6 +15,18 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+         leading: IconButton(
+          icon: Icon(
+            Icons.menu,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MenuPage()),
+            );
+          },
+        ),
         title: const Text(
           'Kent Rehberim',
           style: TextStyle(color: Colors.white),

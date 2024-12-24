@@ -25,7 +25,7 @@ class DraggableSheetPage extends StatelessWidget {
 
     return DraggableScrollableSheet(
       controller: homeController.draggableController,
-      initialChildSize: 0.6,
+      initialChildSize: 0.1,
       minChildSize: 0.1,
       maxChildSize: 0.9,
       builder: (context, scrollController) {
