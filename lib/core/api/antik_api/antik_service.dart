@@ -5,7 +5,7 @@ import 'antik_model.dart';
 class AntikApiService {
   final Dio _dio = Dio();
 
-  Future<List<Antik>> fetchAntikKentler() async {
+  Future<List<Onemliyer>> fetchAntikKentler() async {
     final String apiUrl = dotenv.env['ANTIK_KENTLER']!;
 
     try {
@@ -15,7 +15,7 @@ class AntikApiService {
         final data = response.data as Map<String, dynamic>;
         if (data.containsKey('onemliyer')) {
           final List<dynamic> onemliyer = data['onemliyer'];
-          return onemliyer.map((item) => Antik.fromJson(item)).toList();
+          return onemliyer.map((item) => Onemliyer.fromJson(item)).toList();
         }
       }
 

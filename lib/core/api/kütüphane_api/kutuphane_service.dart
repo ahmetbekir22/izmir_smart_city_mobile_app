@@ -5,7 +5,7 @@ import 'kutuphane_model.dart';
 class KutuphaneApiService {
   final Dio _dio = Dio();
 
-  Future<List<KutuphaneBilgi>> fetchKutuphaneler() async {
+  Future<List<Onemliyer>> fetchKutuphaneler() async {
     final String apiUrl = dotenv.env['KUTUPHANE_API']!;
 
     try {
@@ -16,7 +16,7 @@ class KutuphaneApiService {
         if (data.containsKey('onemliyer')) {
           final List<dynamic> onemliyer = data['onemliyer'];
           return onemliyer
-              .map((item) => KutuphaneBilgi.fromJson(item))
+              .map((item) => Onemliyer.fromJson(item))
               .toList();
         }
       }

@@ -2,7 +2,7 @@ class Galeri {
   int? sayfadakiKayitsayisi;
   int? kayitSayisi;
   int? sayfaNumarasi;
-  List<GaleriSalon>? onemliyer;
+  List<Onemliyer>? onemliyer;
   int? toplamSayfaSayisi;
 
   Galeri(
@@ -17,9 +17,9 @@ class Galeri {
     kayitSayisi = json['kayit_sayisi'];
     sayfaNumarasi = json['sayfa_numarasi'];
     if (json['onemliyer'] != null) {
-      onemliyer = <GaleriSalon>[];
+      onemliyer = <Onemliyer>[];
       json['onemliyer'].forEach((v) {
-        onemliyer!.add(GaleriSalon.fromJson(v));
+        onemliyer!.add(Onemliyer.fromJson(v));
       });
     }
     toplamSayfaSayisi = json['toplam_sayfa_sayisi'];
@@ -38,7 +38,7 @@ class Galeri {
   }
 }
 
-class GaleriSalon {
+class Onemliyer {
   String? iLCE;
   String? kAPINO;
   double? eNLEM;
@@ -50,7 +50,7 @@ class GaleriSalon {
   double? bOYLAM;
   String? yOL;
 
-  GaleriSalon(
+  Onemliyer(
       {this.iLCE,
       this.kAPINO,
       this.eNLEM,
@@ -62,7 +62,7 @@ class GaleriSalon {
       this.bOYLAM,
       this.yOL});
 
-  GaleriSalon.fromJson(Map<String, dynamic> json) {
+  Onemliyer.fromJson(Map<String, dynamic> json) {
     iLCE = json['ILCE'];
     kAPINO = json['KAPINO']?.toString();
     eNLEM = json['ENLEM'] is String

@@ -5,7 +5,7 @@ import 'galeri_model.dart';
 class GaleriApiService {
   final Dio _dio = Dio();
 
-  Future<List<GaleriSalon>> fetchGaleriSalonlar() async {
+  Future<List<Onemliyer>> fetchGaleriSalonlar() async {
     final String apiUrl = dotenv.env['GALERI_SALONLAR']!;
 
     try {
@@ -15,7 +15,7 @@ class GaleriApiService {
         final data = response.data as Map<String, dynamic>;
         if (data.containsKey('onemliyer')) {
           final List<dynamic> onemliyer = data['onemliyer'];
-          return onemliyer.map((item) => GaleriSalon.fromJson(item)).toList();
+          return onemliyer.map((item) => Onemliyer.fromJson(item)).toList();
         }
       }
 

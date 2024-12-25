@@ -43,9 +43,11 @@ class CustomDescription extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Icon(Icons.description, size: 16, color: theme.iconTheme.color),
+        const SizedBox(width: 10),
         Text(
           'Açıklama: ',
-          style: textStyle ?? theme.textTheme.bodySmall,
+          style: theme.textTheme.bodyMedium,
         ),
         Expanded(
           child: description!.length > maxLength
@@ -56,14 +58,13 @@ class CustomDescription extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: '${description!.substring(0, maxLength)}... ',
-                          style: textStyle ?? theme.textTheme.bodySmall,
+                          style: theme.textTheme.bodyMedium,
                         ),
                         TextSpan(
-                          text: 'Detayına Git',
-                          style: (textStyle ?? theme.textTheme.bodySmall)
+                          text: 'Detayına Git...',
+                          style: (textStyle ?? theme.textTheme.bodyMedium)
                               ?.copyWith(
                             color: theme.primaryColor,
-                            decoration: TextDecoration.underline,
                           ),
                         ),
                       ],
@@ -72,7 +73,7 @@ class CustomDescription extends StatelessWidget {
                 )
               : Text(
                   description!,
-                  style: textStyle ?? theme.textTheme.bodySmall,
+                  style: textStyle ?? theme.textTheme.bodyMedium,
                 ),
         ),
       ],

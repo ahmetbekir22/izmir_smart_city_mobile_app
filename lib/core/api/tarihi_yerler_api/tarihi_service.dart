@@ -5,7 +5,7 @@ import 'tarihi_model.dart';
 class TarihiApiService {
   final Dio _dio = Dio();
 
-  Future<List<Yapilar>> fetchTarihiYapilar() async {
+  Future<List<Onemliyer>> fetchTarihiYapilar() async {
     final String apiUrl = dotenv.env['TARIHI_YAPILAR']!;
 
     try {
@@ -15,7 +15,7 @@ class TarihiApiService {
         final data = response.data as Map<String, dynamic>;
         if (data.containsKey('onemliyer')) {
           final List<dynamic> onemliyer = data['onemliyer'];
-          return onemliyer.map((item) => Yapilar.fromJson(item)).toList();
+          return onemliyer.map((item) => Onemliyer.fromJson(item)).toList();
         }
       }
 

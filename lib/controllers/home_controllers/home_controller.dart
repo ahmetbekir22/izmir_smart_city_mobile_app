@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_city_app/controllers/toilet_binding.dart';
 import 'package:smart_city_app/features/auth/views/eczane_pages/eczane_home_screen.dart';
 import 'package:smart_city_app/features/auth/views/pazar_yeri_pages/pazar_yeri_home_screen.dart';
 import 'package:smart_city_app/features/auth/views/toilet_view.dart';
@@ -72,18 +71,16 @@ class HomeController extends GetxController {
   void handleApiTap(String apiKey) {
     switch (apiKey) {
       case 'KULTUR_SANAT_ETKINLILERI_API':
-        // Navigate to the event list page
         Get.to(() => EtkinlikListesiSayfasi());
         break;
       case 'NOBETCI_ECZANE_API':
         Get.to(() => const EczaneHomeScreen());
       case 'SEMT_PAZAR_API':
-        Get.to(() => const PazarYeriHomeScreen());
+        Get.to(() => PazarYeriHomeScreen());
       case 'BISIKLET_ISTASYONLARI':
         Get.to(() => BisikletHomeScreen());
       case 'OTOPARK_API':
         Get.to(() => OtoparkHomeScreen());
-
       case 'PLAJLAR_API':
         Get.to(() => PlajList());
         break;
