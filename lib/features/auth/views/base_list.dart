@@ -4,6 +4,7 @@ import 'package:smart_city_app/controllers/filter_controllers/general_filter_con
 import 'package:smart_city_app/controllers/location_controllers/location_controller.dart';
 import 'package:smart_city_app/features/auth/views/filter_pages/general_filter_UI.dart';
 import 'package:smart_city_app/features/auth/views/map_pages/map_view.dart';
+import 'package:smart_city_app/features/auth/widgets/button_wigdets/custom_tab_bar.dart';
 import 'package:smart_city_app/features/auth/widgets/card_widgets/general_card.dart';
 
 abstract class BaseListPage<T> extends StatefulWidget {
@@ -11,13 +12,11 @@ abstract class BaseListPage<T> extends StatefulWidget {
   final RxList<T> items;
   final String Function(T) extractIlce;
   final String Function(T) extractMahalle;
-  final String? Function(T) extractAdi;
+  final String? Function(T)? extractAdi;
   final double? Function(T)? extractEnlem;
   final double? Function(T)? extractBoylam;
   final String? Function(T)? extractAciklama;
   final String? Function(T)? extractGun;
-
-
 
   BaseListPage({
     required this.title,
@@ -51,7 +50,6 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> {
       ),
     );
 
-    // Initialize filter data
     ever(widget.items, (list) {
       if (list.isNotEmpty) {
         filterController.initializeFilterData(list);
@@ -59,11 +57,9 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> {
     });
   }
 
-@override
-Widget build(BuildContext context) {
-  return DefaultTabController(
-    length: 2,
-    child: Scaffold(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         centerTitle: true,
@@ -87,18 +83,20 @@ Widget build(BuildContext context) {
             return const SizedBox.shrink();
           }),
         ],
-        bottom: TabBar(
-          onTap: (index) {
-            currentTabIndex.value = index;
-          },
-          tabs: const [
-            Tab(text: 'Liste Görünümü'),
-            Tab(text: 'Harita Görünümü'),
-          ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: Obx(() {
+            return CustomTabBar(
+              currentIndex: currentTabIndex.value,
+              labels: const ['Liste Görünümü', 'Harita Görünümü'],
+              onTap: (index) {
+                currentTabIndex.value = index;
+              },
+            );
+          }),
         ),
       ),
       body: Obx(() {
-        // TabBar'a göre doğru içeriği seç
         if (currentTabIndex.value == 0) {
           final displayList = filterController.filteredList.isNotEmpty
               ? filterController.filteredList
@@ -114,39 +112,45 @@ Widget build(BuildContext context) {
             radius: const Radius.circular(8),
             thumbVisibility: false,
             interactive: true,
-            child: ListView.builder(
-              controller: scrollController,
-              itemCount: displayList.length,
-              itemBuilder: (context, index) {
-                final item = displayList[index];
-                return GeneralCard(
-                  adi: widget.extractAdi(item) ?? 'Bilinmiyor',
-                  ilce: widget.extractIlce(item),
-                  mahalle: widget.extractMahalle(item),
-                  aciklama: widget.extractAciklama != null ? widget.extractAciklama!(item) : null,
-                  gun: widget.extractGun != null ? widget.extractGun!(item) : null,
-                  onLocationTap: widget.extractEnlem != null && widget.extractBoylam != null
-                      ? () {
-                          final enlem = widget.extractEnlem!(item);
-                          final boylam = widget.extractBoylam!(item);
-                          if (enlem != null && boylam != null) {
-                            Get.put(LocationController()).openLocationByCoordinates(
-                              enlem,
-                              boylam,
-                            );
+            child: Padding(
+              padding: const EdgeInsets.all(9.0),
+              child: ListView.builder(
+                controller: scrollController,
+                itemCount: displayList.length,
+                itemBuilder: (context, index) {
+                  final item = displayList[index];
+                  return GeneralCard(
+                    adi: widget.extractAdi != null
+                        ? widget.extractAdi!(item) ?? 'Bilinmiyor'
+                        : 'Bilinmiyor',
+                    ilce: widget.extractIlce(item),
+                    mahalle: widget.extractMahalle(item),
+                    aciklama: widget.extractAciklama != null
+                        ? widget.extractAciklama!(item)
+                        : null,
+                    gun: widget.extractGun != null
+                        ? widget.extractGun!(item)
+                        : null,
+                    onLocationTap: widget.extractEnlem != null &&
+                            widget.extractBoylam != null
+                        ? () {
+                            final enlem = widget.extractEnlem!(item);
+                            final boylam = widget.extractBoylam!(item);
+                            if (enlem != null && boylam != null) {
+                              Get.put(LocationController())
+                                  .openLocationByCoordinates(enlem, boylam);
+                            }
                           }
-                        }
-                      : null,
-                );
-              },
+                        : null,
+                  );
+                },
+              ),
             ),
           );
         } else {
-          return const MapView(); // Map görünümü
+          return const MapView();
         }
       }),
-    ),
-  );
-}
-
+    );
+  }
 }
