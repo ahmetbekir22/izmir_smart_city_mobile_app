@@ -4,8 +4,8 @@ import 'package:smart_city_app/controllers/location_controllers/location_control
 import 'package:smart_city_app/controllers/toilet_controller.dart';
 import 'package:smart_city_app/core/api/toilet_model.dart';
 import 'package:smart_city_app/features/auth/views/filter_pages/general_filter_UI.dart';
-import '../widgets/general_card.dart';
 import '../../../../controllers/filter_controllers/general_filter_controller.dart';
+import '../widgets/card_widgets/general_card.dart';
 
 class ToiletView extends GetView<ToiletController> {
   const ToiletView({Key? key}) : super(key: key);

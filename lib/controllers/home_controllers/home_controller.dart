@@ -14,6 +14,7 @@ import '../../features/auth/views/galeri_salonu_pages/galeri_list.dart';
 import '../../features/auth/views/tarihi_yerler_pages/tarihi_list.dart';
 import '../../features/auth/views/antik_kent_pages/antik_list.dart';
 import '../../features/auth/views/kütüphane_pages/kutuphane_list.dart';
+import '../toilet_binding.dart';
 
 
 
