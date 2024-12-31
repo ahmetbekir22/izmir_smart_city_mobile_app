@@ -75,7 +75,7 @@ class HomeController extends GetxController {
         Get.to(() => EtkinlikListesiSayfasi());
         break;
       case 'NOBETCI_ECZANE_API':
-        Get.to(() => const EczaneHomeScreen());
+        Get.to(() => EczaneListPage());
       case 'SEMT_PAZAR_API':
         Get.to(() => PazarYeriHomeScreen());
       case 'BISIKLET_ISTASYONLARI':
