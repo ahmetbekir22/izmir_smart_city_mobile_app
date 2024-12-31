@@ -1,71 +1,59 @@
+// toilet_controller.dart
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:smart_city_app/controllers/map_controllers/map_controller.dart';
 import 'package:smart_city_app/core/api/toilet_model.dart';
 import 'package:smart_city_app/core/api/toilet_service.dart';
-import '../../../../controllers/filter_controllers/general_filter_controller.dart';
 
 class ToiletController extends GetxController {
   final CkanProvider ckanProvider;
+  final MapController mapController = Get.put(MapController());
+  
   ToiletController({required this.ckanProvider});
-
+  
   final _toiletData = Rxn<toilet>();
   final _isLoading = false.obs;
   final _error = ''.obs;
-  final _hasConnection = true.obs;
-
- 
-  final RxList<Records> filteredToilets = <Records>[].obs;
-
-  toilet? get toiletData => _toiletData.value;
-  List<Records> get toilets => _toiletData.value?.result?.records ?? [];
-  bool get isLoading => _isLoading.value;
-  String get error => _error.value;
-  bool get hasConnection => _hasConnection.value;
-
   
-  late final GenericFilterController<Records> filterController;
+  final RxList<Records> toilets = <Records>[].obs;
+  String get error => _error.value;
+  bool get isLoading => _isLoading.value;
 
   @override
   void onInit() {
     super.onInit();
-
-  
-    filterController = Get.find<GenericFilterController<Records>>();
-
- 
-    ever(_toiletData, (_) {
-      final records = toilets;
-      filterController.initializeFilterData(records);
-      filteredToilets.assignAll(records);
-    });
-
-
     fetchToilets();
+    
+    ever(toilets, (_) {
+      updateMapMarkers();
+    });
+  }
+
+  void updateMapMarkers() {
+    if (toilets.isNotEmpty) {
+      mapController.addMarkers(
+        locations: toilets,
+        getLatitude: (toilet) => toilet.eNLEM ?? 0,
+        getLongitude: (toilet) => toilet.bOYLAM ?? 0,
+        getTitle: (toilet) => toilet.tESISADI ?? 'İsimsiz Tesis',
+        getSnippet: (toilet) => '${toilet.iLCE ?? ''}, ${toilet.mAHALLE ?? ''}',
+      );
+    }
   }
 
   Future<void> fetchToilets() async {
     try {
       _isLoading.value = true;
       _error.value = '';
-      _hasConnection.value = true;
-
       final response = await ckanProvider.getToilets();
       _toiletData.value = response;
-
-    
-      if (response.result?.records?.isEmpty ?? true) {
-        _error.value = 'Veri bulunamadı';
-      }
+      toilets.assignAll(response.result?.records ?? []);
     } catch (e) {
       _error.value = e.toString();
-      _hasConnection.value = false;
     } finally {
       _isLoading.value = false;
     }
-  }
-
-
-  Future<void> refreshToilets() async {
-    _error.value = '';
-    await fetchToilets();
   }
 }

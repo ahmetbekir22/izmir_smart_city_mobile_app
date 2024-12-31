@@ -108,7 +108,7 @@ class HomeController extends GetxController {
         break;
          case 'TUVALET_API':
         Get.to(
-          () => const ToiletView(),
+          () => ToiletListPage(),
           binding: ToiletBinding(), // Binding'i burada ekliyoruz
         );
         break;
