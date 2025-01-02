@@ -86,6 +86,7 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
       builder: (BuildContext context) {
         return FilterDialog(
           onLocationSelected: etkinlikController.updateSelectedLocation,
+          onTypeSelected: etkinlikController.updateSelectedType,
           onDateRangeSelected: etkinlikController.updateSelectedDateRange,
         );
       },
