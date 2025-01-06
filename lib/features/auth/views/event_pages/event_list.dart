@@ -43,7 +43,7 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
         }
         return Scrollbar(
           controller: _scrollController,
-          thumbVisibility: false,
+          thumbVisibility: true,
           thickness: 10,
           radius: const Radius.circular(8),
           child: ListView.builder(
