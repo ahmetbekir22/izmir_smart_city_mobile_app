@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../controllers/location_controllers/location_controller.dart';
 import '../../../../controllers/theme_contoller.dart';
@@ -17,7 +18,13 @@ class DetailEventScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     String cleanedDescription =
         DataCleaningUtility.cleanHtmlText(etkinlik.kisaAciklama);
-
+        String formattedDate;
+              try {
+                formattedDate = DateFormat('dd-MM-yyyy')
+                    .format(DateTime.parse(etkinlik.etkinlikBaslamaTarihi));
+              } catch (e) {
+                formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+              }
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -110,7 +117,7 @@ class DetailEventScreen extends StatelessWidget {
                         color: Get.theme.iconTheme.color),
                     title: const Text('Tarih',
                         style: TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: Text(etkinlik.etkinlikBaslamaTarihi),
+                    subtitle: Text(formattedDate),
                   ),
                   const Divider(
                     color: Color.fromARGB(255, 206, 205, 205),

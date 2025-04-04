@@ -27,7 +27,7 @@ abstract class BaseListPage<T> extends StatefulWidget {
     this.extractEnlem,
     this.extractBoylam,
     this.extractAciklama,
-    this.extractGun,
+    this.extractGun, Key? key,
   });
 
   @override

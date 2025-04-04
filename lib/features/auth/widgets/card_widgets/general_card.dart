@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../custom_description.dart';
 
 class GeneralCard extends StatelessWidget {
@@ -9,6 +10,7 @@ class GeneralCard extends StatelessWidget {
   final String mahalle;
   final String? gun;
   final String? aciklama;
+  final String? telefon;
   final VoidCallback? onLocationTap;
 
   const GeneralCard({
@@ -18,6 +20,7 @@ class GeneralCard extends StatelessWidget {
     required this.mahalle,
     this.gun,
     this.aciklama,
+    this.telefon,
     this.onLocationTap,
   }) : super(key: key);
 
@@ -34,14 +37,6 @@ class GeneralCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         child: Container(
     decoration: BoxDecoration(
-      // gradient: LinearGradient(
-      //   colors: [
-      //     Get.theme.colorScheme.primary.withOpacity(0.2), // Renklerin mat görünmesini sağlar
-      //     Get.theme.colorScheme.secondary.withOpacity(0.2),
-      //   ],
-      //   begin: Alignment.topCenter,
-      //   end: Alignment.bottomCenter,
-      // ),
       borderRadius: BorderRadius.circular(10.0), // Köşelerin kavisli olmasını sağlar
     ),
         child: Padding(
@@ -71,12 +66,15 @@ class GeneralCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(FontAwesomeIcons.mapLocationDot, size: 16, color: theme.iconTheme.color),
-                        const SizedBox(width: 10),
-                        Text(
-                          'Mahalle: $mahalle',
-                          style: theme.textTheme.bodyMedium,
+                      Icon(FontAwesomeIcons.mapLocationDot, size: 16, color: theme.iconTheme.color),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                        'Mahalle: $mahalle',
+                        style: theme.textTheme.bodyMedium,
+                        overflow: TextOverflow.visible,
                         ),
+                      ),
                       ],
                     ),
                     const SizedBox(height: 4),
@@ -97,6 +95,25 @@ class GeneralCard extends StatelessWidget {
                         style: theme.textTheme.bodyMedium,
                         ),
                       ],
+                      ),
+                    ],
+                    if (telefon != null && telefon!.isNotEmpty) ...[
+                      GestureDetector(
+                      onTap: () {
+                        if (telefon != null && telefon!.isNotEmpty) {
+                        launchUrl(Uri.parse('tel:$telefon'));
+                        }
+                      },
+                      child: Row(
+                        children: [
+                        Icon(FontAwesomeIcons.phone, size: 16, color: theme.iconTheme.color),
+                        const SizedBox(width: 10),
+                        Text(
+                          'Telefon: $telefon',
+                          style: theme.textTheme.bodyLarge,
+                        ),
+                        ],
+                      ),
                       ),
                     ],
                   ],
