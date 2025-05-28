@@ -40,7 +40,7 @@ class BaskanPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: AssetImage('assets/images/cihathoca.jpeg'),
+                    image: AssetImage('assets/images/pp.jpg'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -50,7 +50,7 @@ class BaskanPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
-                  'Dr. Öğr. Üyesi Cihat ÇETİNKAYA',
+                  'Başkan Adı Soyadı',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -64,7 +64,7 @@ class BaskanPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
-                  'Muğla Sıtkı Koçman Üniversitesi Mühendislik Fakültesi Yazılım Mühendisliği Bölümü\'nde öğretim üyesi olarak görev yapmaktadır. Lisans eğitimini 2008 yılında Pamukkale Üniversitesi Bilgisayar Mühendisliği Bölümü\'nde tamamladı. 2011 yılında Ege Üniversitesi Fen Bilimleri Enstitüsü Uluslararası Bilgisayar alanında yüksek lisansını ve 2017 yılında aynı kurumda doktorasını tamamladı. Yazılım Mühendisliği Anabilim Dalı\'nda akademik çalışmalarını sürdürmektedir.',
+                  'Başkan Hakkında Bilgi - Özgeçmiş Başkan Hakkında Bilgi - Özgeçmiş Başkan Hakkında Bilgi - Özgeçmiş Başkan Hakkında Bilgi - Özgeçmiş Başkan Hakkında Bilgi - Özgeçmiş Başkan Hakkında Bilgi - Özgeçmiş Başkan Hakkında Bilgi - Özgeçmiş Başkan Hakkında Bilgi - Özgeçmiş ',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -89,7 +89,7 @@ class BaskanPage extends StatelessWidget {
                         Icon(Icons.email, color: Colors.white),
                         const SizedBox(width: 12),
                         Text(
-                          'cihat@mu.edu.tr',
+                          'baskan@bel.tr',
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.white,
@@ -103,7 +103,7 @@ class BaskanPage extends StatelessWidget {
                         Icon(Icons.phone, color: Colors.white),
                         const SizedBox(width: 12),
                         Text(
-                          '0252 2112066',
+                          '0252 1111111',
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.white,
