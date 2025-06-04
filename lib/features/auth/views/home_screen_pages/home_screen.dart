@@ -2,11 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../controllers/home_controllers/home_controller.dart';
 import '../../../../controllers/theme_contoller.dart';
+import '../../../../core/mixins/performance_monitoring_mixin.dart';
 import '../../widgets/draggable_sheet_page.dart';
 import 'latest_events_screen.dart';
 import '../menu_pages/menu_page.dart';
-class HomePage extends StatelessWidget {
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with PerformanceMonitoringMixin {
+  @override
+  void initState() {
+    super.initState();
+    startPageLoadTrace('home_page');
+  }
+
+  @override
+  void dispose() {
+    stopPageLoadTrace();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +40,11 @@ class HomePage extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () {
+            startPageLoadTrace('menu_page_transition');
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => MenuPage()),
-            );
+            ).then((_) => stopPageLoadTrace());
           },
         ),
         title: const Text(
@@ -41,10 +61,12 @@ class HomePage extends StatelessWidget {
                       ? Icons.dark_mode
                       : Icons.light_mode,
                   color: Get.theme.colorScheme.onPrimary,
-
-                  //color: Theme.of(context).colorScheme.onPrimary,
                 )),
-            onPressed: themeController.toggleTheme,
+            onPressed: () {
+              startPageLoadTrace('theme_toggle');
+              themeController.toggleTheme();
+              stopPageLoadTrace();
+            },
           ),
         ],
       ),

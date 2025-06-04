@@ -6,6 +6,7 @@ import 'package:smart_city_app/controllers/location_controllers/location_control
 import 'package:smart_city_app/features/auth/views/map_pages/map_view.dart';
 import 'package:smart_city_app/features/auth/widgets/button_wigdets/custom_tab_bar.dart';
 import 'package:smart_city_app/features/auth/widgets/card_widgets/general_card.dart';
+import '../../../../core/mixins/performance_monitoring_mixin.dart';
 
 class EczaneListPage extends StatefulWidget {
   const EczaneListPage({Key? key}) : super(key: key);
@@ -14,10 +15,22 @@ class EczaneListPage extends StatefulWidget {
   _EczaneListPageState createState() => _EczaneListPageState();
 }
 
-class _EczaneListPageState extends State<EczaneListPage> {
+class _EczaneListPageState extends State<EczaneListPage> with PerformanceMonitoringMixin {
   final ScrollController scrollController = ScrollController();
   final RxInt currentTabIndex = 0.obs;
   final EczaneController eczaneController = Get.put(EczaneController());
+
+  @override
+  void initState() {
+    super.initState();
+    startPageLoadTrace('eczane_page');
+  }
+
+  @override
+  void dispose() {
+    stopPageLoadTrace();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +44,10 @@ class _EczaneListPageState extends State<EczaneListPage> {
             if (currentTabIndex.value == 0) {
               return IconButton(
                 icon: const Icon(Icons.filter_list),
-                onPressed: () => _showFilterBottomSheet(context),
+                onPressed: () {
+                  startTrace('filter_bottom_sheet');
+                  _showFilterBottomSheet(context);
+                },
               );
             }
             return const SizedBox.shrink();
@@ -44,7 +60,10 @@ class _EczaneListPageState extends State<EczaneListPage> {
               currentIndex: currentTabIndex.value,
               labels: const ['Liste Görünümü', 'Harita Görünümü'],
               onTap: (index) {
+                startTrace('view_switch');
                 currentTabIndex.value = index;
+                addMetric('view_type', index);
+                stopTrace('view_switch');
               },
             );
           }),
@@ -59,6 +78,8 @@ class _EczaneListPageState extends State<EczaneListPage> {
           if (eczaneController.filteredList.isEmpty) {
             return const Center(child: Text("Eczane bulunamadı."));
           }
+
+          addMetric('filtered_items_count', eczaneController.filteredList.length);
 
           return Scrollbar(
             controller: scrollController,
@@ -81,12 +102,14 @@ class _EczaneListPageState extends State<EczaneListPage> {
                     onLocationTap: eczane.lokasyonX != null && 
                                  eczane.lokasyonY != null
                         ? () {
+                            startTrace('location_open');
                             final enlem = double.tryParse(eczane.lokasyonX!);
                             final boylam = double.tryParse(eczane.lokasyonY!);
                             if (enlem != null && boylam != null) {
                               Get.put(LocationController())
                                   .openLocationByCoordinates(enlem, boylam);
                             }
+                            stopTrace('location_open');
                           }
                         : null,
                   );
@@ -112,6 +135,8 @@ class _EczaneListPageState extends State<EczaneListPage> {
               .where((bolge) => bolge.isNotEmpty)
               .toList();
 
+          addMetric('filter_regions_count', regions.length);
+
           return Container(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -136,8 +161,11 @@ class _EczaneListPageState extends State<EczaneListPage> {
                         title: Text(region),
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () {
+                          startTrace('filter_apply');
                           eczaneController.filterByRegion(region);
+                          addMetric('selected_region_index', index);
                           Navigator.pop(context);
+                          stopTrace('filter_apply');
                         },
                       );
                     },
@@ -148,6 +176,6 @@ class _EczaneListPageState extends State<EczaneListPage> {
           );
         });
       },
-    );
+    ).whenComplete(() => stopTrace('filter_bottom_sheet'));
   }
 }

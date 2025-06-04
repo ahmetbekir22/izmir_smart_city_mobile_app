@@ -5,19 +5,34 @@ import 'package:intl/intl.dart';
 import '../../../../controllers/etkinlik_api_controllers/event_controller.dart';
 import '../../../../controllers/theme_contoller.dart';
 import '../../../../core/api/etkinlik/events_model.dart';
+import '../../../../core/mixins/performance_monitoring_mixin.dart';
 import '../../widgets/card_widgets/event_list_card.dart';
 import 'event_detail_screen.dart';
 import '../filter_pages/filter_dialog.dart';
 
-class EtkinlikListesiSayfasi extends StatelessWidget {
+class EtkinlikListesiSayfasi extends StatefulWidget {
+  const EtkinlikListesiSayfasi({super.key});
+
+  @override
+  State<EtkinlikListesiSayfasi> createState() => _EtkinlikListesiSayfasiState();
+}
+
+class _EtkinlikListesiSayfasiState extends State<EtkinlikListesiSayfasi> with PerformanceMonitoringMixin {
   final EtkinlikController etkinlikController = Get.put(EtkinlikController());
   final ThemeController themeController = Get.put(ThemeController());
   final ScrollController _scrollController = ScrollController();
 
-  EtkinlikListesiSayfasi({super.key});
+  @override
+  void initState() {
+    super.initState();
+    startPageLoadTrace('etkinlik_listesi_page');
+  }
 
-  // Add a method to reset filters
-  void onInit() {}
+  @override
+  void dispose() {
+    stopPageLoadTrace();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +46,7 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.filter_list),
             onPressed: () {
+              startPageLoadTrace('filter_dialog');
               _showFilterDialog(context);
             },
           ),
@@ -41,6 +57,9 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
         if (etkinlikController.filteredEventList.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
+
+        addMetric('filtered_events_count', etkinlikController.filteredEventList.length);
+
         return Scrollbar(
           controller: _scrollController,
           thumbVisibility: true,
@@ -69,7 +88,9 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
                   date: formattedDate,
                   time: etkinlik.etkinlikBaslamaTarihi,
                   onTap: () {
-                    Get.to(() => DetailEventScreen(etkinlik: etkinlik));
+                    startTrace('event_detail');
+                    Get.to(() => DetailEventScreen(etkinlik: etkinlik))
+                        ?.whenComplete(() => stopTrace('event_detail'));
                   },
                 ),
               );
@@ -85,11 +106,23 @@ class EtkinlikListesiSayfasi extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return FilterDialog(
-          onLocationSelected: etkinlikController.updateSelectedLocation,
-          onTypeSelected: etkinlikController.updateSelectedType,
-          onDateRangeSelected: etkinlikController.updateSelectedDateRange,
+          onLocationSelected: (location) {
+            startTrace('filter_location');
+            etkinlikController.updateSelectedLocation(location);
+            stopTrace('filter_location');
+          },
+          onTypeSelected: (type) {
+            startTrace('filter_type');
+            etkinlikController.updateSelectedType(type);
+            stopTrace('filter_type');
+          },
+          onDateRangeSelected: (range) {
+            startTrace('filter_date');
+            etkinlikController.updateSelectedDateRange(range);
+            stopTrace('filter_date');
+          },
         );
       },
-    );
+    )?.whenComplete(() => stopTrace('filter_dialog'));
   }
 }

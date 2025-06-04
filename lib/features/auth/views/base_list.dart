@@ -6,6 +6,7 @@ import 'package:smart_city_app/features/auth/views/filter_pages/general_filter_U
 import 'package:smart_city_app/features/auth/views/map_pages/map_view.dart';
 import 'package:smart_city_app/features/auth/widgets/button_wigdets/custom_tab_bar.dart';
 import 'package:smart_city_app/features/auth/widgets/card_widgets/general_card.dart';
+import '../../../../core/mixins/performance_monitoring_mixin.dart';
 
 abstract class BaseListPage<T> extends StatefulWidget {
   final String title;
@@ -28,13 +29,13 @@ abstract class BaseListPage<T> extends StatefulWidget {
     this.extractBoylam,
     this.extractAciklama,
     this.extractGun, Key? key,
-  });
+  }) : super(key: key);
 
   @override
   _BaseListPageState<T> createState() => _BaseListPageState<T>();
 }
 
-class _BaseListPageState<T> extends State<BaseListPage<T>> {
+class _BaseListPageState<T> extends State<BaseListPage<T>> with PerformanceMonitoringMixin {
   final ScrollController scrollController = ScrollController();
   late final GenericFilterController<T> filterController;
   final RxInt currentTabIndex = 0.obs;
@@ -42,19 +43,35 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> {
   @override
   void initState() {
     super.initState();
+    startPageLoadTrace('${widget.title}_page');
 
-    filterController = Get.put(
-      GenericFilterController<T>(
-        extractIlce: widget.extractIlce,
-        extractMahalle: widget.extractMahalle,
-      ),
-    );
+    try {
+      filterController = Get.put(
+        GenericFilterController<T>(
+          extractIlce: widget.extractIlce,
+          extractMahalle: widget.extractMahalle,
+        ),
+        tag: '${widget.title}_filter',
+      );
+    } catch (e) {
+      // If controller already exists, find it
+      filterController = Get.find<GenericFilterController<T>>(tag: '${widget.title}_filter');
+    }
 
     ever(widget.items, (list) {
       if (list.isNotEmpty) {
+        startApiTrace('filter_initialization');
         filterController.initializeFilterData(list);
+        stopApiTrace();
+        addMetric('items_count', list.length);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    stopPageLoadTrace();
+    super.dispose();
   }
 
   @override
@@ -69,6 +86,7 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> {
               return IconButton(
                 icon: const Icon(Icons.filter_list),
                 onPressed: () {
+                  startTrace('filter_dialog');
                   showDialog(
                     context: context,
                     builder: (context) => GenericFilterDialog<T>(
@@ -76,7 +94,7 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> {
                       allItems: widget.items,
                       title: '${widget.title} Filtrele',
                     ),
-                  );
+                  )?.whenComplete(() => stopTrace('filter_dialog'));
                 },
               );
             }
@@ -90,7 +108,10 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> {
               currentIndex: currentTabIndex.value,
               labels: const ['Liste Görünümü', 'Harita Görünümü'],
               onTap: (index) {
+                startTrace('view_switch');
                 currentTabIndex.value = index;
+                addMetric('view_type', index);
+                stopTrace('view_switch');
               },
             );
           }),
@@ -134,12 +155,14 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> {
                     onLocationTap: widget.extractEnlem != null &&
                             widget.extractBoylam != null
                         ? () {
+                            startTrace('location_open');
                             final enlem = widget.extractEnlem!(item);
                             final boylam = widget.extractBoylam!(item);
                             if (enlem != null && boylam != null) {
                               Get.put(LocationController())
                                   .openLocationByCoordinates(enlem, boylam);
                             }
+                            stopTrace('location_open');
                           }
                         : null,
                   );
