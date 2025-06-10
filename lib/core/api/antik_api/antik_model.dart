@@ -63,20 +63,30 @@ class Onemliyer {
       this.yOL});
 
   Onemliyer.fromJson(Map<String, dynamic> json) {
-    iLCE = json['ILCE'];
-    kAPINO = json['KAPINO']?.toString();
-    eNLEM = json['ENLEM'] is String
-        ? double.tryParse(json['ENLEM'])
-        : json['ENLEM']?.toDouble();
-    aCIKLAMA = json['ACIKLAMA'];
-    iLCEID = json['ILCEID']?.toString();
-    mAHALLE = json['MAHALLE'];
+    iLCE = json['ILCE']?.toString() ?? '';
+    kAPINO = json['KAPINO']?.toString() ?? '';
+    eNLEM = _parseDouble(json['ENLEM']);
+    aCIKLAMA = json['ACIKLAMA']?.toString() ?? '';
+    iLCEID = json['ILCEID']?.toString() ?? '';
+    mAHALLE = json['MAHALLE']?.toString() ?? '';
     mAHALLEID = json['MAHALLEID'];
-    aDI = json['ADI'];
-    bOYLAM = json['BOYLAM'] is String
-        ? double.tryParse(json['BOYLAM'])
-        : json['BOYLAM']?.toDouble();
-    yOL = json['YOL'];
+    aDI = json['ADI']?.toString() ?? '';
+    bOYLAM = _parseDouble(json['BOYLAM']);
+    yOL = json['YOL']?.toString() ?? '';
+  }
+
+  double? _parseDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) {
+      try {
+        return double.parse(value);
+      } catch (e) {
+        throw FormatException('Invalid number format: $value');
+      }
+    }
+    throw FormatException('Invalid number format: $value');
   }
 
   Map<String, dynamic> toJson() {

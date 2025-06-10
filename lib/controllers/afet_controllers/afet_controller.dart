@@ -7,9 +7,14 @@ class AfetController extends GetxController {
   final afetList = <Onemliyer>[].obs;
   final isLoading = true.obs;
   final errorMessage = ''.obs;
-  final AfetApiService apiService = AfetApiService();
-  final mapController = Get.put(MapController());
+  final AfetApiService apiService;
+  final MapController mapController;
 
+  AfetController({
+    AfetApiService? apiService,
+    MapController? mapController,
+  })  : apiService = apiService ?? AfetApiService(),
+        mapController = mapController ?? Get.put(MapController());
 
   @override
   void onInit() {
@@ -29,7 +34,8 @@ class AfetController extends GetxController {
         getLatitude: (location) => location.eNLEM ?? 0,
         getLongitude: (location) => location.bOYLAM ?? 0,
         getTitle: (location) => location.aDI ?? 'Bilinmeyen Konum',
-        getSnippet: (location) => '${location.mAHALLE ?? ''}, ${location.iLCE ?? ''}',
+        getSnippet: (location) =>
+            '${location.mAHALLE ?? ''}, ${location.iLCE ?? ''}',
       );
     } catch (e) {
       errorMessage.value = 'Veriler alınırken bir hata oluştu: $e';
