@@ -19,21 +19,21 @@ class Veteriner {
     if (json['onemliyer'] != null) {
       onemliyer = <Onemliyer>[];
       json['onemliyer'].forEach((v) {
-        onemliyer!.add(new Onemliyer.fromJson(v));
+        onemliyer!.add(Onemliyer.fromJson(v));
       });
     }
     toplamSayfaSayisi = json['toplam_sayfa_sayisi'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['sayfadaki_kayitsayisi'] = this.sayfadakiKayitsayisi;
-    data['kayit_sayisi'] = this.kayitSayisi;
-    data['sayfa_numarasi'] = this.sayfaNumarasi;
-    if (this.onemliyer != null) {
-      data['onemliyer'] = this.onemliyer!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['sayfadaki_kayitsayisi'] = sayfadakiKayitsayisi;
+    data['kayit_sayisi'] = kayitSayisi;
+    data['sayfa_numarasi'] = sayfaNumarasi;
+    if (onemliyer != null) {
+      data['onemliyer'] = onemliyer!.map((v) => v.toJson()).toList();
     }
-    data['toplam_sayfa_sayisi'] = this.toplamSayfaSayisi;
+    data['toplam_sayfa_sayisi'] = toplamSayfaSayisi;
     return data;
   }
 }
@@ -45,7 +45,7 @@ class Onemliyer {
   String? aCIKLAMA;
   String? iLCEID;
   String? mAHALLE;
-  Null? mAHALLEID;
+  Null mAHALLEID;
   String? aDI;
   double? bOYLAM;
   String? yOL;
@@ -76,17 +76,17 @@ class Onemliyer {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ILCE'] = this.iLCE;
-    data['KAPINO'] = this.kAPINO;
-    data['ENLEM'] = this.eNLEM;
-    data['ACIKLAMA'] = this.aCIKLAMA;
-    data['ILCEID'] = this.iLCEID;
-    data['MAHALLE'] = this.mAHALLE;
-    data['MAHALLEID'] = this.mAHALLEID;
-    data['ADI'] = this.aDI;
-    data['BOYLAM'] = this.bOYLAM;
-    data['YOL'] = this.yOL;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['ILCE'] = iLCE;
+    data['KAPINO'] = kAPINO;
+    data['ENLEM'] = eNLEM;
+    data['ACIKLAMA'] = aCIKLAMA;
+    data['ILCEID'] = iLCEID;
+    data['MAHALLE'] = mAHALLE;
+    data['MAHALLEID'] = mAHALLEID;
+    data['ADI'] = aDI;
+    data['BOYLAM'] = bOYLAM;
+    data['YOL'] = yOL;
     return data;
   }
 }

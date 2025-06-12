@@ -7,8 +7,8 @@ class VeterinerController extends GetxController {
   final veterinerList = <Onemliyer>[].obs;
   final isLoading = true.obs;
   final errorMessage = ''.obs;
-  final VeterinerApiService apiService = VeterinerApiService();
-  final mapController = Get.put(MapController());
+  VeterinerApiService apiService = VeterinerApiService();
+  var mapController = Get.put(MapController());
 
   @override
   void onInit() {
@@ -16,7 +16,7 @@ class VeterinerController extends GetxController {
     fetchVeterinerData();
   }
 
-  void fetchVeterinerData() async {
+  Future<void> fetchVeterinerData() async {
     isLoading.value = true;
     errorMessage.value = '';
     try {
@@ -28,7 +28,8 @@ class VeterinerController extends GetxController {
         getLatitude: (location) => location.eNLEM ?? 0,
         getLongitude: (location) => location.bOYLAM ?? 0,
         getTitle: (location) => location.aDI ?? 'Bilinmeyen Konum',
-        getSnippet: (location) => '${location.mAHALLE ?? ''}, ${location.iLCE ?? ''}',
+        getSnippet: (location) =>
+            '${location.mAHALLE ?? ''}, ${location.iLCE ?? ''}',
       );
     } catch (e) {
       errorMessage.value = 'Veriler alınırken bir hata oluştu: $e';
