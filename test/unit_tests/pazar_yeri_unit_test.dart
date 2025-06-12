@@ -83,6 +83,55 @@ void main() {
       )).called(1);
     });
 
+    test('onInit fetches data if autoFetchOnInit is true', () async {
+      when(mockService.getPazarYerleri()).thenAnswer((_) async => sample);
+
+      final controllerWithAutoFetch = Get.put(PazarYeriController(
+        apiService: mockService,
+        mapController: mockMap,
+        autoFetchOnInit: true,
+      ));
+
+      // fetchPazarYerleri'nin microtask'ını bekletmek için:
+      await Future.delayed(Duration.zero);
+
+      expect(controllerWithAutoFetch.pazarYerleri, sample);
+      verify(mockService.getPazarYerleri()).called(1);
+    });
+
+    test('marker argüman fonksiyonları doğru değer döner', () {
+      final yer = sample.first;
+
+      final lat = yer.eNLEM ?? 0;
+      final lng = yer.bOYLAM ?? 0;
+      final title = yer.aDI ?? 'Bilinmeyen Konum';
+      final snippet = '${yer.mAHALLE ?? ''}, ${yer.iLCE ?? ''}';
+
+      expect(lat, 1.0);
+      expect(lng, 2.0);
+      expect(title, 'D1');
+      expect(snippet, 'X, A');
+    });
+
+    test('Onemliyer.fromJson parses correctly', () {
+      final json = {
+        'ILCE': 'TestIlce',
+        'KAPINO': '123',
+        'ENLEM': 10.5,
+        'BOYLAM': 20.3,
+        'ADI': 'TestPazar',
+        'MAHALLE': 'TestMahalle'
+      };
+
+      final yer = Onemliyer.fromJson(json);
+      expect(yer.iLCE, 'TestIlce');
+      expect(yer.kAPINO, '123');
+      expect(yer.eNLEM, 10.5);
+      expect(yer.bOYLAM, 20.3);
+      expect(yer.aDI, 'TestPazar');
+      expect(yer.mAHALLE, 'TestMahalle');
+    });
+
     test('on error, still stops loading and does not add markers', () async {
       when(mockService.getPazarYerleri()).thenThrow(Exception('fail'));
 
