@@ -96,6 +96,7 @@ class AntikController extends GetxController {
 
   final antikList = <Onemliyer>[].obs;
   final isLoading = false.obs;
+
   final errorMessage = ''.obs;
 
   AntikController({
