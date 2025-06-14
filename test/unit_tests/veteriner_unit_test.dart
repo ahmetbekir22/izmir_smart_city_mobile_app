@@ -1,4 +1,4 @@
-// test/unit_tests/veteriner_all_tests.dart
+// test/unit_tests/veteriner_unit_test.dart
 
 import 'dart:convert';
 
@@ -16,7 +16,7 @@ import 'veteriner_unit_test.mocks.dart';
 
 @GenerateMocks([http.Client, VeterinerApiService, MapController])
 void main() {
-  // ---------- Ortak Test Verisi ----------
+  // Ortak test verisi
   final sampleJson = {
     'ILCE': 'Konak',
     'KAPINO': '10',
@@ -30,7 +30,7 @@ void main() {
   };
   final sampleData = [Onemliyer.fromJson(sampleJson)];
 
-  // ---------- MODEL TESTLERİ ----------
+  // MODEL TESTLERİ
   group('Onemliyer model', () {
     test('fromJson maps all fields correctly', () {
       final obj = Onemliyer.fromJson(sampleJson);
@@ -48,7 +48,7 @@ void main() {
     test('toJson produces a matching map', () {
       final obj = Onemliyer.fromJson(sampleJson);
       final expectedMap = Map<String, dynamic>.from(sampleJson);
-      expectedMap['MAHALLEID'] = null; // Eksik olan alan testte de yer almalı
+      expectedMap['MAHALLEID'] = null;
       expect(obj.toJson(), expectedMap);
     });
 
@@ -64,9 +64,31 @@ void main() {
       expect(out['ILCE'], null);
       expect(out['BOYLAM'], null);
     });
+
+    test('fromJson assigns default values for missing optional fields', () {
+      final input = {
+        'ILCE': 'Bornova',
+        'ADI': 'VetX',
+      };
+      final obj = Onemliyer.fromJson(input);
+      expect(obj.iLCE, 'Bornova');
+      expect(obj.aDI, 'VetX');
+      expect(obj.bOYLAM, isNull);
+    });
+
+    test('toJson includes all present fields even if value is 0', () {
+      final obj = Onemliyer(
+        iLCE: 'Karabağlar',
+        bOYLAM: 0.0,
+        eNLEM: 0.0,
+      );
+      final json = obj.toJson();
+      expect(json['BOYLAM'], 0.0);
+      expect(json['ENLEM'], 0.0);
+    });
   });
 
-  // ---------- SERVICE TESTLERİ ----------
+  // SERVICE TESTLERİ
   group('VeterinerApiService', () {
     late MockClient mockClient;
     late VeterinerApiService service;
@@ -81,9 +103,7 @@ void main() {
         (_) async => http.Response(
           json.encode([sampleJson]),
           200,
-          headers: {
-            'content-type': 'application/json; charset=utf-8'
-          }, // Türkçe karakter sorunu çözülür
+          headers: {'content-type': 'application/json; charset=utf-8'},
         ),
       );
 
@@ -98,9 +118,32 @@ void main() {
 
       expect(service.fetchVeteriner(), throwsA(isA<Exception>()));
     });
+
+    test('throws exception when response is not valid JSON', () async {
+      when(mockClient.get(any)).thenAnswer((_) async => http.Response(
+          'INVALID_JSON', 200,
+          headers: {'content-type': 'application/json'}));
+
+      expect(() async => await service.fetchVeteriner(),
+          throwsA(isA<Exception>()));
+    });
+
+    test('returns empty list when response is empty array', () async {
+      when(mockClient.get(any)).thenAnswer((_) async => http.Response('[]', 200,
+          headers: {'content-type': 'application/json'}));
+
+      final result = await service.fetchVeteriner();
+      expect(result, isEmpty);
+    });
+
+    test('throws exception when network error occurs', () {
+      when(mockClient.get(any)).thenThrow(Exception('Network error'));
+
+      expect(service.fetchVeteriner(), throwsA(isA<Exception>()));
+    });
   });
 
-  // ------- CONTROLLER TESTLERİ --------
+  // CONTROLLER TESTLERİ
   group('VeterinerController', () {
     late MockVeterinerApiService mockApiService;
     late MockMapController mockMap;
@@ -155,5 +198,90 @@ void main() {
         getSnippet: anyNamed('getSnippet'),
       ));
     });
+
+    test('fetchVeterinerData clears previous list before fetching', () async {
+      controller.veterinerList.add(Onemliyer(iLCE: 'Eski'));
+
+      when(mockApiService.fetchVeteriner()).thenAnswer((_) async => sampleData);
+
+      await controller.fetchVeterinerData();
+
+      expect(controller.veterinerList.length, sampleData.length);
+      expect(controller.veterinerList.first.iLCE, 'Konak');
+    });
+
+    test('Veteriner.fromJson parses all fields correctly', () {
+      final json = {
+        'sayfadaki_kayitsayisi': 10,
+        'kayit_sayisi': 100,
+        'sayfa_numarasi': 1,
+        'toplam_sayfa_sayisi': 10,
+        'onemliyer': [sampleJson],
+      };
+
+      final model = Veteriner.fromJson(json);
+
+      expect(model.sayfadakiKayitsayisi, 10);
+      expect(model.kayitSayisi, 100);
+      expect(model.sayfaNumarasi, 1);
+      expect(model.toplamSayfaSayisi, 10);
+      expect(model.onemliyer, isA<List<Onemliyer>>());
+      expect(model.onemliyer!.first.iLCE, 'Konak');
+    });
+  });
+  test('Veteriner.toJson returns correct map', () {
+    final model = Veteriner(
+      sayfadakiKayitsayisi: 10,
+      kayitSayisi: 100,
+      sayfaNumarasi: 1,
+      toplamSayfaSayisi: 10,
+      onemliyer: [Onemliyer.fromJson(sampleJson)],
+    );
+
+    final json = model.toJson();
+
+    expect(json['sayfadaki_kayitsayisi'], 10);
+    expect(json['kayit_sayisi'], 100);
+    expect(json['sayfa_numarasi'], 1);
+    expect(json['toplam_sayfa_sayisi'], 10);
+    expect(json['onemliyer'], isA<List>());
+    expect(json['onemliyer'][0]['ILCE'], 'Konak');
+  });
+
+  test('onInit triggers fetchVeterinerData', () async {
+    // fetchVeterinerData() çağrısını takip edebilmek için controller'ı extend etmek gerekebilir
+    var wasCalled = false;
+
+    final testController = VeterinerController()
+      ..apiService = mockApiService
+      ..mapController = mockMap;
+
+    when(mockApiService.fetchVeteriner()).thenAnswer((_) async {
+      wasCalled = true;
+      return sampleData;
+    });
+
+    await testController.onInit(); // manuel tetikle
+
+    expect(wasCalled, true);
+  });
+
+  test('fetchVeterinerData fallback defaults (null values)', () async {
+    final sampleWithNulls = Onemliyer(
+      iLCE: null,
+      mAHALLE: null,
+      bOYLAM: null,
+      eNLEM: null,
+      aDI: null,
+    );
+
+    when(mockApiService.fetchVeteriner())
+        .thenAnswer((_) async => [sampleWithNulls]);
+
+    await controller.fetchVeterinerData();
+
+    // Gözle kontrol etmek için spy gerekmez, hata vermemesi yeterlidir
+    expect(controller.veterinerList.length, 1);
+    expect(controller.errorMessage.value, '');
   });
 }
