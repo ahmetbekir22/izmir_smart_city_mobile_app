@@ -7,6 +7,18 @@ import 'package:smart_city_app/controllers/eczane_api_controllers/eczane_control
 import 'package:smart_city_app/controllers/map_controllers/map_controller.dart';
 import 'package:smart_city_app/core/api/eczane/eczane_api_model.dart';
 import 'package:smart_city_app/features/auth/widgets/button_wigdets/custom_tab_bar.dart';
+import 'dart:io';
+import '../test_report_generator.dart';
+
+// Dio mock için HttpOverrides
+class TestHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 // Mock EczaneController sınıfı
 class MockEczaneController extends EczaneController {
@@ -48,7 +60,7 @@ class MockEczaneController extends EczaneController {
   }
 
   @override
-  void fetchEczaneler() {
+  Future<void> fetchEczaneler() async {
     // API çağrısını simüle etme
     isLoading.value = false;
   }
@@ -94,116 +106,122 @@ class TestApp extends StatelessWidget {
   }
 }
 
-void main() {
+void eczaneTests(List<TestResult> testResults) {
+  setUpAll(() {
+    HttpOverrides.global = TestHttpOverrides();
+  });
+
   setUp(() {
-    // Her test öncesi GetX bağımlılıklarını sıfırla
     Get.reset();
-    // Mock controller'ları enjekte et
     Get.put<EczaneController>(MockEczaneController());
     Get.put<MapController>(MockMapController());
   });
 
-  testWidgets('EczaneListPage liste görünümü testi',
+  testWidgets('PharmacyListPage list view test', (WidgetTester tester) async {
+    try {
+      Get.put<EczaneController>(MockEczaneController());
+      Get.put<MapController>(MockMapController());
+      await tester.pumpWidget(TestApp(child: const EczaneListPage()));
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      expect(find.text('Nöbetçi Eczaneler'), findsOneWidget);
+      expect(find.text('Liste Görünümü'), findsOneWidget);
+      expect(find.text('Harita Görünümü'), findsOneWidget);
+      expect(find.text('Test Eczanesi 1'), findsOneWidget);
+      expect(find.text('Test Eczanesi 2'), findsOneWidget);
+      expect(find.text('Test Eczanesi 3'), findsOneWidget);
+      expect(find.byIcon(Icons.filter_list), findsOneWidget);
+      testResults.add(
+          TestResult(name: 'PharmacyListPage list view test', success: true));
+    } catch (e) {
+      testResults.add(TestResult(
+          name: 'PharmacyListPage list view test',
+          success: false,
+          error: e.toString()));
+      rethrow;
+    }
+  });
+
+  test('PharmacyController filtering functionality test', () {
+    try {
+      Get.put<EczaneController>(MockEczaneController());
+      final eczaneController = Get.find<EczaneController>();
+      expect(eczaneController.filteredList.length, 3);
+      eczaneController.filterByRegion('Konak');
+      expect(eczaneController.filteredList.length, 1);
+      expect(eczaneController.filteredList[0].adi, 'Test Eczanesi 1');
+      eczaneController.filterByRegion('Bornova');
+      expect(eczaneController.filteredList.length, 1);
+      expect(eczaneController.filteredList[0].adi, 'Test Eczanesi 2');
+      eczaneController.filterByRegion('Olmayan Bölge');
+      expect(eczaneController.filteredList.length, 0);
+      eczaneController.filterByRegion('');
+      expect(eczaneController.filteredList.length, 3);
+      testResults.add(TestResult(
+          name: 'PharmacyController filtering functionality test',
+          success: true));
+    } catch (e) {
+      testResults.add(TestResult(
+          name: 'PharmacyController filtering functionality test',
+          success: false,
+          error: e.toString()));
+      rethrow;
+    }
+  });
+
+  testWidgets('PharmacyListPage TabBar transition test',
       (WidgetTester tester) async {
-    await tester.pumpWidget(
-      TestApp(child: const EczaneListPage()),
-    );
+    try {
+      Get.put<EczaneController>(MockEczaneController());
+      Get.put<MapController>(MockMapController());
+      await tester.pumpWidget(TestApp(child: const EczaneListPage()));
+      await tester.pump(const Duration(milliseconds: 500));
 
-    // İlk render sonrası widget ağacının oluşması için pump
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
+      final customTabBarFinder = find.byType(CustomTabBar);
+      expect(customTabBarFinder, findsOneWidget);
+      expect(find.byIcon(Icons.filter_list), findsOneWidget);
 
-    // Başlık kontrolü
-    expect(find.text('Nöbetçi Eczaneler'), findsOneWidget);
+      await tester.tap(find.text('Harita Görünümü'), warnIfMissed: false);
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(milliseconds: 500));
 
-    // Tab bar kontrolü
-    expect(find.text('Liste Görünümü'), findsOneWidget);
-    expect(find.text('Harita Görünümü'), findsOneWidget);
-
-    // Eczane listesi kontrolü
-    expect(find.text('Test Eczanesi 1'), findsOneWidget);
-    expect(find.text('Test Eczanesi 2'), findsOneWidget);
-    expect(find.text('Test Eczanesi 3'), findsOneWidget);
-
-    // Filtre butonu kontrolü
-    expect(find.byIcon(Icons.filter_list), findsOneWidget);
+      expect(
+          find.descendant(
+            of: find.byType(AppBar).last,
+            matching: find.byIcon(Icons.filter_list),
+          ),
+          findsNothing);
+      testResults.add(TestResult(
+          name: 'PharmacyListPage TabBar transition test', success: true));
+    } catch (e) {
+      testResults.add(TestResult(
+          name: 'PharmacyListPage TabBar transition test',
+          success: false,
+          error: e.toString()));
+      rethrow;
+    }
   });
 
-  test('EczaneController filtreleme işlevsellik testi', () {
-    // Controller üzerinden direkt filtreleme işlevini test etme
-    final eczaneController = Get.find<EczaneController>();
-
-    // Başlangıçta filtresiz liste
-    expect(eczaneController.filteredList.length, 3);
-
-    // Konak bölgesine filtrele
-    eczaneController.filterByRegion('Konak');
-    expect(eczaneController.filteredList.length, 1);
-    expect(eczaneController.filteredList[0].adi, 'Test Eczanesi 1');
-
-    // Bornova bölgesine filtrele
-    eczaneController.filterByRegion('Bornova');
-    expect(eczaneController.filteredList.length, 1);
-    expect(eczaneController.filteredList[0].adi, 'Test Eczanesi 2');
-
-    // Olmayan bir bölge ile filtrele
-    eczaneController.filterByRegion('Olmayan Bölge');
-    expect(eczaneController.filteredList.length, 0);
-
-    // Filtreyi temizle
-    eczaneController.filterByRegion('');
-    expect(eczaneController.filteredList.length, 3);
-  });
-
-  testWidgets('EczaneListPage TabBar geçiş testi', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      TestApp(child: const EczaneListPage()),
-    );
-
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
-
-    // Başlangıçta Liste Görünümü sekmesinin aktif olduğunu kontrol et
-    final customTabBarFinder = find.byType(CustomTabBar);
-    expect(customTabBarFinder, findsOneWidget);
-
-    // Filtre butonunun görünür olduğunu kontrol et (sadece liste görünümünde görünür)
-    expect(find.byIcon(Icons.filter_list), findsOneWidget);
-
-    // Harita Görünümü sekmesine tıkla
-    await tester.tap(find.text('Harita Görünümü'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
-
-    // Filtre butonunun artık görünmediğini kontrol et (harita görünümünde gizlenir)
-    expect(
-        find.descendant(
-          of: find.byType(AppBar).last,
-          matching: find.byIcon(Icons.filter_list),
-        ),
-        findsNothing);
-  });
-
-  testWidgets('EczaneListPage filtre bottomsheet testi',
+  testWidgets('PharmacyListPage filter bottomsheet test',
       (WidgetTester tester) async {
-    // Test için EczaneListPage widget'ını oluştur
-    await tester.pumpWidget(
-      TestApp(child: const EczaneListPage()),
-    );
-
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
-
-    // Filtre butonuna tıkla
-    await tester.tap(find.byIcon(Icons.filter_list));
-    await tester.pumpAndSettle();
-
-    // BottomSheet'in görünüp görünmediğini kontrol et
-    expect(find.text('Bölgeye Göre Filtrele'), findsOneWidget);
-
-    // Filtreleme seçeneklerinin görünüp görünmediğini kontrol et
-    expect(find.text('Konak'), findsOneWidget);
-    expect(find.text('Bornova'), findsOneWidget);
-    expect(find.text('Karşıyaka'), findsOneWidget);
+    try {
+      Get.put<EczaneController>(MockEczaneController());
+      Get.put<MapController>(MockMapController());
+      await tester.pumpWidget(TestApp(child: const EczaneListPage()));
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await tester.tap(find.byIcon(Icons.filter_list), warnIfMissed: false);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      expect(find.text('Bölgeye Göre Filtrele'), findsOneWidget);
+      expect(find.text('Konak'), findsOneWidget);
+      expect(find.text('Bornova'), findsOneWidget);
+      expect(find.text('Karşıyaka'), findsOneWidget);
+      testResults.add(TestResult(
+          name: 'PharmacyListPage filter bottomsheet test', success: true));
+    } catch (e) {
+      testResults.add(TestResult(
+          name: 'PharmacyListPage filter bottomsheet test',
+          success: false,
+          error: e.toString()));
+      rethrow;
+    }
   });
 }

@@ -9,6 +9,18 @@ import 'package:smart_city_app/controllers/filter_controllers/general_filter_con
 import 'package:smart_city_app/features/auth/views/filter_pages/general_filter_UI.dart';
 import 'package:smart_city_app/features/auth/widgets/button_wigdets/custom_tab_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:io';
+import '../test_report_generator.dart';
+
+// Dio mock için HttpOverrides
+class TestHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 // Mock PlajController sınıfı
 class MockPlajController extends PlajController {
@@ -45,7 +57,7 @@ class MockPlajController extends PlajController {
   }
 
   @override
-  void fetchPlajData() {
+  Future<void> fetchPlajData() async {
     // API çağrısını simüle etme
     isLoading.value = false;
   }
@@ -90,121 +102,131 @@ class TestApp extends StatelessWidget {
   }
 }
 
-void main() {
+void plajTests(List<TestResult> testResults) {
+  setUpAll(() {
+    HttpOverrides.global = TestHttpOverrides();
+  });
+
   setUp(() {
-    // Her test öncesi GetX bağımlılıklarını sıfırla
     Get.reset();
-    // Mock controller'ları enjekte et
     final plajController = Get.put<PlajController>(MockPlajController());
     Get.put<MapController>(MockMapController());
-
-    // Generic filter controller için de bir instance oluştur
     Get.put(GenericFilterController<Onemliyer>(
       extractIlce: (plaj) => plaj.iLCE ?? '',
       extractMahalle: (plaj) => plaj.mAHALLE ?? '',
     ));
-
-    // FilterController'ı başlat
     final filterController = Get.find<GenericFilterController<Onemliyer>>();
     filterController.initializeFilterData(plajController.plajList);
   });
 
-  testWidgets('PlajList liste görünümü testi', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      TestApp(child: PlajList()),
-    );
-
-    // İlk render sonrası widget ağacının oluşması için pump
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
-
-    // Başlık kontrolü
-    expect(find.text('Plajlar'), findsOneWidget);
-
-    // Tab bar kontrolü
-    expect(find.text('Liste Görünümü'), findsOneWidget);
-    expect(find.text('Harita Görünümü'), findsOneWidget);
-
-    // Plaj listesi kontrolü
-    expect(find.text('Alsancak Plajı'), findsOneWidget);
-    expect(find.text('Alaçatı Plajı'), findsOneWidget);
-    expect(find.text('Foça Plajı'), findsOneWidget);
-
-    // Filtre butonu kontrolü
-    expect(find.byIcon(Icons.filter_list), findsOneWidget);
+  testWidgets('BeachList list view test', (WidgetTester tester) async {
+    try {
+      Get.put<PlajController>(MockPlajController());
+      Get.put<MapController>(MockMapController());
+      Get.put(GenericFilterController<Onemliyer>(
+        extractIlce: (plaj) => plaj.iLCE ?? '',
+        extractMahalle: (plaj) => plaj.mAHALLE ?? '',
+      ));
+      await tester.pumpWidget(TestApp(child: PlajList()));
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      expect(find.text('Plajlar'), findsOneWidget);
+      expect(find.text('Liste Görünümü'), findsOneWidget);
+      expect(find.text('Harita Görünümü'), findsOneWidget);
+      expect(find.text('Alsancak Plajı'), findsOneWidget);
+      expect(find.text('Alaçatı Plajı'), findsOneWidget);
+      expect(find.text('Foça Plajı'), findsOneWidget);
+      expect(find.byIcon(Icons.filter_list), findsOneWidget);
+      testResults
+          .add(TestResult(name: 'BeachList list view test', success: true));
+    } catch (e) {
+      testResults.add(TestResult(
+          name: 'BeachList list view test',
+          success: false,
+          error: e.toString()));
+      rethrow;
+    }
   });
 
-  test('PlajList filtreleme işlevsellik testi', () {
-    // Bu test widget testi değil, filtreleme mantığını doğrudan test ediyor
-    final filterController = Get.find<GenericFilterController<Onemliyer>>();
-
-    // Filtre başlangıç durumunu kontrol et
-    expect(filterController.selectedIlce.value, '');
-    expect(filterController.selectedMahalle.value, '');
-    expect(filterController.filteredList.isEmpty, true);
-
-    // Konak ilçesini seç
-    filterController.selectedIlce.value = 'Konak';
-    filterController.filterList();
-
-    // Filtrelenmiş liste kontrolü
-    expect(filterController.filteredList.length, 1);
-    expect(filterController.filteredList[0].aDI, 'Alsancak Plajı');
-
-    // Çeşme ilçesini seç
-    filterController.selectedIlce.value = 'Çeşme';
-    filterController.filterList();
-
-    // Filtrelenmiş liste kontrolü
-    expect(filterController.filteredList.length, 1);
-    expect(filterController.filteredList[0].aDI, 'Alaçatı Plajı');
-
-    // Filtreyi temizle
-    filterController.resetFilter();
-    filterController.filterList();
-
-    // Tüm plajların filtrede olmasını kontrol et
-    expect(filterController.selectedIlce.value, '');
-    expect(filterController.selectedMahalle.value, '');
-    expect(filterController.filteredList.length, 3);
+  test('BeachList filtering functionality test', () {
+    try {
+      Get.put<PlajController>(MockPlajController());
+      Get.put(GenericFilterController<Onemliyer>(
+        extractIlce: (plaj) => plaj.iLCE ?? '',
+        extractMahalle: (plaj) => plaj.mAHALLE ?? '',
+      ));
+      final filterController = Get.find<GenericFilterController<Onemliyer>>();
+      expect(filterController.selectedIlce.value, '');
+      expect(filterController.selectedMahalle.value, '');
+      expect(filterController.filteredList.isEmpty, true);
+      filterController.selectedIlce.value = 'Konak';
+      filterController.filterList();
+      expect(filterController.filteredList.length, 1);
+      expect(filterController.filteredList[0].aDI, 'Alsancak Plajı');
+      filterController.selectedIlce.value = 'Çeşme';
+      filterController.filterList();
+      expect(filterController.filteredList.length, 1);
+      expect(filterController.filteredList[0].aDI, 'Alaçatı Plajı');
+      filterController.resetFilter();
+      filterController.filterList();
+      expect(filterController.selectedIlce.value, '');
+      expect(filterController.selectedMahalle.value, '');
+      expect(filterController.filteredList.length, 3);
+      testResults.add(TestResult(
+          name: 'BeachList filtering functionality test', success: true));
+    } catch (e) {
+      testResults.add(TestResult(
+          name: 'BeachList filtering functionality test',
+          success: false,
+          error: e.toString()));
+      rethrow;
+    }
   });
 
-  testWidgets('PlajList TabBar geçiş testi', (WidgetTester tester) async {
-    // Test öncesi widget tree render edelim
-    await tester.pumpWidget(
-      TestApp(child: PlajList()),
-    );
+  testWidgets('BeachList TabBar transition test', (WidgetTester tester) async {
+    try {
+      Get.put<PlajController>(MockPlajController());
+      Get.put<MapController>(MockMapController());
+      Get.put(GenericFilterController<Onemliyer>(
+        extractIlce: (plaj) => plaj.iLCE ?? '',
+        extractMahalle: (plaj) => plaj.mAHALLE ?? '',
+      ));
+      await tester.pumpWidget(TestApp(child: PlajList()));
+      await tester.pump(const Duration(milliseconds: 500));
 
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
+      final customTabBarFinder = find.byType(CustomTabBar);
+      expect(customTabBarFinder, findsOneWidget);
+      expect(find.byIcon(Icons.filter_list), findsOneWidget);
 
-    // Başlangıçta Liste Görünümü sekmesinin aktif olduğunu kontrol et
-    final customTabBarFinder = find.byType(CustomTabBar);
-    expect(customTabBarFinder, findsOneWidget);
+      await tester.tap(find.text('Harita Görünümü'), warnIfMissed: false);
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(milliseconds: 500));
 
-    // Filtre butonunun görünür olduğunu kontrol et (sadece liste görünümünde görünür)
-    expect(find.byIcon(Icons.filter_list), findsOneWidget);
-
-    // Harita Görünümü sekmesine tıkla
-    await tester.tap(find.text('Harita Görünümü'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
-
-    // Filtre butonunun artık görünmediğini kontrol et (harita görünümünde gizlenir)
-    expect(
-        find.descendant(
-          of: find.byType(AppBar).last,
-          matching: find.byIcon(Icons.filter_list),
-        ),
-        findsNothing);
+      expect(
+          find.descendant(
+            of: find.byType(AppBar).last,
+            matching: find.byIcon(Icons.filter_list),
+          ),
+          findsNothing);
+      testResults.add(
+          TestResult(name: 'BeachList TabBar transition test', success: true));
+    } catch (e) {
+      testResults.add(TestResult(
+          name: 'BeachList TabBar transition test',
+          success: false,
+          error: e.toString()));
+      rethrow;
+    }
   });
 
-  testWidgets('PlajList dialog UI testi', (WidgetTester tester) async {
-    // Dialog widget'ını doğrudan test edelim
-    final filterController = Get.find<GenericFilterController<Onemliyer>>();
-
-    await tester.pumpWidget(
-      TestApp(
+  testWidgets('BeachList dialog UI test', (WidgetTester tester) async {
+    try {
+      Get.put<PlajController>(MockPlajController());
+      Get.put(GenericFilterController<Onemliyer>(
+        extractIlce: (plaj) => plaj.iLCE ?? '',
+        extractMahalle: (plaj) => plaj.mAHALLE ?? '',
+      ));
+      final filterController = Get.find<GenericFilterController<Onemliyer>>();
+      await tester.pumpWidget(TestApp(
         child: Builder(
           builder: (context) {
             return Scaffold(
@@ -224,18 +246,22 @@ void main() {
             );
           },
         ),
-      ),
-    );
-
-    // Filtre dialog'unu açacak butona tıkla
-    await tester.tap(find.text('Filtre Aç'));
-    await tester.pumpAndSettle();
-
-    // Dialog bileşenlerinin varlığını kontrol et
-    expect(find.text('Plajlar Filtrele'), findsOneWidget);
-    expect(find.text('İlçe Seç'), findsOneWidget);
-    expect(find.text('Mahalle Seç'), findsOneWidget);
-    expect(find.text('Temizle'), findsOneWidget);
-    expect(find.text('Uygula'), findsOneWidget);
+      ));
+      await tester.tap(find.text('Filtre Aç'), warnIfMissed: false);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      expect(find.text('Plajlar Filtrele'), findsOneWidget);
+      expect(find.text('İlçe Seç'), findsOneWidget);
+      expect(find.text('Mahalle Seç'), findsOneWidget);
+      expect(find.text('Temizle'), findsOneWidget);
+      expect(find.text('Uygula'), findsOneWidget);
+      testResults
+          .add(TestResult(name: 'BeachList dialog UI test', success: true));
+    } catch (e) {
+      testResults.add(TestResult(
+          name: 'BeachList dialog UI test',
+          success: false,
+          error: e.toString()));
+      rethrow;
+    }
   });
 }
