@@ -35,14 +35,20 @@ class _HomePageState extends State<HomePage> with PerformanceMonitoringMixin {
           children: [
             ElevatedButton(
               onPressed: () {
-                Get.toNamed('/eczane');
+                PerformanceMonitoringMixin.startNavigationTrace('eczane_page');
+                Get.toNamed('/eczane')?.whenComplete(() {
+                  PerformanceMonitoringMixin.stopNavigationTrace('eczane_page');
+                });
               },
               child: const Text('Eczaneler'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Get.toNamed('/etkinlik');
+                PerformanceMonitoringMixin.startNavigationTrace('etkinlik_page');
+                Get.toNamed('/etkinlik')?.whenComplete(() {
+                  PerformanceMonitoringMixin.stopNavigationTrace('etkinlik_page');
+                });
               },
               child: const Text('Etkinlikler'),
             ),

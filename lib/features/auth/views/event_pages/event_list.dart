@@ -89,8 +89,12 @@ class _EtkinlikListesiSayfasiState extends State<EtkinlikListesiSayfasi> with Pe
                   time: etkinlik.etkinlikBaslamaTarihi,
                   onTap: () {
                     startTrace('event_detail');
+                    PerformanceMonitoringMixin.startNavigationTrace('event_detail_page');
                     Get.to(() => DetailEventScreen(etkinlik: etkinlik))
-                        ?.whenComplete(() => stopTrace('event_detail'));
+                        ?.whenComplete(() {
+                          stopTrace('event_detail');
+                          PerformanceMonitoringMixin.stopNavigationTrace('event_detail_page');
+                        });
                   },
                 ),
               );
@@ -107,19 +111,19 @@ class _EtkinlikListesiSayfasiState extends State<EtkinlikListesiSayfasi> with Pe
       builder: (BuildContext context) {
         return FilterDialog(
           onLocationSelected: (location) {
-            startTrace('filter_location');
+            PerformanceMonitoringMixin.startApiCall('filter_location');
             etkinlikController.updateSelectedLocation(location);
-            stopTrace('filter_location');
+            PerformanceMonitoringMixin.stopApiCall('filter_location');
           },
           onTypeSelected: (type) {
-            startTrace('filter_type');
+            PerformanceMonitoringMixin.startApiCall('filter_type');
             etkinlikController.updateSelectedType(type);
-            stopTrace('filter_type');
+            PerformanceMonitoringMixin.stopApiCall('filter_type');
           },
           onDateRangeSelected: (range) {
-            startTrace('filter_date');
+            PerformanceMonitoringMixin.startApiCall('filter_date');
             etkinlikController.updateSelectedDateRange(range);
-            stopTrace('filter_date');
+            PerformanceMonitoringMixin.stopApiCall('filter_date');
           },
         );
       },

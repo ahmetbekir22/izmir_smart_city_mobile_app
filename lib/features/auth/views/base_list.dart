@@ -39,6 +39,7 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> with PerformanceMonit
   final ScrollController scrollController = ScrollController();
   late final GenericFilterController<T> filterController;
   final RxInt currentTabIndex = 0.obs;
+  bool _isDataLoaded = false;
 
   @override
   void initState() {
@@ -46,6 +47,7 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> with PerformanceMonit
     startPageLoadTrace('${widget.title}_page');
 
     try {
+      PerformanceMonitoringMixin.startApiCall('filter_controller_init');
       filterController = Get.put(
         GenericFilterController<T>(
           extractIlce: widget.extractIlce,
@@ -53,24 +55,26 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> with PerformanceMonit
         ),
         tag: '${widget.title}_filter',
       );
+      PerformanceMonitoringMixin.stopApiCall('filter_controller_init');
     } catch (e) {
-      // If controller already exists, find it
       filterController = Get.find<GenericFilterController<T>>(tag: '${widget.title}_filter');
     }
 
     ever(widget.items, (list) {
       if (list.isNotEmpty) {
-        startApiTrace('filter_initialization');
+        PerformanceMonitoringMixin.startApiCall('filter_initialization');
         filterController.initializeFilterData(list);
-        stopApiTrace();
+        PerformanceMonitoringMixin.stopApiCall('filter_initialization');
         addMetric('items_count', list.length);
+        _isDataLoaded = true;
+        stopPageLoadTrace();
       }
     });
   }
 
   @override
   void dispose() {
-    stopPageLoadTrace();
+    cleanup();
     super.dispose();
   }
 
@@ -103,28 +107,30 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> with PerformanceMonit
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(50),
-          child: Obx(() {
-            return CustomTabBar(
-              currentIndex: currentTabIndex.value,
-              labels: const ['Liste Görünümü', 'Harita Görünümü'],
-              onTap: (index) {
-                startTrace('view_switch');
-                currentTabIndex.value = index;
-                addMetric('view_type', index);
-                stopTrace('view_switch');
-              },
-            );
-          }),
+          child: Obx(() => CustomTabBar(
+            currentIndex: currentTabIndex.value,
+            labels: const ['Liste Görünümü', 'Harita Görünümü'],
+            onTap: (index) {
+              startTrace('view_switch');
+              currentTabIndex.value = index;
+              addMetric('view_type', index);
+              stopTrace('view_switch');
+            },
+          )),
         ),
       ),
       body: Obx(() {
+        if (!_isDataLoaded) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
         if (currentTabIndex.value == 0) {
           final displayList = filterController.filteredList.isNotEmpty
               ? filterController.filteredList
               : widget.items;
 
           if (displayList.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: Text("Veri bulunamadı."));
           }
 
           return Scrollbar(
@@ -140,7 +146,7 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> with PerformanceMonit
                 itemCount: displayList.length,
                 itemBuilder: (context, index) {
                   final item = displayList[index];
-                  return GeneralCard(
+                  return Obx(() => GeneralCard(
                     adi: widget.extractAdi != null
                         ? widget.extractAdi!(item) ?? 'Bilinmiyor'
                         : 'Bilinmiyor',
@@ -156,16 +162,18 @@ class _BaseListPageState<T> extends State<BaseListPage<T>> with PerformanceMonit
                             widget.extractBoylam != null
                         ? () {
                             startTrace('location_open');
+                            PerformanceMonitoringMixin.startNavigationTrace('location_view');
                             final enlem = widget.extractEnlem!(item);
                             final boylam = widget.extractBoylam!(item);
                             if (enlem != null && boylam != null) {
-                              Get.put(LocationController())
-                                  .openLocationByCoordinates(enlem, boylam);
+                              final locationController = Get.put(LocationController());
+                              locationController.openLocationByCoordinates(enlem, boylam);
+                              stopTrace('location_open');
+                              PerformanceMonitoringMixin.stopNavigationTrace('location_view');
                             }
-                            stopTrace('location_open');
                           }
                         : null,
-                  );
+                  ));
                 },
               ),
             ),

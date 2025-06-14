@@ -5,8 +5,10 @@ import 'package:intl/intl.dart';
 import '../../core/api/etkinlik/event_api_service.dart';
 import '../../core/api/etkinlik/events_model.dart';
 import '../../utils/making_data_unique.dart';
+import '../../core/mixins/performance_monitoring_mixin.dart';
 
 class EtkinlikController extends GetxController {
+  final EtkinlikApiService _eventsService = EtkinlikApiService();
   // Observable lists for events
   var etkinlikListesi = <Etkinlik>[].obs;
   var filteredEventList = <Etkinlik>[].obs;
@@ -46,13 +48,25 @@ class EtkinlikController extends GetxController {
 
   // Event loading and management
   Future<void> loadEtkinlikler() async {
+    isLoading.value = true;
+    PerformanceMonitoringMixin.startApiCall('fetch_events');
+    
     try {
-      isLoading.value = true;
       hasError.value = false;
-      final etkinlikler = await EtkinlikApiService().fetchEtkinlikler();
+      final etkinlikler = await _eventsService.fetchEtkinlikler();
       etkinlikListesi.value = filterUniqueById(etkinlikler, (etkinlik) => etkinlik.id);
+      filteredEventList.value = etkinlikler;
       applyFilters();
+      PerformanceMonitoringMixin.stopApiCall(
+        'fetch_events',
+        responseSize: etkinlikler.toString().length,
+        statusCode: '200'
+      );
     } catch (e) {
+      PerformanceMonitoringMixin.stopApiCall(
+        'fetch_events',
+        statusCode: 'error'
+      );
       hasError.value = true;
       errorMessage.value = 'Etkinlikler yüklenirken hata oluştu: $e';
     } finally {
@@ -96,6 +110,7 @@ class EtkinlikController extends GetxController {
   }
 
   void applyFilters() {
+    PerformanceMonitoringMixin.startApiCall('apply_filters');
     List<Etkinlik> filteredList = etkinlikListesi.toList();
     
     if (selectedLocation.value != null) {
@@ -124,28 +139,37 @@ class EtkinlikController extends GetxController {
         .compareTo(DateTime.parse(b.etkinlikBaslamaTarihi)));
 
     filteredEventList.value = filteredList;
+    PerformanceMonitoringMixin.stopApiCall('apply_filters');
   }
 
   void updateSelectedLocation(String? location) {
+    PerformanceMonitoringMixin.startApiCall('filter_by_location');
     selectedLocation.value = location;
     applyFilters();
+    PerformanceMonitoringMixin.stopApiCall('filter_by_location');
   }
 
   void updateSelectedType(String? type) {
+    PerformanceMonitoringMixin.startApiCall('filter_by_type');
     selectedType.value = type;
     applyFilters();
+    PerformanceMonitoringMixin.stopApiCall('filter_by_type');
   }
 
   void updateSelectedDateRange(DateTimeRange? range) {
+    PerformanceMonitoringMixin.startApiCall('filter_by_date');
     selectedDateRange.value = range;
     applyFilters();
+    PerformanceMonitoringMixin.stopApiCall('filter_by_date');
   }
 
   void clearFilters() {
+    PerformanceMonitoringMixin.startApiCall('clear_filters');
     selectedLocation.value = null;
     selectedType.value = null;
     selectedDateRange.value = null;
     applyFilters();
+    PerformanceMonitoringMixin.stopApiCall('clear_filters');
   }
 
   // Favorite events management

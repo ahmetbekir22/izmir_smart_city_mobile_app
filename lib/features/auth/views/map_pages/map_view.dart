@@ -45,9 +45,9 @@ class _MapViewState extends State<MapView> with PerformanceMonitoringMixin {
                 zoomControlsEnabled: true,
                 zoomGesturesEnabled: true,
                 onMapCreated: (GoogleMapController mapController) {
-                  startTrace('map_initialization');
+                  PerformanceMonitoringMixin.startApiCall('map_initialization');
                   addMetric('markers_count', controller.markers.length);
-                  stopTrace('map_initialization');
+                  PerformanceMonitoringMixin.stopApiCall('map_initialization');
                 },
               ),
       ),
