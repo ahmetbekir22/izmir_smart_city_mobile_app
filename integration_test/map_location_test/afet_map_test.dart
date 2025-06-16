@@ -10,7 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  group('Afet Harita Entegrasyon Testleri', () {
+  group('Afet Map Integration Tests', () {
     late AfetController afetController;
 
     setUpAll(() async {
@@ -18,9 +18,9 @@ void main() {
       afetController = Get.put(AfetController());
     });
 
-    testWidgets('Haritada afet noktaları doğru şekilde gösterilmeli', (WidgetTester tester) async {
+    testWidgets('Afet points should be shown correctly on the map', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('📋 Afet Harita Testi Başlıyor...');
+      print('📋 Afet Map Test Begins...');
 
       // Uygulamayı başlat
       await app.main();
@@ -56,9 +56,9 @@ void main() {
       // Afet verilerinin yüklendiğini kontrol et
       try {
         expect(afetController.afetList.isNotEmpty, true);
-        print('Afet noktası sayısı: ${afetController.afetList.length}');
+        print('Number of Afet points: ${afetController.afetList.length}');
       } catch (e) {
-        print('API Hatası: $e');
+        print('API Error: $e');
         fail('Afet verileri yüklenemedi: $e');
       }
 
@@ -76,12 +76,12 @@ void main() {
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Afet Harita Testi Tamamlandı (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
+      print('✅ Afet Map Test Completed (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
     });
 
-    testWidgets('Afet noktalarına tıklandığında detay bilgileri gösterilmeli', (WidgetTester tester) async {
+    testWidgets('When you click on Afet points, detailed information should be displayed.', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('📋 Afet Marker Detay Testi Başlıyor...');
+      print('📋 Afet Marker Detail Test Begins...');
 
       // Uygulamayı başlat
       await app.main();
@@ -126,7 +126,7 @@ void main() {
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Afet Marker Detay Testi Tamamlandı (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
+      print('✅ Afet Marker Detail Test Completed (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
     });
   });
 

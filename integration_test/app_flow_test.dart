@@ -12,7 +12,7 @@ void main() {
   group('App Flow Tests', () {
     testWidgets('Splash screen should show and transition to home screen', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('\n🔄 Test başladı: Splash screen should show and transition to home screen');
+      print('\n🔄 Test Started: Splash screen should show and transition to home screen');
       
       app.main();
       await tester.pumpAndSettle();
@@ -29,13 +29,13 @@ void main() {
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Test tamamlandı: Splash screen should show and transition to home screen');
-      print('⏱️ Süre: ${duration.inSeconds}.${duration.inMilliseconds % 1000} saniye\n');
+      print('✅ Test Completed: Splash screen should show and transition to home screen');
+      print('⏱️ Time: ${duration.inSeconds}.${duration.inMilliseconds % 1000} seconds\n');
     });
 
     testWidgets('Home screen should show all required elements', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('\n🔄 Test başladı: Home screen should show all required elements');
+      print('\n🔄 Test Started: Home screen should show all required elements');
       
       app.main();
       await tester.pumpAndSettle();
@@ -58,13 +58,13 @@ void main() {
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Test tamamlandı: Home screen should show all required elements');
-      print('⏱️ Süre: ${duration.inSeconds}.${duration.inMilliseconds % 1000} saniye\n');
+      print('✅ Test Completed: Home screen should show all required elements');
+      print('⏱️ Time: ${duration.inSeconds}.${duration.inMilliseconds % 1000} seconds\n');
     });
 
     testWidgets('Menu navigation should work', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('\n🔄 Test başladı: Menu navigation should work');
+      print('\n🔄 Test Started: Menu navigation should work');
       
       app.main();
       await tester.pumpAndSettle();
@@ -82,8 +82,8 @@ void main() {
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Test tamamlandı: Menu navigation should work');
-      print('⏱️ Süre: ${duration.inSeconds}.${duration.inMilliseconds % 1000} saniye\n');
+      print('✅ Test Completed: Menu navigation should work');
+      print('⏱️ Time: ${duration.inSeconds}.${duration.inMilliseconds % 1000} seconds\n');
     });
   });
 } 

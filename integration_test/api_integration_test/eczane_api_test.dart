@@ -32,7 +32,7 @@ void main() {
 
     testWidgets('Eczane API endpoint should be accessible', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('📋 Eczane API Testi Başlıyor...');
+      print('📋 Eczane API Test Started...');
 
       try {
         final apiUrl = dotenv.env['NOBETCI_ECZANE_API']!;
@@ -43,19 +43,19 @@ void main() {
         
         final List<dynamic> eczaneData = response.data;
         expect(eczaneData, isNotEmpty);
-        print('✅ ${eczaneData.length} adet eczane verisi alındı');
+        print('✅ ${eczaneData.length} pharmacy data was received');
       } catch (e) {
         fail('API endpoint test failed: $e');
       }
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Eczane API Testi Tamamlandı (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
+      print('✅ Eczane API Test Completed (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
     });
 
-    testWidgets('Eczane listesi UI\'da gösterilmeli', (WidgetTester tester) async {
+    testWidgets('Pharmacy list should be displayed in UI', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('📋 Eczane UI Testi Başlıyor...');
+      print('📋 Eczane UI Test Started...');
 
       // Uygulamayı başlat
       await app.main();
@@ -92,12 +92,12 @@ void main() {
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Eczane UI Testi Tamamlandı (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
+      print('✅ Eczane UI Test Completed (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
     });
 
-    testWidgets('Eczane detayları doğru gösterilmeli', (WidgetTester tester) async {
+    testWidgets('Pharmacy details must be displayed correctly', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('📋 Eczane Detay Testi Başlıyor...');
+      print('📋 Pharmacy Detail Test Started...');
 
       // Uygulamayı başlat
       await app.main();
@@ -143,7 +143,7 @@ void main() {
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Eczane Detay Testi Tamamlandı (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
+      print('✅ Pharmacy Detail Test Completed (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
     });
   });
 } 

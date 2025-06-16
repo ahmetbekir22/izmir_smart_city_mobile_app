@@ -24,7 +24,7 @@ void main() {
 
     testWidgets('Etkinlik API endpoint should be accessible', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('\n🔄 Test başladı: Etkinlik API endpoint should be accessible');
+      print('\n🔄 Test Started: Etkinlik API endpoint should be accessible');
 
       try {
         // Etkinlik API'sini test et
@@ -36,27 +36,27 @@ void main() {
         
         // API yanıtının doğru formatta olduğunu kontrol et
         expect(response.data, isA<List>());
-        print('✅ API yanıtı başarıyla alındı');
+        print('✅ API response received successfully');
         
         // Yanıt verilerini Etkinlik modeline dönüştür
         final List<dynamic> eventsData = response.data;
         final events = eventsData.map((data) => Etkinlik.fromJson(data)).toList();
         expect(events, isNotEmpty);
-        print('✅ ${events.length} adet etkinlik verisi alındı');
+        print('✅ ${events.length} activity data were received');
       } catch (e) {
-        print('❌ API Hatası: $e');
+        print('❌ API Error: $e');
         fail('API endpoint test failed: $e');
       }
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Test tamamlandı: Etkinlik API endpoint should be accessible');
-      print('⏱️ Süre: ${duration.inSeconds}.${duration.inMilliseconds % 1000} saniye\n');
+      print('✅ Test Completed: Etkinlik API endpoint should be accessible');
+      print('⏱️ Time: ${duration.inSeconds}.${duration.inMilliseconds % 1000} seconds\n');
     });
 
-    testWidgets('Etkinlik verileri UI\'da gösterilmeli', (WidgetTester tester) async {
+    testWidgets('Event data should be displayed in the UI', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('\n🔄 Test başladı: Etkinlik verileri UI\'da gösterilmeli');
+      print('\n🔄 Test Started: Event data should be displayed in the UI');
 
       app.main();
       await tester.pumpAndSettle();
@@ -70,29 +70,29 @@ void main() {
       
       // Etkinlik listesinin yüklendiğini kontrol et
       expect(find.byType(PageView), findsOneWidget);
-      print('✅ PageView widget\'ı bulundu');
+      print('✅ PageView widget found');
       
       // Etkinlik başlıklarının gösterildiğini kontrol et
       expect(find.byType(Text), findsWidgets);
-      print('✅ Etkinlik başlıkları bulundu');
+      print('✅ Event titles found');
 
       // Etkinlik kartlarının varlığını kontrol et
       expect(find.byType(Card), findsWidgets);
-      print('✅ Etkinlik kartları bulundu');
+      print('✅ Event cards found');
 
       // Etkinlik resimlerinin yüklendiğini kontrol et
       expect(find.byType(Image), findsWidgets);
-      print('✅ Etkinlik resimleri bulundu');
+      print('✅ Event images found');
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Test tamamlandı: Etkinlik verileri UI\'da gösterilmeli');
-      print('⏱️ Süre: ${duration.inSeconds}.${duration.inMilliseconds % 1000} saniye\n');
+      print('✅ Test Complated: Event data should be displayed in the UI');
+      print('⏱️ Time: ${duration.inSeconds}.${duration.inMilliseconds % 1000} seconds\n');
     });
 
-    testWidgets('Etkinlik detay sayfası açılmalı', (WidgetTester tester) async {
+    testWidgets('The event detail page should open', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('\n🔄 Test başladı: Etkinlik detay sayfası açılmalı');
+      print('\n🔄 Test Started: The event detail page should open');
 
       app.main();
       await tester.pumpAndSettle();
@@ -107,26 +107,26 @@ void main() {
 
       // Detay sayfasının açıldığını kontrol et
       expect(find.byType(Scaffold), findsWidgets);
-      print('✅ Detay sayfası Scaffold\'u bulundu');
+      print('✅ Detail page Scaffold found');
       
       expect(find.byType(AppBar), findsOneWidget);
-      print('✅ Detay sayfası AppBar\'ı bulundu');
+      print('✅ Detail page AppBar found');
 
       // Detay sayfası içeriğini kontrol et
       expect(find.byType(Image), findsWidgets);
-      print('✅ Detay sayfası resmi bulundu');
+      print('✅ Detail page image found');
 
       expect(find.byType(ListTile), findsWidgets);
-      print('✅ Detay sayfası bilgi kartları bulundu');
+      print('✅ Detail page information cards found');
 
       // Etkinlik başlığının gösterildiğini kontrol et
       expect(find.byType(Text), findsWidgets);
-      print('✅ Detay sayfası metinleri bulundu');
+      print('✅ Detail page texts found');
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Test tamamlandı: Etkinlik detay sayfası açılmalı');
-      print('⏱️ Süre: ${duration.inSeconds}.${duration.inMilliseconds % 1000} saniye\n');
+      print('✅ Test Completed: The event detail page should open');
+      print('⏱️ Time: ${duration.inSeconds}.${duration.inMilliseconds % 1000} seconds\n');
     });
   });
 } 

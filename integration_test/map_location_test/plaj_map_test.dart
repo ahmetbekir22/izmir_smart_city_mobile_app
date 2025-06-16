@@ -10,7 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  group('Plaj Harita Entegrasyon Testleri', () {
+  group('Beach Map Integration Tests', () {
     late PlajController plajController;
 
     setUpAll(() async {
@@ -18,9 +18,9 @@ void main() {
       plajController = Get.put(PlajController());
     });
 
-    testWidgets('Haritada plaj markerları doğru şekilde gösterilmeli', (WidgetTester tester) async {
+    testWidgets('Plaj markers should be displayed correctly on the map', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('📋 Plaj Harita Testi Başlıyor...');
+      print('📋 Plaj Map Test Begins...');
 
       // Uygulamayı başlat
       await app.main();
@@ -56,9 +56,9 @@ void main() {
       // Plaj verilerinin yüklendiğini kontrol et
       try {
         expect(plajController.plajList.isNotEmpty, true);
-        print('Plaj sayısı: ${plajController.plajList.length}');
+        print('Number of beaches: ${plajController.plajList.length}');
       } catch (e) {
-        print('API Hatası: $e');
+        print('API Error: $e');
         fail('Plaj verileri yüklenemedi: $e');
       }
 
@@ -76,12 +76,12 @@ void main() {
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Plaj Harita Testi Tamamlandı (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
+      print('✅ Plaj Map Test Completed (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
     });
 
-    testWidgets('Plaj markerlarına tıklandığında detay bilgileri gösterilmeli', (WidgetTester tester) async {
+    testWidgets('Clicking on Plaj markers should show detailed information', (WidgetTester tester) async {
       final startTime = DateTime.now();
-      print('📋 Plaj Marker Detay Testi Başlıyor...');
+      print('📋 Plaj Marker Detail Test Begins...');
 
       // Uygulamayı başlat
       await app.main();
@@ -126,7 +126,7 @@ void main() {
 
       final endTime = DateTime.now();
       final duration = endTime.difference(startTime);
-      print('✅ Plaj Marker Detay Testi Tamamlandı (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
+      print('✅ Plaj Marker Detail Test Completed (${duration.inSeconds}.${duration.inMilliseconds % 1000}s)');
     });
   });
 
